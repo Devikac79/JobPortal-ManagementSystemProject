@@ -1,0 +1,40 @@
+﻿@model JobPortalManagementSystem.Models.Signin
+
+@{
+    ViewBag.Title = "Signin";
+    Layout = "~/Views/Home/HomeLayoutpage.cshtml";
+}
+<link href="~/Content/CSS/login.css" rel="stylesheet" />
+<h2>Signin</h2>
+
+
+@using (Html.BeginForm("Signin", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+        <div class="container2">
+            <div class="form-group">
+                @Html.LabelFor(m => m.username)
+                @Html.TextBoxFor(m => m.username, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.username)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.password)
+                @Html.PasswordFor(m => m.password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.password)
+            </div>
+
+            <input type="submit" value="Sign In" class="btn btn-primary" />
+        </div>
+    
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <p>@ViewBag.Message</p>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
