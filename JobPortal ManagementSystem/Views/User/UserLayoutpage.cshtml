@@ -11,7 +11,7 @@
     <title>HomeLayoutpage</title>
     <link href="~/Content/CSS/Home.css" rel="stylesheet" />
     <link href="@Url.Content("~/Content/CSS/Home.css")" rel="stylesheet" type="text/css" />
-    <link href="~/Content/CSS/login.css" rel="stylesheet" />
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,34 +30,34 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav m-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        @Html.ActionLink("Home", "Homepage", "Home", null, new { @class = "nav-item nav-link" })
+                        @Html.ActionLink("Home", "UserHomepage", "User", null, new { @class = "nav-item nav-link" })
 
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Find a Job</a>
-                    </li>
 
-                    <li class="nav-item dropdown">
+                    <li class="nav-item ">
 
-                        @Html.ActionLink("About", "About", "Home", null, new { @class = "nav-item nav-link" })
+                        @Html.ActionLink("Job", "ViewJobPost", "User", null, new { @class = "nav-item nav-link" })
 
                     </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Contact", "AddContact", "Home", null, new { @class = "nav-item nav-link" })
+                    <li class="nav-item ">
+
+                        @Html.ActionLink("About", "About", "User", null, new { @class = "nav-item nav-link" })
+
                     </li>
+                    <li class="nav-item ">
+
+                        @Html.ActionLink("Contact", "AddContact", "User", null, new { @class = "nav-item nav-link" })
+
+                    </li>
+
                 </ul>
-                <form class="d-flex" role="search">
-
-                    @Html.ActionLink("Register", "AddSignupDetails", "Home", null, new { @class = "btn0 mx-2" })
-                    @Html.ActionLink("Login", "Signin", "Home", null, new { @class = "btn1" })
-
-
-
-                </form>
+                
             </div>
         </div>
     </nav>
     @RenderBody()
+
+
     <!-- Remove the container if you want to extend the Footer to full width. -->
     <div class="">
         <!-- Footer -->
@@ -88,7 +88,7 @@
                                 <a href="#!" class=" nav-link text-black">About</a>
                             </h6>
                         </div>
-                     
+
                         <!-- Grid column -->
                         <!-- Grid column -->
                         <div class="col-md-2">
@@ -118,12 +118,12 @@
                 <!-- Section: Social -->
                 <section class="text-center mb-5">
                     <!-- <a href="" class="text-white me-4">
-        <i class="fab fa-facebook"></i>
-    </a>-->
+                        <i class="fab fa-facebook"></i>
+                    </a>-->
                     <a href="#" class="px-4"><i class="fa fa-facebook"></i></a>
-                    <a href="#"class="px-4"><i class="fa fa-twitter"></i></a>
-                    <a href="#"class="px-4"><i class="fa fa-instagram"></i></a>
-                    <a href="#"class="px-4"><i class="fa fa-linkedin"></i></a>
+                    <a href="#" class="px-4"><i class="fa fa-twitter"></i></a>
+                    <a href="#" class="px-4"><i class="fa fa-instagram"></i></a>
+                    <a href="#" class="px-4"><i class="fa fa-linkedin"></i></a>
 
                 </section>
                 <!-- Section: Social -->

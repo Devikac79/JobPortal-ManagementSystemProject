@@ -38,6 +38,7 @@ namespace JobPortal_ManagementSystem.Repository
             command.Parameters.AddWithValue("@Phone", user.Phone);
             command.Parameters.AddWithValue("@Address", user.Address);
             command.Parameters.AddWithValue("@ResumePath", user.ResumePath);
+            command.Parameters.AddWithValue("ImagePath", user.ImagePath);
             connection.Open();
             int i = command.ExecuteNonQuery();
             connection.Close();
@@ -84,7 +85,8 @@ namespace JobPortal_ManagementSystem.Repository
                         TwelfthPercentageOrGrade = Convert.ToString(datarow["TwelfthPercentageOrGrade"]),
                         GraduationGradeOrPercentage = Convert.ToString(datarow["GraduationGradeOrPercentage"]),
                         PostGraduationGradeOrPercentage = Convert.ToString(datarow["PostGraduationGradeOrPercentage"]),
-                        ResumePath = Convert.ToString(datarow["ResumePath"])
+                        ResumePath = Convert.ToString(datarow["ResumePath"]),
+                        ImagePath = Convert.ToString(datarow["ImagePath"])
 
     }
                     );
@@ -109,6 +111,7 @@ namespace JobPortal_ManagementSystem.Repository
             command.Parameters.AddWithValue("@GraduationGradeOrPercentage", user.GraduationGradeOrPercentage);
             command.Parameters.AddWithValue("@PostGraduationGradeOrPercentage", user.PostGraduationGradeOrPercentage);
             command.Parameters.AddWithValue("@ResumePath", user.ResumePath);
+            command.Parameters.AddWithValue("@ImagePath", user.ImagePath);
             connection.Open();
             int i = command.ExecuteNonQuery();
             connection.Close();

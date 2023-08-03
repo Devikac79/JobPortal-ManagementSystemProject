@@ -1,4 +1,5 @@
-﻿using JobPortalManagementSystem.Repository;
+﻿using JobPortalManagementSystem.Models;
+using JobPortalManagementSystem.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,36 @@ namespace JobPortalManagementSystem.Controllers
         {
             var jobPosts = repository.GetJobPostDetails();
             return View(jobPosts);
+        }
+        public ActionResult About()
+        {
+            return View();
+        }
+        public ActionResult AddContact()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddContact(Contact contact)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    ContactRepository signupRepository = new ContactRepository();
+                    if (signupRepository.AddContact(contact))
+                    {
+                        ViewBag.Message = "User Details Added Successfully";
+
+                    }
+                }
+                return RedirectToAction("AddContact", "Home");
+            }
+            catch
+            {
+                return View();
+            }
         }
 
     }

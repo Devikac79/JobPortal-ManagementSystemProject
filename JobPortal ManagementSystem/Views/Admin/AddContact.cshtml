@@ -1,8 +1,8 @@
 ﻿@model JobPortalManagementSystem.Models.Contact
 
 @{
-    ViewBag.Title = "Contact";
-    Layout = "~/Views/Home/HomeLayoutpage.cshtml";
+    ViewBag.Title = "AddContact";
+    Layout = "~/Views/Admin/AdminLayoutpage.cshtml";
 }
 
 <!DOCTYPE html>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="container form-container">
-        @using (Html.BeginForm("AddContact", "Home", FormMethod.Post, new { id = "contactForm" }))
+        @using (Html.BeginForm("AddContact", "Admin", FormMethod.Post, new { id = "contactForm" }))
         {
             @Html.AntiForgeryToken()
 
@@ -38,28 +38,28 @@
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group">
+            <div class="form-group">
 
 
-        @Html.LabelFor(model => model.name,"Name", htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", id = "name" } })
-        @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger", id = "nameValidation" })
-    </div>
+                @Html.LabelFor(model => model.name, "Name", htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", id = "name" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger", id = "nameValidation" })
+            </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.email,"Email" ,htmlAttributes: new { @class = "control-label" })
+                @Html.LabelFor(model => model.email, "Email", htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", id = "email" } })
                 @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger", id = "emailValidation" })
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.subject,"Subject", htmlAttributes: new { @class = "control-label" })
+                @Html.LabelFor(model => model.subject, "Subject", htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.subject, new { htmlAttributes = new { @class = "form-control", id = "subject" } })
                 @Html.ValidationMessageFor(model => model.subject, "", new { @class = "text-danger", id = "subjectValidation" })
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.message,"Message", htmlAttributes: new { @class = "control-label" })
+                @Html.LabelFor(model => model.message, "Message", htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.message, new { htmlAttributes = new { @class = "form-control", id = "message", rows = 5 } })
                 @Html.ValidationMessageFor(model => model.message, "", new { @class = "text-danger", id = "messageValidation" })
             </div>
@@ -70,8 +70,8 @@
         }
     </div>
 
-    
     <script src="~/Content/Javascript/contact.js"></script>
 
 </body>
 </html>
+

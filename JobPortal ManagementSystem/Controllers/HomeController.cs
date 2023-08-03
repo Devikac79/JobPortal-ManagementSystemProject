@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace JobPortalManagementSystem.Controllers
 {
@@ -157,7 +158,7 @@ namespace JobPortalManagementSystem.Controllers
 
                     if (role == "user")
                     {
-                        return RedirectToAction("Homepage", "Home");
+                        return RedirectToAction("UserHomepage", "User");
                        
                     }
                     else if (role == "admin")
@@ -221,7 +222,7 @@ namespace JobPortalManagementSystem.Controllers
 
                     }
                 }
-                return RedirectToAction("Homepage");
+                return RedirectToAction("AddContact","Home");
             }
             catch
             {
@@ -267,7 +268,7 @@ namespace JobPortalManagementSystem.Controllers
               }
           }*/
 
-        public ActionResult AddDetails(User user, HttpPostedFileBase ResumeFile)
+        public ActionResult AddDetails(User user, HttpPostedFileBase ResumeFile, HttpPostedFileBase ImageFile)
         {
             try
             {
@@ -281,6 +282,14 @@ namespace JobPortalManagementSystem.Controllers
                         ResumeFile.SaveAs(ResumeFilePath);
 
                         user.ResumePath = ResumeFilePath;
+                    }
+                    if (ImageFile != null)
+                    {
+                        string imageFileName = Path.GetFileName(ImageFile.FileName);
+                        string imageFilePath = Path.Combine(Server.MapPath("~/Images/"), imageFileName);
+                        ImageFile.SaveAs(imageFilePath);
+
+                        user.ImagePath = imageFilePath;
                     }
 
                     UserRepository userRepository = new UserRepository();
@@ -341,7 +350,7 @@ namespace JobPortalManagementSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditDetails(int? Id, User user, HttpPostedFileBase ResumeFile)
+        public ActionResult EditDetails(int? Id, User user, HttpPostedFileBase ResumeFile, HttpPostedFileBase ImageFile)
         {
             try
             {
@@ -374,9 +383,18 @@ namespace JobPortalManagementSystem.Controllers
 
                         existingUser.ResumePath = ResumeFilePath;
                     }
-                    
 
-                    
+                    // Check if a new image file is uploaded, and update the ImagePath accordingly
+                    if (ImageFile != null )
+                    {
+                        string imageFileName = Path.GetFileName(ImageFile.FileName);
+                        string imageFilePath = Path.Combine(Server.MapPath("~/Images/"), imageFileName);
+                        ImageFile.SaveAs(imageFilePath);
+
+                        existingUser.ImagePath = imageFilePath;
+                    }
+
+
 
 
                     // Save the changes to the database

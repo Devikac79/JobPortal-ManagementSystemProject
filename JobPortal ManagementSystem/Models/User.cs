@@ -23,6 +23,7 @@ namespace JobPortal_ManagementSystem.Models
             public string GraduationGradeOrPercentage { get; set; }
             public string PostGraduationGradeOrPercentage { get; set; }
         public string ResumePath { get; set; }
+        public string ImagePath { get; set; }
 
 
 

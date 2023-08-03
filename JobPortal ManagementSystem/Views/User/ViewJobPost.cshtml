@@ -1,89 +1,49 @@
 ﻿@model IEnumerable<JobPortalManagementSystem.Models.JobPost>
 
 @{
-    Layout = null;
+    Layout = "~/Views/User/UserLayoutpage.cshtml";
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>ViewJobPost</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.minSalary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.maxSalary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.postDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.endDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.jobCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.jobNature)
-            </th>
-            <th></th>
-        </tr>
-    
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.minSalary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.maxSalary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.postDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.endDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.jobCategory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.jobNature)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-    }
-    
-    </table>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="card mb-4 w-100">
+                    <div class="card-header">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.title)</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Location:</strong> @Html.DisplayFor(modelItem => item.location)</p>
+                        <p class="card-text"><strong>Salary:</strong> $@Html.DisplayFor(modelItem => item.minSalary) - $@Html.DisplayFor(modelItem => item.maxSalary)</p>
+                        <p class="card-text"><strong>Posted:</strong> @Html.DisplayFor(modelItem => item.postDate)</p>
+                        <p class="card-text"><strong>End Date:</strong> @Html.DisplayFor(modelItem => item.endDate)</p>
+                        <p class="card-text"><strong>Category:</strong> @Html.DisplayFor(modelItem => item.jobCategory)</p>
+                        <p class="card-text"><strong>Nature:</strong> @Html.DisplayFor(modelItem => item.jobNature)</p>
+                        <p class="card-text"><strong>Description:</strong> @Html.DisplayFor(modelItem => item.description)</p>
+                    </div>
+                   
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

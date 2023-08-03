@@ -1,0 +1,49 @@
+﻿/* Custom styles for the form */
+body {
+    padding-top: 0px;
+}
+
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+    .form-container h4 {
+        text-align: center;
+    }
+
+.form-group {
+    margin-bottom: 20px;
+}
+/* Styling the Hero Area */
+.slider-area {
+    position: relative;
+    width: 100%;
+    height: 500px; /* Adjust the height as needed */
+    overflow: hidden;
+}
+
+.single-slider {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+}
+
+.hero-cap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent background for text */
+    padding: 70%;
+    border-radius: 5px;
+}
+
+    .hero-cap h2 {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+    }
