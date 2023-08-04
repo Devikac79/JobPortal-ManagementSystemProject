@@ -15,7 +15,6 @@ namespace JobPortalManagementSystem.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50)]
         public string title { get; set; }
 
         [StringLength(50)]
@@ -42,6 +41,10 @@ namespace JobPortalManagementSystem.Models
 
         [Required]
         public string jobNature { get; set; }
+        public int categoryId { get; set; }
+
+        public byte[] imageData { get; set; }
+        public string companyName { get; set; }
 
     }
 

@@ -1,0 +1,70 @@
+﻿@model JobPortalManagementSystem.Models.JobPost
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Job Post Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5" style="padding-left:200px;">
+        <h2>Job Post Details</h2>
+
+        @if (Model != null)
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <dl>
+                        <dt>Title</dt>
+                        <dd>@Model.title</dd>
+
+                        <dt>Company Name</dt>
+                        <dd>@Model.companyName</dd>
+
+                        <dt>Location</dt>
+                        <dd>@Model.location</dd>
+
+                        <dt>Min Salary</dt>
+                        <dd>@Model.minSalary</dd>
+
+                        <dt>Max Salary</dt>
+                        <dd>@Model.maxSalary</dd>
+
+                        <dt>Post Date</dt>
+                        <dd>@Model.postDate.ToString("yyyy-MM-dd")</dd>
+
+                        <dt>End Date</dt>
+                        <dd>@Model.endDate.ToString("yyyy-MM-dd")</dd>
+
+                        <dt>Description</dt>
+                        <dd>@Model.description</dd>
+
+                        <dt>Job Category</dt>
+                        <dd>@Model.jobCategory</dd>
+
+                        <dt>Job Nature</dt>
+                        <dd>@Model.jobNature</dd>
+
+                    </dl>
+                </div>
+
+                @* Display the image if available *@
+                @if (Model.imageData != null && Model.imageData.Length > 0)
+                {
+                    <div class="col-md-4 text-right">
+                        <img src="data:image/png;base64,@Convert.ToBase64String(Model.imageData)" alt="Job Post Image" ;class="img-thumbnail" style="max-width: 300px;" />
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>Job post not found.</p>
+        }
+    </div>
+</body>
+</html>

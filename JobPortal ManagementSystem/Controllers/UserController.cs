@@ -25,11 +25,11 @@ namespace JobPortalManagementSystem.Controllers
         }
 
         // Action to display the user homepage
-        public ActionResult ViewJobPost()
+       /* public ActionResult ViewJobPost()
         {
             var jobPosts = repository.GetJobPostDetails();
             return View(jobPosts);
-        }
+        }*/
         public ActionResult About()
         {
             return View();
@@ -59,6 +59,20 @@ namespace JobPortalManagementSystem.Controllers
             {
                 return View();
             }
+        }
+        public ActionResult GetAllPosts()
+        {
+            List<JobPost> allPosts = repository.GetAllPosts();
+            return View("GetAllPosts", allPosts);
+        }
+        [HttpGet]
+        public ActionResult Details(int Id)
+        {
+            // Fetch the job post details by id from the repository
+            JobPost post = repository.GetJobPostById(Id);
+
+            // Return the view with the job post details
+            return View(post);
         }
 
     }

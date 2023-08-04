@@ -64,7 +64,7 @@
                 <td>
                     @if (!string.IsNullOrEmpty(item.ImagePath))
                     {
-                        <img src="C:/Project/JobPortal ManagementSystem/JobPortal ManagementSystem/Images/img2.jpg" alt="User Image" style="max-width: 200px; max-height: 200px;" />
+                        <img src="@Url.Action("GetImage", "Home", new { filePath = item.ImagePath })" alt="User Image" style="max-width: 200px; max-height: 200px;" />
                     }
                     else
                     {

@@ -229,12 +229,25 @@ namespace JobPortalManagementSystem.Controllers
                 return View();
             }
         }
+        public ActionResult GetImage(string filePath)
+        {
+            // Read the image file into a byte array
+            byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+            // Determine the content type of the image based on its file extension
+            string contentType = "image/jpeg"; // You may need to adjust this based on the actual file type
+
+            // Return the image as a FileResult with the appropriate content type
+            return File(imageBytes, contentType);
+        }
 
         public ActionResult GetDetails()
         {
             UserRepository userRepository = new UserRepository();
             ModelState.Clear();
             return View(userRepository.GetDetails());
+
+
         }
         /// <summary>
         /// Get method to view Creating  a record

@@ -7,7 +7,7 @@ namespace JobPortalManagementSystem.Models
 {
     public class Category
     {
-        public int JobCategoryId { get; set; }
+        public int categoryId { get; set; }
         public string category{ get; set; }
     }
 }

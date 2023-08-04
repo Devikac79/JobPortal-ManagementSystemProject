@@ -138,6 +138,7 @@
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\CategoryRepository.cs" />
     <Compile Include="Repository\ContactRepository.cs" />
     <Compile Include="Repository\JobPostRepository.cs" />
     <Compile Include="Repository\SignupRepository.cs" />
@@ -216,7 +217,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Admin\AddJobPost.cshtml" />
     <Content Include="Views\Admin\AdminHomepage.cshtml" />
     <Content Include="Views\Admin\AdminLayoutpage.cshtml" />
     <Content Include="Views\Admin\GetJobPostDetails.cshtml" />
@@ -246,8 +246,17 @@
     <Content Include="Views\User\UserLayoutpage.cshtml" />
     <Content Include="Views\User\About.cshtml" />
     <Content Include="Views\User\AddContact.cshtml" />
-    <Content Include="Views\Admin\About.cshtml" />
-    <Content Include="Views\Admin\AddContact.cshtml" />
+    <Content Include="Views\Admin\AddPost.cshtml" />
+    <Content Include="Views\Admin\GetAllPosts.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\EditJobPost.cshtml" />
+    <Content Include="Views\User\GetAllPosts.cshtml" />
+    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\Admin\GetContact.cshtml" />
+    <Content Include="Views\Admin\AddCategory.cshtml" />
+    <Content Include="Views\Admin\GetAllCategories.cshtml" />
+    <Content Include="Views\Admin\EditCategory.cshtml" />
+    <Content Include="Views\Admin\DeleteJobPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
