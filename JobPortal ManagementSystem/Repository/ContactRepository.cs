@@ -24,6 +24,11 @@ namespace JobPortalManagementSystem.Repository
                 string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
                 connection = new SqlConnection(connectionString);
             }
+        /// <summary>
+        /// Add contact 
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
             public bool AddContact(Contact contact)
             {
                 Connection();
@@ -31,9 +36,9 @@ namespace JobPortalManagementSystem.Repository
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@name", contact.name);
                 command.Parameters.AddWithValue("@email", contact.email);
-            command.Parameters.AddWithValue("@subject", contact.subject);
+                command.Parameters.AddWithValue("@subject", contact.subject);
 
-            command.Parameters.AddWithValue("@message", contact.message);
+                command.Parameters.AddWithValue("@message", contact.message);
                 connection.Open();
                 int i = command.ExecuteNonQuery();
                 connection.Close();
@@ -46,6 +51,12 @@ namespace JobPortalManagementSystem.Repository
                     return false;
                 }
             }
+
+
+        /// <summary>
+        /// Get COntact
+        /// </summary>
+        /// <returns></returns>
             public List<Contact> GetContact()
             {
                 Connection();

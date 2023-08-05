@@ -10,5 +10,6 @@ namespace JobPortalManagementSystem.Models
 
         public int countryId { get; set; }
         public string countryName { get; set; }
+      
     }
 }

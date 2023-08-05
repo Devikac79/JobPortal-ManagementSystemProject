@@ -12,10 +12,9 @@ function validateUsername()
             usernameValidation.style.display = "block";
             return false;
         }
-        else if (!/^[\w-\.]+@@([\w-]+\.)+[\w-]{2, 4}$/.test(username))
-        {
-            usernameValidation.textContent = "Invalid email format";
-            usernameValidation.style.display = "block";
+        else if (!/^[\w-\.]+@@([\w-]+\.)+[\w-]{2,4}$/.test(username)) {
+            emailValidation.textContent = "Invalid email format";
+            emailValidation.style.display = "block";
             return false;
         }
 

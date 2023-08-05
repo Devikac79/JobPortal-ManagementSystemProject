@@ -22,24 +22,65 @@ namespace JobPortal_ManagementSystem.Repository
         }
 
 
+        /*  public bool AddCategory(Category category)
+          {
+              Connection();
+              SqlCommand command = new SqlCommand("SPI_Category", connection);
+              command.CommandType = CommandType.StoredProcedure;
+              command.Parameters.AddWithValue("@category", category.category);
+
+              connection.Open();
+              int i = command.ExecuteNonQuery();
+              connection.Close();
+              if (i > 0)
+              {
+                  return true;
+              }
+              else
+              {
+                  return false;
+              }
+          }*/
         public bool AddCategory(Category category)
         {
             Connection();
             SqlCommand command = new SqlCommand("SPI_Category", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@category", category.category);
-           
+
             connection.Open();
             int i = command.ExecuteNonQuery();
             connection.Close();
-            if (i > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            return i > 0;
         }
+
+        string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
+        public List<Category> GetAllCategories()
+        {
+            List<Category> categories = new List<Category>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT categoryId, category FROM Table_JobCategory";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Category category = new Category
+                            {
+                                categoryId = Convert.ToInt32(reader["categoryId"]),
+                                category = Convert.ToString(reader["category"])
+                            };
+                            categories.Add(category);
+                        }
+                    }
+                }
+            }
+            return categories;
+        }
+
     }
 }

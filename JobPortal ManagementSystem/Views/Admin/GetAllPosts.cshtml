@@ -9,104 +9,103 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>GetAllPosts</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            line-height: 1.6;
+            margin: 20px;
         }
 
-        .container {
-            margin-top: 20px;
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .table-image {
-            max-width: 100px;
-            max-height: 100px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        /* Style the table header */
-        .table thead th {
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
             font-weight: bold;
-            background-color: #f8f9fa;
+        }
+
+        td:last-child {
             text-align: center;
         }
 
-        /* Style the table cells */
-        .table tbody td {
-            vertical-align: middle;
+        .action-links {
+            display: flex;
+            justify-content: center;
         }
 
-        /* Style the "Create New" button */
-        .btn-create-new {
+            .action-links a {
+                padding: 5px 10px;
+                margin: 0 5px;
+                color: #fff;
+                background-color: #007bff;
+                text-decoration: none;
+                border-radius: 3px;
+            }
+
+                .action-links a:hover {
+                    background-color: #0056b3;
+                }
+
+        .create-button {
+            text-align: left;
             margin-bottom: 20px;
-            float:left;
         }
-
-      
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2 class="text-center">Job Post List</h2>
-
-        <div class="text-center">
-            @Html.ActionLink("Create New", "AddPost", null, new { @class = "btn btn-primary btn-create-new" })
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Company Name</th>
-                        <th>Location</th>
-                        <th>Min Salary</th>
-                        <th>Max Salary</th>
-                        <th>Post Date</th>
-                        <th>End Date</th>
-
-                        <th>Job Nature</th>
-                        <th>Category</th>
-                        <th>Image</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var post in Model)
-                    {
-                        <tr>
-                            <td>@post.title</td>
-                            <td>@post.companyName</td>
-                            <td>@post.location</td>
-                            <td>@post.minSalary</td>
-                            <td>@post.maxSalary</td>
-                            <td>@post.postDate.ToString("yyyy-MM-dd")</td>
-                            <td>@post.endDate.ToString("yyyy-MM-dd")</td>
-                          
-                            <td>@post.jobNature</td>
-                            <td>@ViewBag.CategoryNames[post.categoryId]</td>
-                            <td>
-                                @if (post.imageData != null && post.imageData.Length > 0)
-                                {
-                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(post.imageData)" alt="Job Post Image" class="table-image" />
-                                }
-                                else
-                                {
-                                    <span>No Image</span>
-                                }
-                            </td>
-                            <td>
-                                @Html.ActionLink("Edit  ", "EditJobPost", new { Id = post.Id }, new { @class = "btn btn-primary btn-sm" })
-                                @Html.ActionLink("Delete", "DeleteJobPost", new { Id = post.Id }, new { @class = "btn btn-primary btn-sm" })
-                            </td>
-                            
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    <div class="create-button">
+        @Html.ActionLink("Create New", "AddPost")
     </div>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Min Salary</th>
+            <th>Max Salary</th>
+            <th>Post Date</th>
+            <th>End Date</th>
+            <th>Description</th>
+            <th>Job Category</th>
+            <th>Job Nature</th>
+            <th>Category ID</th>
+            <th>Company Name</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.title)</td>
+                <td>@Html.DisplayFor(modelItem => item.location)</td>
+                <td>@Html.DisplayFor(modelItem => item.minSalary)</td>
+                <td>@Html.DisplayFor(modelItem => item.maxSalary)</td>
+                <td>@Html.DisplayFor(modelItem => item.postDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.endDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.description)</td>
+                <td>@Html.DisplayFor(modelItem => item.jobCategory)</td>
+                <td>@Html.DisplayFor(modelItem => item.jobNature)</td>
+                <td>@Html.DisplayFor(modelItem => item.categoryId)</td>
+                <td>@Html.DisplayFor(modelItem => item.companyName)</td>
+                <td class="action-links">
+                    @Html.ActionLink("Edit", "EditJobPost", new { Id = item.Id })
+                    @Html.ActionLink("Delete", "DeleteJobPost", new { Id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
 </body>
 </html>
-

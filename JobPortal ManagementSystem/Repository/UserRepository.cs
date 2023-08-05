@@ -24,7 +24,11 @@ namespace JobPortal_ManagementSystem.Repository
             connection = new SqlConnection(connectionString);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public bool AddDetails(User user)
         {
             Connection();

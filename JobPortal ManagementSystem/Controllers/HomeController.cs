@@ -36,6 +36,106 @@ namespace JobPortalManagementSystem.Controllers
             ModelState.Clear();
             return View(signupRepository.GetSignupDetails());
         }
+
+        private SignupRepository signupRepository = new SignupRepository();
+
+        /*   public ActionResult AddSignupDetails()
+           {
+               ViewBag.Countries = signupRepository.GetCountries();
+               ViewBag.States = signupRepository.GetStates();
+               ViewBag.Cities = signupRepository.GetCities();
+
+               Signup signup = new Signup();
+               return View(signup);
+           }
+
+
+           [HttpPost]
+           public ActionResult AddSignupDetails(Signup signup)
+           {
+               try
+               {
+                   if (ModelState.IsValid)
+                   {
+                       if (signupRepository.AddSignupDetails(signup))
+                       {
+                           ViewBag.Message = "User Registration Successful";
+                           return RedirectToAction("Signin"); // Redirect to login page after successful registration
+                       }
+                   }
+                   ViewBag.Countries = signupRepository.GetCountries();
+                   ViewBag.States = signupRepository.GetStates();
+                   ViewBag.Cities = signupRepository.GetCities();
+
+                   return View(signup);
+               }
+               catch
+               {
+                   return View();
+               }
+           }*/
+
+        // GET: /Signup/AddSignupDetails
+
+
+      /*  public ActionResult AddSignupDetails()
+        {
+            ViewBag.Countries = signupRepository.GetCountries();
+            ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
+            ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
+
+            return View(new Signup());
+        }
+
+        // POST: /Signup/AddSignupDetails
+        [HttpPost]
+        public ActionResult AddSignupDetails(Signup signup)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // Perform any additional validation or processing here
+                    // Save the signup details to the database using the repository method
+                    if (signupRepository.AddSignupDetails(signup))
+                    {
+                        ViewBag.Message = "User Registration Successful";
+                        return RedirectToAction("Signin"); // Redirect to login page after successful registration
+                    }
+                    else
+                    {
+                        ViewBag.Message = "User Registration Failed";
+                    }
+                }
+
+                // If ModelState is invalid or registration failed, reload the dropdown data
+                ViewBag.Countries = signupRepository.GetCountries();
+                ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
+                ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
+
+                return View(signup);
+            }
+            catch
+            {
+                ViewBag.Message = "An error occurred while processing your request.";
+                return View(signup);
+            }
+        }
+
+        // Action to fetch states based on the selected country using AJAX
+        public JsonResult GetStatesByCountry(int countryId)
+        {
+            var states = signupRepository.GetStatesByCountry(countryId);
+            return Json(states, JsonRequestBehavior.AllowGet);
+        }
+
+        // Action to fetch cities based on the selected state using AJAX
+        public JsonResult GetCitiesByState(int stateId)
+        {
+            var cities = signupRepository.GetCitiesByState(stateId);
+            return Json(cities, JsonRequestBehavior.AllowGet);
+        }
+      */
         /// <summary>
         /// Get method to view Creating  a record
         /// </summary>

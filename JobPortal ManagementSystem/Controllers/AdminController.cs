@@ -209,47 +209,67 @@ namespace JobPortalManagementSystem.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult AddCategory(Category category)
-        {
-            try
+            [HttpPost]
+            public ActionResult AddCategory(Category category)
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    CategoryRepository categoryRepository = new CategoryRepository();
-                    if (categoryRepository.AddCategory(category))
+                    if (ModelState.IsValid)
                     {
-                        ViewBag.Message = "User Details Added Successfully";
+                        CategoryRepository categoryRepository = new CategoryRepository();
+                        if (categoryRepository.AddCategory(category))
+                        {
+                            ViewBag.Message = "User Details Added Successfully";
 
+                        }
                     }
+                    return RedirectToAction("AdminHomepage", "Admin");
                 }
-                return RedirectToAction("AdminHomepage", "Admin");
+                catch
+                {
+                    return View();
+                }
             }
-            catch
+    
+        public ActionResult GetAllCategories()
+        {
+            List<Category> allCategories = repository.GetAllCategories();
+            return View(allCategories);
+        }
+        [HttpGet]
+        public ActionResult DeleteJobPost(int Id)
+        {
+            // Get the job post by its ID from the repository
+            JobPost jobPost = repository.GetJobPostById(Id);
+
+            // If the job post doesn't exist, return a "Not Found" response
+            if (jobPost == null)
             {
-                return View();
+                return HttpNotFound();
             }
+
+            return View(jobPost); // Pass the job post to the view for confirmation
         }
 
-
         [HttpPost]
-        public ActionResult DeleteSignupDetails(int Id, JobPost jobPost)
+        public ActionResult DeleteJobPost(int Id,JobPost jobPost)
         {
             try
             {
                 JobPostRepository jobPostRepository = new JobPostRepository();
                 if (jobPostRepository.DeleteJobPost(Id))
                 {
-                    ViewBag.AlertMessage("User details deleted successfully");
+                    ViewBag.AlertMessage = "Job post deleted successfully";
                 }
-                return RedirectToAction("GetDetails");
+                return RedirectToAction("GetAllPosts");
             }
             catch
             {
                 return View();
             }
         }
-      
+
+
 
     }
 

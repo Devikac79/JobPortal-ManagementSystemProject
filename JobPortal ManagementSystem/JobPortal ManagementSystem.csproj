@@ -130,7 +130,8 @@
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\Country.cs" />
-    <Compile Include="Models\JobCategory.cs" />
+    <Compile Include="Models\Education.cs" />
+    <Compile Include="Models\Experience.cs" />
     <Compile Include="Models\JobPost.cs" />
     <Compile Include="Models\Nature.cs" />
     <Compile Include="Models\Signin.cs" />

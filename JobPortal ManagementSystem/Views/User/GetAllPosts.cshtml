@@ -1,5 +1,11 @@
 ﻿@model IEnumerable<JobPortalManagementSystem.Models.JobPost>
 
+@{
+    ViewBag.Title = "About";
+    Layout = "~/Views/User/UserLayoutpage.cshtml";
+}
+
+
 <h2>All Posts</h2>
 
 @if (Model != null && Model.Any())
