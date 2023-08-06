@@ -1,0 +1,20 @@
+﻿@model JobPortalManagementSystem.Models.Signup
+
+@{
+    ViewBag.Title = "User Profile Details";
+    Layout = "~/Views/User/UserLayoutpage.cshtml";
+}
+
+<h2>User Profile Details</h2>
+
+<table class="table">
+    <tr>
+        <td><strong>First Name:</strong></td>
+        <td>@Model.firstName</td>
+    </tr>
+    <tr>
+        <td><strong>Last Name:</strong></td>
+        <td>@Model.lastName</td>
+    </tr>
+    <!-- Add other user profile details here -->
+</table>

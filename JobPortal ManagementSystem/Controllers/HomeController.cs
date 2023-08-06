@@ -244,7 +244,7 @@ namespace JobPortalManagementSystem.Controllers
             return View();
         }
 
-       
+
 
         [HttpPost]
         public ActionResult Signin(Signin signin)
@@ -254,16 +254,30 @@ namespace JobPortalManagementSystem.Controllers
                 if (ModelState.IsValid)
                 {
                     SignupRepository signupRepository = new SignupRepository();
-                    string role = signupRepository.GetUserRole(signin.username, signin.password);
+                    Signup userSignup = signupRepository.GetSignupDetailsByUsernameAndPassword(signin.username, signin.password);
 
-                    if (role == "user")
+                    if (userSignup != null)
                     {
-                        return RedirectToAction("UserHomepage", "User");
-                       
-                    }
-                    else if (role == "admin")
-                    {
-                        return RedirectToAction("AdminHomepage", "Admin");
+                        string role = signupRepository.GetUserRole(signin.username, signin.password);
+
+                        // Store user ID and role in session
+                        Session["UserId"] = userSignup.Id;
+                        Session["UserRole"] = role;
+
+                        if (role == "user")
+                        {
+                            // Redirect to UserProfileDetails action in UserController
+                            return RedirectToAction("UserHomepage", "User");
+                        }
+                        else if (role == "admin")
+                        {
+                            // Redirect to AdminHomepage action in AdminController
+                            return RedirectToAction("AdminHomepage", "Admin");
+                        }
+                        else
+                        {
+                            ViewBag.Message = "Invalid role for the user.";
+                        }
                     }
                     else
                     {
@@ -273,9 +287,37 @@ namespace JobPortalManagementSystem.Controllers
 
                 return View();
             }
-            catch
+            catch (Exception ex)
             {
+                // Handle any exceptions that occur during authentication or redirection
+                // Logging, error handling, or custom error messages can be implemented here
+                ViewBag.Message = "An error occurred: " + ex.Message;
                 return View();
+            }
+        }
+        public ActionResult UserProfileDetails(int Id)
+        {
+            try
+            {
+                SignupRepository signupRepository = new SignupRepository();
+                Signup userSignup = signupRepository.GetSignupById(Id);
+
+                if (userSignup != null)
+                {
+                    return View(userSignup);
+                }
+                else
+                {
+                    ViewBag.Message = "User not found";
+                    return View("UserNotFound");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during fetching the user's profile details
+                // Logging, error handling, or custom error messages can be implemented here
+                ViewBag.Message = "An error occurred: " + ex.Message;
+                return View("UserNotFound");
             }
         }
 

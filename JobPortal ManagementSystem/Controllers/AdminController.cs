@@ -110,6 +110,7 @@ namespace JobPortalManagementSystem.Controllers
         {
             List<Category> categories = repository.GetAllCategories();
             ViewBag.Categories = new SelectList(categories, "categoryId", "category");
+
             return View();
         }
 
@@ -120,6 +121,19 @@ namespace JobPortalManagementSystem.Controllers
             {
                 if (imageFile != null && imageFile.ContentLength > 0)
                 {
+
+
+
+
+                    // Check if the uploaded file is an image by validating the file extension
+                    string fileExtension = Path.GetExtension(imageFile.FileName).ToLower();
+                    string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; // Add more extensions as needed
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        ModelState.AddModelError("imageFile", "Only image files (JPG, JPEG, PNG, GIF) are allowed.");
+                        return View(post);
+                    }
+
                     byte[] imageData;
                     using (var binaryReader = new BinaryReader(imageFile.InputStream))
                     {
@@ -132,7 +146,7 @@ namespace JobPortalManagementSystem.Controllers
                 return RedirectToAction("GetAllPosts");
             }
 
-            List<Category> categories = repository.GetAllCategories();
+             List<Category> categories = repository.GetAllCategories();
             ViewBag.Categories = new SelectList(categories, "categoryId", "category");
             return View(post);
         }
