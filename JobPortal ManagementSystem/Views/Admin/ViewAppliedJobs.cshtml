@@ -1,0 +1,66 @@
+﻿@model IEnumerable<JobPortal_ManagementSystem.Models.JobApplication>
+
+@{
+    ViewBag.Title = "ViewAppliedJobs";
+    Layout = "~/Views/Admin/AdminLayoutpage.cshtml";
+}
+
+
+<style>
+    /* Custom CSS for table appearance */
+    .table-responsive {
+        margin:50px;
+        min-height:400px;
+    }
+
+    .table {
+        text-align: center; /* Center-align table content */
+    }
+    tr
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+    .colored-box {
+        background-color:cadetblue!important;
+        color: #343a40;
+        padding: 10px;
+        border: 1px solid #dee2e6;
+    }
+  
+        .colored-box:hover {
+            background-color: #e2e6ea;
+        }
+        h2{
+            text-align:center;
+            padding-bottom:20px;
+        }
+</style>
+<div class="table-responsive">
+    <h2>View AppliedJobs</h2>
+    <table class="table table-hover table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th class="colored-box">@Html.DisplayNameFor(model => model.UserName)</th>
+                <th class="colored-box">@Html.DisplayNameFor(model => model.Email)</th>
+               
+                <th class="colored-box">@Html.DisplayNameFor(model => model.jobPostId)</th>
+                <th class="colored-box">@Html.DisplayNameFor(model => model.applicationDate)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                   
+                    <td>@Html.DisplayFor(modelItem => item.jobPostId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.applicationDate)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

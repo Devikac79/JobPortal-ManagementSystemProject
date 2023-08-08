@@ -34,7 +34,7 @@
 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Find a Job</a>
+                        @Html.ActionLink("Job", "GetAllPosts", "Home", null, new { @class = "nav-item nav-link" })
                     </li>
 
                     <li class="nav-item dropdown">
@@ -45,6 +45,7 @@
                     <li class="nav-item">
                         @Html.ActionLink("Contact", "AddContact", "Home", null, new { @class = "nav-item nav-link" })
                     </li>
+                   
                 </ul>
                 <form class="d-flex" role="search">
 
@@ -71,7 +72,8 @@
                         <!-- Grid column -->
                         <div class="col-md-2">
                             <h6 class="text-uppercase font-weight-bold">
-                                <a href="#!" class="nav-link text-black">Home</a>
+                                @Html.ActionLink("Home", "Homepage", "Home", null, new { @class = "nav-item nav-link text-black" })
+
                             </h6>
                         </div>
                         <!-- Grid column -->
@@ -85,15 +87,15 @@
                         <!-- Grid column -->
                         <div class="col-md-2">
                             <h6 class="text-uppercase font-weight-bold">
-                                <a href="#!" class=" nav-link text-black">About</a>
+                                @Html.ActionLink("About", "About", "Home", null, new { @class = "nav-item nav-link text-black" })
                             </h6>
                         </div>
-                     
+
                         <!-- Grid column -->
                         <!-- Grid column -->
                         <div class="col-md-2">
                             <h6 class="text-uppercase font-weight-bold">
-                                <a href="#!" class="nav-link text-black">Contact</a>
+                                @Html.ActionLink("Contact", "AddContact", "Home", null, new { @class = "nav-item nav-link text-black" })
                             </h6>
                         </div>
                         <!-- Grid column -->
@@ -114,19 +116,13 @@
                         </div>
                     </div>
                 </section>
-                <!-- Section: Text -->
-                <!-- Section: Social -->
                 <section class="text-center mb-5">
-                    <!-- <a href="" class="text-white me-4">
-        <i class="fab fa-facebook"></i>
-    </a>-->
-                    <a href="#" class="px-4"><i class="fa fa-facebook"></i></a>
-                    <a href="#"class="px-4"><i class="fa fa-twitter"></i></a>
-                    <a href="#"class="px-4"><i class="fa fa-instagram"></i></a>
-                    <a href="#"class="px-4"><i class="fa fa-linkedin"></i></a>
-
+                    <a href="https://www.facebook.com/" class="px-4" target="_blank"><i class="fa fa-facebook"></i></a>
+                    <a href="https://twitter.com/" class="px-4" target="_blank"><i class="fa fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/" class="px-4" target="_blank"><i class="fa fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/" class="px-4" target="_blank"><i class="fa fa-linkedin"></i></a>
                 </section>
-                <!-- Section: Social -->
+
             </div>
             <!-- Grid container -->
             <!-- Copyright -->

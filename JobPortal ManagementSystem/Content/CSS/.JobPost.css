@@ -1,0 +1,21 @@
+﻿.form-control {
+    width: 500px;
+}
+/* Optional: If you want to add some space around the form */
+.form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 50px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h4 {
+    text-align: center;
+}
+
+.control-label {
+    font-weight: bold;
+    padding-bottom: 10px;
+}

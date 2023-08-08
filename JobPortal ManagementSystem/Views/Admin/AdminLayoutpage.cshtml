@@ -40,15 +40,27 @@
                     </li>
 
 
-                    
+                    <li class="nav-item">
+                        @Html.ActionLink("All Users", "GetSignupDetails", "Admin", null, new { @class = "nav-item nav-link" })
+                    </li>
+
+
 
                     <li class="nav-item">
                         @Html.ActionLink("All Posts", "GetAllPosts", "Admin", null, new { @class = "nav-item nav-link" })
                     </li>
                     <li class="nav-item">
+                        @Html.ActionLink("Applied", "ViewAppliedJobs", "Admin", null, new { @class = "nav-item nav-link" })
+                    </li>
+                    <li class="nav-item">
                         @Html.ActionLink("Feedback", "GetContact", "Admin", null, new { @class = "nav-item nav-link" })
                     </li>
-                    
+                    <li class="nav-item">
+                        @Html.ActionLink("All Category", "GetAllCategories", "Admin", null, new { @class = "nav-item nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Logout", "Logout", "Admin", null, new { @class = "nav-item nav-link" })
+                    </li>
                 </ul>
                 
             </div>
@@ -62,42 +74,7 @@
             <!-- Grid container -->
             <div class="container">
                 <!-- Section: Links -->
-                <section class="mt-5">
-                    <!-- Grid row-->
-                    <div class="nav-link row text-center d-flex justify-content-center pt-5">
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class="text-uppercase font-weight-bold">
-                                <a href="#!" class="nav-link text-black">Home</a>
-                            </h6>
-                        </div>
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class="text-uppercase font-weight-bold">
-                                <a href="#!" class="nav-link text-black">Job</a>
-                            </h6>
-                        </div>
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class="text-uppercase font-weight-bold">
-                                <a href="#!" class=" nav-link text-black">About</a>
-                            </h6>
-                        </div>
 
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class="text-uppercase font-weight-bold">
-                                <a href="#!" class="nav-link text-black">Contact</a>
-                            </h6>
-                        </div>
-                        <!-- Grid column -->
-                    </div>
-                    <!-- Grid row-->
-                </section>
-                <!-- Section: Links -->
 
                 <hr class="my-5 border-dark" />
 
@@ -112,17 +89,13 @@
                     </div>
                 </section>
                 <!-- Section: Text -->
-                <!-- Section: Social -->
                 <section class="text-center mb-5">
-                    <!-- <a href="" class="text-white me-4">
-                        <i class="fab fa-facebook"></i>
-                    </a>-->
-                    <a href="#" class="px-4"><i class="fa fa-facebook"></i></a>
-                    <a href="#" class="px-4"><i class="fa fa-twitter"></i></a>
-                    <a href="#" class="px-4"><i class="fa fa-instagram"></i></a>
-                    <a href="#" class="px-4"><i class="fa fa-linkedin"></i></a>
-
+                    <a href="https://www.facebook.com/" class="px-4" target="_blank"><i class="fa fa-facebook"></i></a>
+                    <a href="https://twitter.com/" class="px-4" target="_blank"><i class="fa fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/" class="px-4" target="_blank"><i class="fa fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/" class="px-4" target="_blank"><i class="fa fa-linkedin"></i></a>
                 </section>
+
                 <!-- Section: Social -->
             </div>
             <!-- Grid container -->

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using System.Web.UI.WebControls;
 
 namespace JobPortalManagementSystem.Controllers
@@ -24,6 +25,9 @@ namespace JobPortalManagementSystem.Controllers
 
             return View();
         }
+        private readonly JobPostRepository jobPostRepository;
+     
+        
 
 
         /// <summary>
@@ -78,64 +82,64 @@ namespace JobPortalManagementSystem.Controllers
         // GET: /Signup/AddSignupDetails
 
 
-      /*  public ActionResult AddSignupDetails()
-        {
-            ViewBag.Countries = signupRepository.GetCountries();
-            ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
-            ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
+        /*  public ActionResult AddSignupDetails()
+          {
+              ViewBag.Countries = signupRepository.GetCountries();
+              ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
+              ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
 
-            return View(new Signup());
-        }
+              return View(new Signup());
+          }
 
-        // POST: /Signup/AddSignupDetails
-        [HttpPost]
-        public ActionResult AddSignupDetails(Signup signup)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    // Perform any additional validation or processing here
-                    // Save the signup details to the database using the repository method
-                    if (signupRepository.AddSignupDetails(signup))
-                    {
-                        ViewBag.Message = "User Registration Successful";
-                        return RedirectToAction("Signin"); // Redirect to login page after successful registration
-                    }
-                    else
-                    {
-                        ViewBag.Message = "User Registration Failed";
-                    }
-                }
+          // POST: /Signup/AddSignupDetails
+          [HttpPost]
+          public ActionResult AddSignupDetails(Signup signup)
+          {
+              try
+              {
+                  if (ModelState.IsValid)
+                  {
+                      // Perform any additional validation or processing here
+                      // Save the signup details to the database using the repository method
+                      if (signupRepository.AddSignupDetails(signup))
+                      {
+                          ViewBag.Message = "User Registration Successful";
+                          return RedirectToAction("Signin"); // Redirect to login page after successful registration
+                      }
+                      else
+                      {
+                          ViewBag.Message = "User Registration Failed";
+                      }
+                  }
 
-                // If ModelState is invalid or registration failed, reload the dropdown data
-                ViewBag.Countries = signupRepository.GetCountries();
-                ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
-                ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
+                  // If ModelState is invalid or registration failed, reload the dropdown data
+                  ViewBag.Countries = signupRepository.GetCountries();
+                  ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
+                  ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
 
-                return View(signup);
-            }
-            catch
-            {
-                ViewBag.Message = "An error occurred while processing your request.";
-                return View(signup);
-            }
-        }
+                  return View(signup);
+              }
+              catch
+              {
+                  ViewBag.Message = "An error occurred while processing your request.";
+                  return View(signup);
+              }
+          }
 
-        // Action to fetch states based on the selected country using AJAX
-        public JsonResult GetStatesByCountry(int countryId)
-        {
-            var states = signupRepository.GetStatesByCountry(countryId);
-            return Json(states, JsonRequestBehavior.AllowGet);
-        }
+          // Action to fetch states based on the selected country using AJAX
+          public JsonResult GetStatesByCountry(int countryId)
+          {
+              var states = signupRepository.GetStatesByCountry(countryId);
+              return Json(states, JsonRequestBehavior.AllowGet);
+          }
 
-        // Action to fetch cities based on the selected state using AJAX
-        public JsonResult GetCitiesByState(int stateId)
-        {
-            var cities = signupRepository.GetCitiesByState(stateId);
-            return Json(cities, JsonRequestBehavior.AllowGet);
-        }
-      */
+          // Action to fetch cities based on the selected state using AJAX
+          public JsonResult GetCitiesByState(int stateId)
+          {
+              var cities = signupRepository.GetCitiesByState(stateId);
+              return Json(cities, JsonRequestBehavior.AllowGet);
+          }
+        */
         /// <summary>
         /// Get method to view Creating  a record
         /// </summary>
@@ -157,7 +161,7 @@ namespace JobPortalManagementSystem.Controllers
 
                 if (ModelState.IsValid)
                 {
-                   SignupRepository signupRepository = new SignupRepository();
+                    SignupRepository signupRepository = new SignupRepository();
                     if (signupRepository.AddSignupDetails(signup))
                     {
                         ViewBag.Message = "User Registration Successful";
@@ -171,9 +175,6 @@ namespace JobPortalManagementSystem.Controllers
                 return View();
             }
         }
-
-
-
 
 
 
@@ -197,7 +198,7 @@ namespace JobPortalManagementSystem.Controllers
         /// <param name="Id"></param>
         /// <param name="signup"></param>
         /// <returns></returns>
-        [HttpPost]
+    /*    [HttpPost]
         public ActionResult EditSignupDetails(int? Id, Signup signup)
         {
             try
@@ -210,7 +211,7 @@ namespace JobPortalManagementSystem.Controllers
             {
                 return View();
             }
-        }
+        }*/
         /// <summary>
         /// Deleting the record
         /// </summary>
@@ -246,55 +247,62 @@ namespace JobPortalManagementSystem.Controllers
 
 
 
-        [HttpPost]
-        public ActionResult Signin(Signin signin)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    SignupRepository signupRepository = new SignupRepository();
+           [HttpPost]
+           public ActionResult Signin(Signin signin)
+           {
+               try
+               {
+                   if (ModelState.IsValid)
+                   {
+                       SignupRepository signupRepository = new SignupRepository();
+                    string role = signupRepository.GetUserRole(signin.username, signin.password);
+
                     Signup userSignup = signupRepository.GetSignupDetailsByUsernameAndPassword(signin.username, signin.password);
 
-                    if (userSignup != null)
+                       if (userSignup != null)
+                       {
+                          // string role = signupRepository.GetUserRole(signin.username, signin.password);
+
+
+                           // Store user ID and role in session
+                           Session["UserId"] = userSignup.Id;
+                           Session["UserRole"] = role;
+
+
+                           if (role == "user")
+                           {
+                               // Redirect to UserProfileDetails action in UserController
+                               return RedirectToAction("UserHomepage", "User");
+                           }
+                           else if (role == "admin")
+                           {
+                               // Redirect to AdminHomepage action in AdminController
+                               return RedirectToAction("AdminHomepage", "Admin");
+                           }
+                           else
+                           {
+                               ViewBag.Message = "Invalid role for the user.";
+                           }
+                       }
+                       else if (role == "admin")
                     {
-                        string role = signupRepository.GetUserRole(signin.username, signin.password);
-
-                        // Store user ID and role in session
-                        Session["UserId"] = userSignup.Id;
-                        Session["UserRole"] = role;
-
-                        if (role == "user")
-                        {
-                            // Redirect to UserProfileDetails action in UserController
-                            return RedirectToAction("UserHomepage", "User");
-                        }
-                        else if (role == "admin")
-                        {
-                            // Redirect to AdminHomepage action in AdminController
-                            return RedirectToAction("AdminHomepage", "Admin");
-                        }
-                        else
-                        {
-                            ViewBag.Message = "Invalid role for the user.";
-                        }
+                        return RedirectToAction("AdminHomepage", "Admin");
                     }
-                    else
-                    {
-                        ViewBag.Message = "Invalid username or password";
-                    }
-                }
+                   }
 
-                return View();
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions that occur during authentication or redirection
-                // Logging, error handling, or custom error messages can be implemented here
-                ViewBag.Message = "An error occurred: " + ex.Message;
-                return View();
-            }
-        }
+                   return View();
+               }
+               catch (Exception ex)
+               {
+                   // Handle any exceptions that occur during authentication or redirection
+                   // Logging, error handling, or custom error messages can be implemented here
+                   ViewBag.Message = "An error occurred: " + ex.Message;
+                   return View();
+               }
+           }
+
+
+       
         public ActionResult UserProfileDetails(int Id)
         {
             try
@@ -568,6 +576,26 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
+        public HomeController()
+        {
+            jobPostRepository = new JobPostRepository();
+          
+        }
 
+
+        public ActionResult GetAllPosts()
+        {
+            List<JobPost> allPosts = jobPostRepository.GetAllPosts();
+            return View("GetAllPosts", allPosts);
+        }
+        [HttpGet]
+        public ActionResult Details(int Id)
+        {
+            // Fetch the job post details by id from the repository
+            JobPost post = jobPostRepository.GetJobPostById(Id);
+
+            // Return the view with the job post details
+            return View(post);
+        }
     }
 }

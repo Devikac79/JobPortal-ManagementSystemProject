@@ -9,103 +9,114 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>GetAllPosts</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
+        .btn-custom {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            width:60px;
+            margin-bottom:10px;
         }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
+        .btn1{
+            float:left!important;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* Optional: Adjust spacing between rows in the table */
+        .table tbody tr {
+            vertical-align: middle;
         }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
         th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+            background-color: #007BFF !important;
+            height: 50px;
         }
-
-        td:last-child {
-            text-align: center;
-        }
-
-        .action-links {
+        /* Custom CSS for the "Create New" button */
+        .create-button-container {
             display: flex;
-            justify-content: center;
-        }
-
-            .action-links a {
-                padding: 5px 10px;
-                margin: 0 5px;
-                color: #fff;
-                background-color: #007bff;
-                text-decoration: none;
-                border-radius: 3px;
-            }
-
-                .action-links a:hover {
-                    background-color: #0056b3;
-                }
-
-        .create-button {
-            text-align: left;
+            justify-content: flex-start;
+            align-items: center;
             margin-bottom: 20px;
         }
+
+            .create-button-container .create-button {
+                margin-right: 10px;
+            }
+
+           .create-button-container .create-button a {
+                    color: #fff;
+                    background-color: #007BFF;
+                    border-color: #007BFF;
+                    border-radius: 3px;
+                    padding: 5px 10px;
+                    text-decoration: none;
+                }
+
+          .create-button-container .create-button a:hover {
+                        background-color: #0056b3;
+                    }
+
+          h2{
+              display:flex;
+              justify-content:center;
+          }
     </style>
 </head>
 <body>
-    <div class="create-button">
-        @Html.ActionLink("Create New", "AddPost")
+    <div class="container mt-4">
+        <h2>All Posts</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div class="create-button-container">
+                <div class="create-button">
+                    @Html.ActionLink("Create New", "AddPost", new { @class = "btn btn-primary btn-custom" })
+                </div>
+
+            </div>
+
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Min Salary</th>
+                    <th>Max Salary</th>
+                    <th>Post Date</th>
+                    <th>End Date</th>
+                    <th>Description</th>
+                    <th>Job Category</th>
+                    <th>Job Nature</th>
+                    <th>Category ID</th>
+                    <th>Company Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.title)</td>
+                        <td>@Html.DisplayFor(modelItem => item.location)</td>
+                        <td>@Html.DisplayFor(modelItem => item.minSalary)</td>
+                        <td>@Html.DisplayFor(modelItem => item.maxSalary)</td>
+                        <td>@Html.DisplayFor(modelItem => item.postDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.endDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.jobCategory)</td>
+                        <td>@Html.DisplayFor(modelItem => item.jobNature)</td>
+                        <td>@Html.DisplayFor(modelItem => item.categoryId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.companyName)</td>
+                        <td>
+                            @Html.ActionLink("Edit", "EditJobPost", new { Id = item.Id }, new { @class = "btn btn-primary btn-custom" })
+                            @Html.ActionLink("Delete", "DeleteJobPost", new { Id = item.Id }, new { @class = "btn btn-danger btn-custom" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Location</th>
-            <th>Min Salary</th>
-            <th>Max Salary</th>
-            <th>Post Date</th>
-            <th>End Date</th>
-            <th>Description</th>
-            <th>Job Category</th>
-            <th>Job Nature</th>
-            <th>Category ID</th>
-            <th>Company Name</th>
-            <th></th>
-        </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.title)</td>
-                <td>@Html.DisplayFor(modelItem => item.location)</td>
-                <td>@Html.DisplayFor(modelItem => item.minSalary)</td>
-                <td>@Html.DisplayFor(modelItem => item.maxSalary)</td>
-                <td>@Html.DisplayFor(modelItem => item.postDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.endDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.description)</td>
-                <td>@Html.DisplayFor(modelItem => item.jobCategory)</td>
-                <td>@Html.DisplayFor(modelItem => item.jobNature)</td>
-                <td>@Html.DisplayFor(modelItem => item.categoryId)</td>
-                <td>@Html.DisplayFor(modelItem => item.companyName)</td>
-                <td class="action-links">
-                    @Html.ActionLink("Edit", "EditJobPost", new { Id = item.Id })
-                    @Html.ActionLink("Delete", "DeleteJobPost", new { Id = item.Id })
-                </td>
-            </tr>
-        }
-
-    </table>
+    <!-- Include Bootstrap JS and Popper.js -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

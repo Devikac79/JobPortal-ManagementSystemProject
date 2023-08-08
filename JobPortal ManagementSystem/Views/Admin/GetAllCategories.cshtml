@@ -4,31 +4,86 @@
     ViewBag.Title = "GetAllCategories";
     Layout = "~/Views/Admin/AdminLayoutpage.cshtml";
 }
+<!DOCTYPE html>
 
-<h2>GetAllCategories</h2>
+<html>
+<head>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.category)
-        </th>
-        <th></th>
-    </tr>
+    <style>
+  
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.category)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.categoryId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.categoryId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.categoryId })
-        </td>
-    </tr>
-}
+        .table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
 
-</table>
+        }
+
+        .table-wrapper {
+            width: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border-radius: 6px;
+        }
+
+        table {
+            width: 120%;
+         //   border-collapse: collapse;
+            background-color: #fff;
+           
+        }
+        th {
+            background-color: #007BFF !important;
+            font-size: 24px;
+            text-align: center;
+            height:50px;
+        }
+        th, td {
+            padding: 5px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .create-link {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+      
+    </style>
+
+</head>
+<body>
+    <div class="table-container">
+        <div class="table-wrapper">
+            
+            <table>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.category)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.category)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</body>
+</html>

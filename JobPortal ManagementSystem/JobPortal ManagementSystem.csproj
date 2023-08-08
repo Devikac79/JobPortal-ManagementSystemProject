@@ -146,9 +146,21 @@
     <Compile Include="Repository\JobPostRepository.cs" />
     <Compile Include="Repository\SignupRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
+    <Content Include="Content\CSS\.JobPost.css" />
+    <Content Include="Content\CSS\Signup.css" />
+    <Content Include="Content\Images\Admin.jpg" />
+    <Content Include="Content\Images\homepage.jpg" />
+    <Content Include="Content\Images\user.jpg" />
+    <Content Include="Content\Javascript\JobPost.js" />
+    <Content Include="Content\Javascript\Signup.js" />
     <Content Include="Views\User\GetSignupDetails.cshtml" />
     <Content Include="Views\User\EditUserProfile.cshtml" />
     <Content Include="Views\User\ApplyForJob.cshtml" />
+    <Content Include="Views\Admin\GetSignupDetails.cshtml" />
+    <Content Include="Views\Admin\DeleteSignupDetails.cshtml" />
+    <Content Include="Views\Home\GetAllPosts.cshtml" />
+    <Content Include="Views\Home\Details.cshtml" />
+    <Content Include="Views\Admin\ViewAppliedJobs.cshtml" />
     <None Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\User\UserProfileDetails.cshtml" />
   </ItemGroup>

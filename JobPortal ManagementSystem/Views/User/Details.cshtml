@@ -10,67 +10,123 @@
     <meta charset="utf-8" />
     <title>Job Post Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5" style="padding-left:200px;">
-        <h2>Job Post Details</h2>
 
-        @if (Model != null)
-        {
-            <div class="row">
-                <div class="col-md-4">
-                    <dl>
-                        <dt>Title</dt>
-                        <dd>@Model.title</dd>
+    <style>
+        /* Custom CSS */
+      
 
-                        <dt>Company Name</dt>
-                        <dd>@Model.companyName</dd>
+        .job-details-container {
+            background-color: #fff;
+            padding: 40px;
+            border: 1px solid #dee2e6; /* Add a border */
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-                        <dt>Location</dt>
-                        <dd>@Model.location</dd>
+        .job-title {
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+            padding-bottom:30px;
+        }
 
-                        <dt>Min Salary</dt>
-                        <dd>@Model.minSalary</dd>
+        .job-details {
+            margin-top: 20px;
+        }
 
-                        <dt>Max Salary</dt>
-                        <dd>@Model.maxSalary</dd>
+            .job-details dt {
+                font-weight: bold;
+            }
+            dd{
+                padding-right:20px;
+            }
+        .job-image {
+            max-width: 300px;
+            border-radius: 5px;
+        }
 
-                        <dt>Post Date</dt>
-                        <dd>@Model.postDate.ToString("yyyy-MM-dd")</dd>
+        .apply-button {
+            margin-top: 20px;
+        }
 
-                        <dt>End Date</dt>
-                        <dd>@Model.endDate.ToString("yyyy-MM-dd")</dd>
+            .apply-button a {
+                padding: 10px 20px;
+                font-size: 18px;
+                color: #fff;
+                background-color: #007bff;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.2s;
+            }
 
-                        <dt>Description</dt>
-                        <dd>@Model.description</dd>
-
-                        <dt>Job Category</dt>
-                        <dd>@Model.jobCategory</dd>
-
-                        <dt>Job Nature</dt>
-                        <dd>@Model.jobNature</dd>
-
-                    </dl>
-                </div>
-
-                @* Display the image if available *@
-                @if (Model.imageData != null && Model.imageData.Length > 0)
-                {
-                    <div class="col-md-4 text-right">
-                        <img src="data:image/png;base64,@Convert.ToBase64String(Model.imageData)" alt="Job Post Image" ;class="img-thumbnail" style="max-width: 300px;" />
-                    </div>
+                .apply-button a:hover {
+                    background-color: #0056b3;
                 }
 
+        .not-found {
+            text-align: center;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 ">
+        <div class="job-details-container">
+            @if (Model != null)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="job-title">@Model.title</h2>
+                        <dl class="row">
+                            <dt class="col-md-4">Company Name</dt>
+                            <dd class="col-md-8">@Model.companyName</dd>
 
-                <div class="mt-4">
-                    <a href="@Url.Action("ApplyForJob", "User", new { jobId = Model.Id })" class="btn btn-primary">Apply for Job</a>
+                            <dt class="col-md-4">Location</dt>
+                            <dd class="col-md-8">@Model.location</dd>
+
+                            <dt class="col-md-4">Min Salary</dt>
+                            <dd class="col-md-8">$@Model.minSalary</dd>
+
+                            <dt class="col-md-4">Max Salary</dt>
+                            <dd class="col-md-8">$@Model.maxSalary</dd>
+
+                            <dt class="col-md-4">Post Date</dt>
+                            <dd class="col-md-8">@Model.postDate.ToString("yyyy-MM-dd")</dd>
+
+                            <dt class="col-md-4">End Date</dt>
+                            <dd class="col-md-8">@Model.endDate.ToString("yyyy-MM-dd")</dd>
+
+                            <dt class="col-md-4">Description</dt>
+                            <dd class="col-md-8">@Model.description</dd>
+
+                            <dt class="col-md-4">Job Category</dt>
+                            <dd class="col-md-8">@Model.jobCategory</dd>
+
+                            <dt class="col-md-4">Job Nature</dt>
+                            <dd class="col-md-8">@Model.jobNature</dd>
+                        </dl>
+                    </div>
+
+                    @* Display the image if available *@
+                    @if (Model.imageData != null && Model.imageData.Length > 0)
+                    {
+                        <div class="col-md-6 text-center">
+                            <img src="data:image/png;base64,@Convert.ToBase64String(Model.imageData)" alt="Job Post Image" class="job-image img-thumbnail" />
+                        </div>
+                    }
                 </div>
-            </div>
-        }
-        else
-        {
-            <p>Job post not found.</p>
-        }
+
+                <div class="row justify-content-center mt-4 apply-button">
+                    <div class="col-md-6 text-center">
+                        <a href="@Url.Action("ApplyForJob", "User", new { jobId = Model.Id })" class="btn btn-primary">Apply for Job</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p class="not-found">Job post not found.</p>
+            }
+        </div>
     </div>
 </body>
 </html>

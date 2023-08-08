@@ -1,0 +1,28 @@
+﻿/* Center the box vertically and horizontally on the page */
+.container4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5; /* Set a background color */
+}
+
+/* Style the form box */
+.form-box {
+    background-color: #ffffff;
+    margin: 20px;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Adjust the width as needed */
+    max-width: 500px; /* Set a maximum width for larger screens */
+}
+
+/* Center the submit button */
+.text-center {
+    text-align: center;
+}
+
+.control-label {
+    font-weight: bold;
+}

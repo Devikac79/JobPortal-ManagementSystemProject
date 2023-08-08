@@ -15,7 +15,9 @@
     color:rgb(10,10,94) !important;
     text-decoration:none;
 }
-
+.btn{
+    color:white;
+}
 .nav-link:hover{
     color:red !important;
     transition:0.3s;
@@ -66,7 +68,7 @@
 
 
 .main {
-    background-image: url(/Content/Images/Home1.jpg);
+    background-image: url(/Content/Images/homepage.jpg);
     background-repeat: repeat;
     background-size: cover;
     min-height: 95vh;

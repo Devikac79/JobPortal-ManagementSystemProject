@@ -20,42 +20,46 @@ namespace JobPortal_ManagementSystem.Repository
             string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
             connection = new SqlConnection(connectionString);
         }
+        string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
 
-
-        /*  public bool AddCategory(Category category)
-          {
-              Connection();
-              SqlCommand command = new SqlCommand("SPI_Category", connection);
-              command.CommandType = CommandType.StoredProcedure;
-              command.Parameters.AddWithValue("@category", category.category);
-
-              connection.Open();
-              int i = command.ExecuteNonQuery();
-              connection.Close();
-              if (i > 0)
-              {
-                  return true;
-              }
-              else
-              {
-                  return false;
-              }
-          }*/
         public bool AddCategory(Category category)
         {
-            Connection();
-            SqlCommand command = new SqlCommand("SPI_Category", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@category", category.category);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
-            connection.Open();
-            int i = command.ExecuteNonQuery();
-            connection.Close();
+                string query = "INSERT INTO Table_JobCategory (category) VALUES (@category)";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlParameter paramCategory = new SqlParameter("@category", SqlDbType.VarChar);
+                    paramCategory.Value = category.category;
+                    command.Parameters.Add(paramCategory);
 
-            return i > 0;
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
         }
 
-        string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
+        
+
+      /*public bool AddCategory(Category category)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "INSERT INTO Table_JobCategory (category) VALUES (@category)";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@category", category.category);
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+     
+*/
         public List<Category> GetAllCategories()
         {
             List<Category> categories = new List<Category>();

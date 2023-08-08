@@ -12,165 +12,143 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>AddJobPost</title>
+    <title>Add a job</title>
+    <link href="~/Content/CSS/.JobPost.css" rel="stylesheet" />
     <style>
-        
-        .form-control{
-            width:500px;
-        }
-        /* Optional: If you want to add some space around the form */
-        .form-container {
-            
-
-        
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 50px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h4{
-            text-align:center;
-        }
-        .control-label{
-            font-weight:bold;
-            padding-bottom:10px;
+        /* Apply CSS styles to the title element */
+        .form-head{
+            background-color: cadetblue;
+            color: black;
+            padding: 10px;
+            border-radius: 3px;
+            margin-bottom:20px;
+           
+           
+          
         }
     </style>
 
 
 </head>
 <body>
+    
     <div class="form-container">
-       
-
-            @using (Html.BeginForm("AddPost", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-
-           
-                <h4>Job post</h4>
-                
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.title,"Title", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", onfocusout = "validateTitle()" } })
-                        @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger", @id = "titleValidationMessage" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.companyName,"Company", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.location,"Location", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.location, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.location, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.minSalary,"Minimumsalary", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.minSalary, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.minSalary, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.maxSalary, "Maximumsalary", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.maxSalary, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.maxSalary, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.postDate,"Postdate", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.postDate, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.postDate, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.endDate,"Enddate", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.endDate, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.endDate, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.description, "Description",htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.jobCategory, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.jobCategory, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.jobCategory, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.jobNature, "Nature",htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.jobNature, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.jobNature, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(m => m.categoryId,"Category", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.DropDownListFor(m => m.categoryId, ViewBag.Categories as SelectList, "Select a Category", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.Label("Image","Image", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <input type="file" name="imageFile" id="imageFile" class="form-control" />
-                </div>
-                <br />
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Add post" class="btn btn-primary" />
-                    </div>
-                </div>
-           
-            }
-
+        <div class="form-head">
+            <h4>Add a job</h4>
         </div>
+        @using (Html.BeginForm("AddPost", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
 
- 
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <script>
-    // Function to show validation message in the <span> element
-    function showValidationMessage(inputId, message) {
-        const validationSpan = document.getElementById(inputId + 'ValidationMessage');
-        validationSpan.textContent = message;
-    }
+            <div class="form-group">
+                @Html.LabelFor(model => model.title, "Title", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", @id = "title", @onfocusout = "validateTitle()", placeholder = "Enter Job title" } })
+                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger", @id = "titleValidationMessage" })
+                </div>
+            </div>
 
-    // Validation function for the title field
-    function validateTitle() {
-        const titleField = document.getElementById('title').value.trim();
-        if (titleField.length < 3) {
-            showValidationMessage('title', 'Title must contain at least 3 characters.');
-        } else {
-            showValidationMessage('title', ''); // Clear the validation message if valid
+            <div class="form-group">
+                @Html.LabelFor(model => model.companyName, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "form-control", @id = "companyName", @onfocusout = "validateCompanyName()", placeholder = "Enter Company Name" } })
+                    @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger", @id = "companyNameValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.location, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.location, new { htmlAttributes = new { @class = "form-control", @id = "location", @onfocusout = "validateLocation()", placeholder = "Enter Company Location" } })
+                    @Html.ValidationMessageFor(model => model.location, "", new { @class = "text-danger", @id = "locationValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.minSalary, "Minimumsalary", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.minSalary, new { htmlAttributes = new { @class = "form-control", @id = "minSalary", @onfocusout = "validateMinSalary()", placeholder = "Enter Minimum salary" } })
+                    @Html.ValidationMessageFor(model => model.minSalary, "", new { @class = "text-danger", @id = "minSalaryValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.maxSalary, "Maximumsalary", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.maxSalary, new { htmlAttributes = new { @class = "form-control", @id = "maxSalary", @onfocusout = "validateMaxSalary()", placeholder = "Enter Maximum Salary" } })
+                    @Html.ValidationMessageFor(model => model.maxSalary, "", new { @class = "text-danger", @id = "maxSalaryValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.postDate, "Postdate", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.postDate, new { htmlAttributes = new { @class = "form-control", @id = "postDate", @onchange = "disablePreviousDates()" } })
+                    @Html.ValidationMessageFor(model => model.postDate, "", new { @class = "text-danger", @id = "postDateValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.endDate, "Enddate", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.endDate, new { htmlAttributes = new { @class = "form-control", @id = "postDate", @onchange = "disablePreviousDates()" } })
+                    @Html.ValidationMessageFor(model => model.endDate, "", new { @class = "text-danger", @id = "endDateValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.description, "Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control", @id = "description", @onfocusout = "validateDescription()", placeholder = "Enter Job description" } })
+                    @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger", @id = "descriptionValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.jobCategory, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.jobCategory, new { htmlAttributes = new { @class = "form-control", @id = "jobCategory", @onfocusout = "validateJobCategory()", placeholder = "Enter Job Category" } })
+                    @Html.ValidationMessageFor(model => model.jobCategory, "", new { @class = "text-danger", @id = "jobCategoryValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.jobNature, "Nature", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.jobNature, new { htmlAttributes = new { @class = "form-control", @id = "jobNature", @onfocusout = "validateJobNature()", placeholder = "Enter Job Nature" } })
+                    @Html.ValidationMessageFor(model => model.jobNature, "", new { @class = "text-danger", @id = "jobNatureValidationMessage" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.categoryId, "Category", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.categoryId, ViewBag.Categories as SelectList, "Select a Category", new { @class = "form-control", @id = "categoryId" })
+            </div>
+
+            <!-- <div class="form-group">
+            @Html.Label("Image", "Image", htmlAttributes: new { @class = "control-label col-md-2",  placeholder = "Upload jpeg or jpg image" })
+            <input type="file" name="imageFile" id="imageFile" class="form-control" />
+        </div>-->
+            <div class="form-group">
+                @Html.Label("Image", "Image", htmlAttributes: new { @class = "control-label col-md-2" })
+                <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg, .jpeg" />
+                <span id="imageValidationMessage" class="text-danger" style="display: none;"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Add post" class="btn btn-primary" />
+                </div>
+            </div>
+
         }
-    }
+    </div>
 
-    </script>
+    <script src="~/Content/Javascript/JobPost.js"></script>
+    
 
 </body>
 </html>

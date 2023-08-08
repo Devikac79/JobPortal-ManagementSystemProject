@@ -17,10 +17,13 @@ namespace JobPortalManagementSystem.Controllers
     public class AdminController : Controller
     {
         private readonly JobPostRepository repository;
-        
+        private readonly CategoryRepository categoryRepository;
+        private readonly JobApplicationRepository jobApplicationRepository;
+
         public AdminController()
         {
             repository = new JobPostRepository();
+            jobApplicationRepository =new JobApplicationRepository();
         }
 
         // GET: Admin
@@ -223,28 +226,27 @@ namespace JobPortalManagementSystem.Controllers
             return View();
         }
 
-            [HttpPost]
-            public ActionResult AddCategory(Category category)
+        [HttpPost]
+        public ActionResult AddCategory(Category category)
+        {
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
+                    CategoryRepository categoryRepository = new CategoryRepository();
+                    if (categoryRepository.AddCategory(category))
                     {
-                        CategoryRepository categoryRepository = new CategoryRepository();
-                        if (categoryRepository.AddCategory(category))
-                        {
-                            ViewBag.Message = "User Details Added Successfully";
+                        ViewBag.Message = "category added Added Successfully";
 
-                        }
                     }
-                    return RedirectToAction("AdminHomepage", "Admin");
                 }
-                catch
-                {
-                    return View();
-                }
+                return RedirectToAction("AdminHomepage", "Admin");
             }
-    
+            catch
+            {
+                return View();
+            }
+        }
         public ActionResult GetAllCategories()
         {
             List<Category> allCategories = repository.GetAllCategories();
@@ -283,9 +285,90 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
+        public ActionResult GetSignupDetails()
+        {
+            SignupRepository signupRepository = new SignupRepository();
+            ModelState.Clear();
+            return View(signupRepository.GetSignupDetails());
+        }
+        public ActionResult Logout()
+        {
+            // Clear session data
+            Session.Clear();
+
+            // Redirect the user to the desired page after logout (e.g., homepage)
+            return RedirectToAction("Homepage", "Home");
+        }
 
 
+
+        /*  public ActionResult DeleteSignupDetails(int Id, Signup signup)
+          {
+              try
+              {
+                  SignupRepository signupRepository = new SignupRepository();
+                //  Signup signup = signupRepository.GetSignupById(Id);
+
+
+
+
+                  if (signupRepository.DeleteSignupDetails(Id))
+                  {
+                      ViewBag.AlertMessage("User details deleted successfully");
+                  }
+                  return RedirectToAction("AdminHomepage","Admin");
+              }
+              catch
+              {
+                  return View();
+              }
+          }
+        */
+        public ActionResult DeleteDetails(int Id) // Signup signup
+        {
+
+            SignupRepository signupRepository = new SignupRepository();
+            return View(signupRepository.GetSignupDetails().Find(signup => signup.Id == Id));
+        }
+        [HttpPost]
+        public ActionResult DeleteDetails(int Id, Signup signup) // Signup signup
+        {
+            try
+            {
+                SignupRepository signupRepository = new SignupRepository();
+                if (signupRepository.DeleteSignupDetails(Id))
+                {
+                    ViewBag.AlertMessage("User details deleted successfully");
+                }
+                return RedirectToAction("GetDetails");
+            }
+            catch
+            {
+                return View();
+            }
+
+            //SignupRepository signupRepository = new SignupRepository();
+            //return View(signupRepository.GetDetails().Find(signup => signup.Id == Id));
+        }
+
+
+
+
+
+
+
+      
+
+        // Action to view all applied jobs
+        public ActionResult ViewAppliedJobs()
+        {
+            var appliedJobs = jobApplicationRepository.GetAllAppliedJobs();
+            return View(appliedJobs);
+        }
     }
+
+
+
 
 
 }
