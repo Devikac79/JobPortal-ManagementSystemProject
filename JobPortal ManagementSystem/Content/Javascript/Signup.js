@@ -60,7 +60,7 @@ function validateEmail() {
     const emailField = document.getElementById('email').value.trim();
     const emailValidation = document.getElementById('emailValidation');
 
-    const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/; // Basic email format regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email format regex
 
     if (emailField === '') {
         emailValidation.textContent = 'Email cannot be empty.';
@@ -174,7 +174,7 @@ function validateUsername() {
     const usernameField = document.getElementById('username').value.trim();
     const usernameValidation = document.getElementById('usernameValidation');
 
-    const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/; // Basic email format regex
+    const emailRegex = /^[^\s@]+@[^\s@@]+\.[^\s@]+$/; // Basic email format regex
 
     if (usernameField === '') {
         usernameValidation.textContent = 'Username cannot be empty.';

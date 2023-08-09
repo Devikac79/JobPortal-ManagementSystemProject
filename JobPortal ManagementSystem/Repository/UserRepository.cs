@@ -29,29 +29,34 @@ namespace JobPortal_ManagementSystem.Repository
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
+
         public bool AddDetails(User user)
         {
-            Connection();
-            SqlCommand command = new SqlCommand("AddUser", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@FirstName", user.FirstName);
-            command.Parameters.AddWithValue("@LastName", user.LastName);
+            try
+            {
+                Connection();
+                SqlCommand command = new SqlCommand("AddUser", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@FirstName", user.FirstName);
+                command.Parameters.AddWithValue("@LastName", user.LastName);
+                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@Password", user.Password);
+                command.Parameters.AddWithValue("@Phone", user.Phone);
+                command.Parameters.AddWithValue("@Address", user.Address);
+                command.Parameters.AddWithValue("@ResumePath", user.ResumePath);
+                command.Parameters.AddWithValue("@ImagePath", user.ImagePath);
+                command.Parameters.Add("@image", SqlDbType.VarBinary, -1).Value = user.image ?? (object)DBNull.Value;
+                command.Parameters.Add("@resume", SqlDbType.VarBinary, -1).Value = user.resume ?? (object)DBNull.Value;
 
-            command.Parameters.AddWithValue("@Email", user.Email);
-            command.Parameters.AddWithValue("@Password", user.Password);
-            command.Parameters.AddWithValue("@Phone", user.Phone);
-            command.Parameters.AddWithValue("@Address", user.Address);
-            command.Parameters.AddWithValue("@ResumePath", user.ResumePath);
-            command.Parameters.AddWithValue("ImagePath", user.ImagePath);
-            connection.Open();
-            int i = command.ExecuteNonQuery();
-            connection.Close();
-            if (i > 0)
-            {
-                return true;
+                connection.Open();
+                int i = command.ExecuteNonQuery();
+                connection.Close();
+                return i > 0;
             }
-            else
+            catch (Exception ex)
             {
+                // Handle the exception appropriately, log it, and return false to indicate failure.
+                // You can also rethrow the exception if needed.
                 return false;
             }
         }
@@ -90,9 +95,9 @@ namespace JobPortal_ManagementSystem.Repository
                         GraduationGradeOrPercentage = Convert.ToString(datarow["GraduationGradeOrPercentage"]),
                         PostGraduationGradeOrPercentage = Convert.ToString(datarow["PostGraduationGradeOrPercentage"]),
                         ResumePath = Convert.ToString(datarow["ResumePath"]),
-                        ImagePath = Convert.ToString(datarow["ImagePath"])
-
-    }
+                        ImagePath = Convert.ToString(datarow["ImagePath"]),
+                        // image = reader["image"] as byte[],
+                    }
                     );
             return List;
         }
@@ -116,6 +121,12 @@ namespace JobPortal_ManagementSystem.Repository
             command.Parameters.AddWithValue("@PostGraduationGradeOrPercentage", user.PostGraduationGradeOrPercentage);
             command.Parameters.AddWithValue("@ResumePath", user.ResumePath);
             command.Parameters.AddWithValue("@ImagePath", user.ImagePath);
+            SqlParameter imageDataParam = new SqlParameter("@image", SqlDbType.VarBinary);
+            imageDataParam.Value = user.image ?? (object)DBNull.Value;
+            command.Parameters.Add(imageDataParam);
+            SqlParameter resumeDataParam = new SqlParameter("@resume", SqlDbType.VarBinary);
+            resumeDataParam.Value = user.resume ?? (object)DBNull.Value;
+            command.Parameters.Add(resumeDataParam);
             connection.Open();
             int i = command.ExecuteNonQuery();
             connection.Close();
@@ -126,6 +137,26 @@ namespace JobPortal_ManagementSystem.Repository
             else
             {
                 return false;
+            }
+        }
+
+        string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
+
+
+        public void InsertUploadedFile(UploadedFile file)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("InsertUploadedFile", connection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@FileName", file.FileName);
+                    command.Parameters.AddWithValue("@FileData", file.FileData);
+                    command.Parameters.AddWithValue("@Image", file.ImageData);
+
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }

@@ -7,10 +7,7 @@
 
 <style>
     /* Define your custom CSS styles here */
-    .container {
-        max-width: 800px; /* Set the maximum width of the container */
-        margin: 0 auto; /* Center the container horizontally */
-    }
+    
 
     .card {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -33,41 +30,47 @@
         background-color: cadetblue;
         text-align: center;
     }
+    .mainn {
+        max-width: 1000px; /* Set the maximum width of the container */
+        margin: 0 auto;
+    }
 </style>
+<div class="mainn">
+    <div class="container">
 
-<div class="container">
-    <h2 class="page-heading">All Posts</h2>
+        <h2 class="page-heading">All Posts</h2>
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="row justify-content-center">
-            @foreach (var post in Model)
-            {
-                <div class="col-12 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title">@post.title</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text"><strong>Location:</strong> @post.location</p>
-                            <p class="card-text"><strong>Salary:</strong> $@post.minSalary - $@post.maxSalary</p>
-                            <p class="card-text"><strong>Posted:</strong> @post.postDate.ToString("yyyy-MM-dd")</p>
-                            <p class="card-text"><strong>End Date:</strong> @post.endDate.ToString("yyyy-MM-dd")</p>
-                            <p class="card-text"><strong>Category:</strong> @post.jobCategory</p>
-                            <p class="card-text"><strong>Nature:</strong> @post.jobNature</p>
-                            <p class="card-text"><strong>Company Name:</strong> @post.companyName</p>
-                        </div>
-                        <div class="card-footer text-center">
-                            <!-- Add a link button to navigate to the detailed page -->
-                            <a href="@Url.Action("Details", "Home", new { Id = post.Id })" class="btn btn-primary">Details</a>
+        @if (Model != null && Model.Any())
+        {
+            <div class="row justify-content-center">
+                @foreach (var post in Model)
+                {
+                    <div class="col-12 col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="card-title">@post.title</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><strong>Location:</strong> @post.location</p>
+                                <p class="card-text"><strong>Salary:</strong> $@post.minSalary - $@post.maxSalary</p>
+                                <p class="card-text"><strong>Posted:</strong> @post.postDate.ToString("yyyy-MM-dd")</p>
+                                <p class="card-text"><strong>End Date:</strong> @post.endDate.ToString("yyyy-MM-dd")</p>
+                                <p class="card-text"><strong>Category:</strong> @post.jobCategory</p>
+                                <p class="card-text"><strong>Nature:</strong> @post.jobNature</p>
+                                <p class="card-text"><strong>Company Name:</strong> @post.companyName</p>
+                            </div>
+                            <div class="card-footer text-center">
+                                <!-- Add a link button to navigate to the detailed page -->
+                                <a href="@Url.Action("Details", "Home", new { Id = post.Id })" class="btn btn-primary">Details</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <p>No posts found.</p>
-    }
+                }
+            </div>
+        }
+        else
+        {
+            <p>No posts found.</p>
+        }
+    </div>
 </div>

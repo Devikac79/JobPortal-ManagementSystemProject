@@ -96,7 +96,10 @@ namespace JobPortalManagementSystem.Repository
                 command.Parameters.AddWithValue("@username", signup.username);
                
                 command.Parameters.AddWithValue("@password", signup.password);
+                //string imageBase64 = Convert.ToBase64String(signup.image);
+               // command.Parameters.AddWithValue("@image", imageBase64);
 
+               command.Parameters.AddWithValue("@image", signup.image);
 
                 connection.Open();
                 int i = command.ExecuteNonQuery();
