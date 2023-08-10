@@ -97,9 +97,10 @@ namespace JobPortalManagementSystem.Repository
                
                 command.Parameters.AddWithValue("@password", signup.password);
                 //string imageBase64 = Convert.ToBase64String(signup.image);
-               // command.Parameters.AddWithValue("@image", imageBase64);
-
-               command.Parameters.AddWithValue("@image", signup.image);
+                // command.Parameters.AddWithValue("@image", imageBase64);
+              //  command.Parameters.Add("@image", SqlDbType.VarBinary, -1).Value = signup.image;
+              //  command.Parameters.Add("@resume", SqlDbType.VarBinary, -1).Value = signup.resume;
+                //  command.Parameters.AddWithValue("@image", signup.image);
 
                 connection.Open();
                 int i = command.ExecuteNonQuery();
@@ -125,41 +126,85 @@ namespace JobPortalManagementSystem.Repository
         /// Viewing the database signup record
         /// </summary>
         /// <returns></returns>
+        /* public List<Signup> GetSignupDetails()
+         {
+             Connection();
+             List<Signup> SignupList = new List<Signup>();
+             SqlCommand command = new SqlCommand("SPS_Signup", connection);
+             command.CommandType = CommandType.StoredProcedure;
+             SqlDataAdapter data = new SqlDataAdapter(command);
+             DataTable dataTable = new DataTable();
+             connection.Open();
+             data.Fill(dataTable);
+             connection.Close();
+             foreach (DataRow datarow in dataTable.Rows)
+
+                 SignupList.Add(
+                     new Signup
+                     {
+                         Id = Convert.ToInt32(datarow["Id"]),
+                         firstName = Convert.ToString(datarow["firstName"]),
+                         lastName = Convert.ToString(datarow["lastName"]),
+                         dateOfBirth = Convert.ToDateTime(datarow["dateOfBirth"]),
+                         gender = Convert.ToString(datarow["gender"]),
+                         email = Convert.ToString(datarow["email"]),
+                         phone = Convert.ToString(datarow["phone"]),
+                         address = Convert.ToString(datarow["address"]),
+                         city = Convert.ToString(datarow["city"]),
+                         state = Convert.ToString(datarow["state"]),
+                         pincode = Convert.ToInt32(datarow["pincode"]),
+                         country = Convert.ToString(datarow["country"]),
+                         username = Convert.ToString(datarow["username"]),
+
+                     }
+                     );
+             return SignupList;
+         }
+    */
         public List<Signup> GetSignupDetails()
         {
-            Connection();
-            List<Signup> SignupList = new List<Signup>();
-            SqlCommand command = new SqlCommand("SPS_Signup", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataAdapter data = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable();
-            connection.Open();
-            data.Fill(dataTable);
-            connection.Close();
-            foreach (DataRow datarow in dataTable.Rows)
-
-                SignupList.Add(
-                    new Signup
+            List<Signup> allsignup = new List<Signup>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("SPS_Signup", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    using (SqlDataReader datarow = command.ExecuteReader())
                     {
-                        Id = Convert.ToInt32(datarow["Id"]),
-                        firstName = Convert.ToString(datarow["firstName"]),
-                        lastName = Convert.ToString(datarow["lastName"]),
-                        dateOfBirth = Convert.ToDateTime(datarow["dateOfBirth"]),
-                        gender = Convert.ToString(datarow["gender"]),
-                        email = Convert.ToString(datarow["email"]),
-                        phone = Convert.ToString(datarow["phone"]),
-                        address = Convert.ToString(datarow["address"]),
-                        city = Convert.ToString(datarow["city"]),
-                        state = Convert.ToString(datarow["state"]),
-                        pincode = Convert.ToInt32(datarow["pincode"]),
-                        country = Convert.ToString(datarow["country"]),
-                        username = Convert.ToString(datarow["username"]),
-                        
+                        while (datarow.Read())
+                        {
+                            Signup signup = new Signup
+                            {
+                                Id = Convert.ToInt32(datarow["Id"]),
+                                firstName = Convert.ToString(datarow["firstName"]),
+                                lastName = Convert.ToString(datarow["lastName"]),
+                                dateOfBirth = Convert.ToDateTime(datarow["dateOfBirth"]),
+                                gender = Convert.ToString(datarow["gender"]),
+                                email = Convert.ToString(datarow["email"]),
+                                phone = Convert.ToString(datarow["phone"]),
+                                address = Convert.ToString(datarow["address"]),
+                                city = Convert.ToString(datarow["city"]),
+                                state = Convert.ToString(datarow["state"]),
+                                pincode = Convert.ToInt32(datarow["pincode"]),
+                                country = Convert.ToString(datarow["country"]),
+                                username = Convert.ToString(datarow["username"]),
+                                image = datarow["image"] as byte[],
+                                resume = datarow["resume"] as byte[],
+                            };
+                            allsignup.Add(signup);
+                        }
                     }
-                    );
-            return SignupList;
+                }
+            }
+            return allsignup;
         }
-   
+
+
+
+
+     
+
         /// <summary>
         /// Deleting the signup record of the memeber with specific id
         /// </summary>
@@ -183,8 +228,6 @@ namespace JobPortalManagementSystem.Repository
                 return false;
             }
         }
-
-
 
 
 
@@ -276,6 +319,9 @@ namespace JobPortalManagementSystem.Repository
                         pincode = Convert.ToInt32(reader["pincode"]),
                         country = Convert.ToString(reader["country"]),
                         username = Convert.ToString(reader["username"]),
+                        password = Convert.ToString(reader["password"]),    
+                        image = reader["image"] as byte[],
+                        resume = reader["resume"] as byte[],
                         // Add other properties as needed
                     };
 
@@ -289,15 +335,13 @@ namespace JobPortalManagementSystem.Repository
 
 
 
-
-
-        public bool EditSignupDetails(Signup signup)
+        public void EditSignupDetails(Signup signup)
         {
-            try
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("SPU_Signup", connection))
                 {
-                    SqlCommand command = new SqlCommand("SPU_Signup", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@Id", signup.Id);
 
@@ -314,22 +358,105 @@ namespace JobPortalManagementSystem.Repository
                     command.Parameters.AddWithValue("@country", signup.country);
                     command.Parameters.AddWithValue("@username", signup.username);
                     command.Parameters.AddWithValue("@password", signup.password);
+                    // Convert the imageData byte array to SqlParameter of SqlDbType.VarBinary
+                    /* SqlParameter imageDataParam = new SqlParameter("@image", SqlDbType.VarBinary);
+                     imageDataParam.Value = signup.image ?? (object)DBNull.Value;
+                     command.Parameters.Add(imageDataParam);
+                     SqlParameter resumeDataParam = new SqlParameter("@resume", SqlDbType.VarBinary);
+                     resumeDataParam.Value = signup.resume ?? (object)DBNull.Value;
+                     command.Parameters.Add(resumeDataParam);*/
+                    SqlParameter imageParam = new SqlParameter("@image", SqlDbType.VarBinary, -1);
+                    imageParam.Value = signup.image ?? (object)DBNull.Value; // If null, set to DBNull.Value
+                    command.Parameters.Add(imageParam);
 
-                    connection.Open();
-                    int i = command.ExecuteNonQuery();
+                    SqlParameter resumeParam = new SqlParameter("@resume", SqlDbType.VarBinary, -1);
+                    resumeParam.Value = signup.resume ?? (object)DBNull.Value; // If null, set to DBNull.Value
+                    command.Parameters.Add(resumeParam);
 
-
-                    return i > 0;
+                    command.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred while editing signup details: " + ex.Message);
-                return false;
             }
         }
 
 
+        public Signup GetSignUpById(int Id)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("SP_GetSignupById", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Id", Id);
+                    using (SqlDataReader datarow = command.ExecuteReader())
+                    {
+                        if (datarow.Read())
+                        {
+                            Signup signup = new Signup
+                            {
+                                Id = Convert.ToInt32(datarow["Id"]),
+                                firstName = Convert.ToString(datarow["firstName"]),
+                                lastName = Convert.ToString(datarow["lastName"]),
+                                dateOfBirth = Convert.ToDateTime(datarow["dateOfBirth"]),
+                                gender = Convert.ToString(datarow["gender"]),
+                                email = Convert.ToString(datarow["email"]),
+                                phone = Convert.ToString(datarow["phone"]),
+                                address = Convert.ToString(datarow["address"]),
+                                city = Convert.ToString(datarow["city"]),
+                                state = Convert.ToString(datarow["state"]),
+                                pincode = Convert.ToInt32(datarow["pincode"]),
+                                country = Convert.ToString(datarow["country"]),
+                                username = Convert.ToString(datarow["username"]),
+                                password = Convert.ToString(datarow["password"]),
+                                image = datarow["image"] as byte[],
+                                resume = datarow["resume"] as byte[],
+                            };
+                            return signup;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        /*   public bool EditSignupDetails(Signup signup)
+           {
+               try
+               {
+                   using (SqlConnection connection = new SqlConnection(connectionString))
+                   {
+                       SqlCommand command = new SqlCommand("SPU_Signup", connection);
+                       command.CommandType = CommandType.StoredProcedure;
+                       command.Parameters.AddWithValue("@Id", signup.Id);
+
+                       command.Parameters.AddWithValue("@firstName", signup.firstName);
+                       command.Parameters.AddWithValue("@lastName", signup.lastName);
+                       command.Parameters.AddWithValue("@dateOfBirth", signup.dateOfBirth);
+                       command.Parameters.AddWithValue("@gender", signup.gender);
+                       command.Parameters.AddWithValue("@email", signup.email);
+                       command.Parameters.AddWithValue("@phone", signup.phone);
+                       command.Parameters.AddWithValue("@address", signup.address);
+                       command.Parameters.AddWithValue("@city", signup.city);
+                       command.Parameters.AddWithValue("@state", signup.state);
+                       command.Parameters.AddWithValue("@pincode", signup.pincode);
+                       command.Parameters.AddWithValue("@country", signup.country);
+                       command.Parameters.AddWithValue("@username", signup.username);
+                       command.Parameters.AddWithValue("@password", signup.password);
+
+                       connection.Open();
+                       int i = command.ExecuteNonQuery();
+
+
+                       return i > 0;
+                   }
+               }
+               catch (Exception ex)
+               {
+                   Console.WriteLine("An error occurred while editing signup details: " + ex.Message);
+                   return false;
+               }
+           }
+
+           */
 
         /*   public bool EditSignupDetails(Signup signup)
            {

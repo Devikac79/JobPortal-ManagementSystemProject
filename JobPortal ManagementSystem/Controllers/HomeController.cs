@@ -44,112 +44,22 @@ namespace JobPortalManagementSystem.Controllers
         /// Control view record page
         /// </summary>
         /// <returns></returns>
-        public ActionResult GetSignupDetails()
+       /* public ActionResult GetSignupDetails()
         {
             SignupRepository signupRepository = new SignupRepository();
             ModelState.Clear();
             return View(signupRepository.GetSignupDetails());
         }
-
-     //   private SignupRepository signupRepository = new SignupRepository();
-
-        /*   public ActionResult AddSignupDetails()
-           {
-               ViewBag.Countries = signupRepository.GetCountries();
-               ViewBag.States = signupRepository.GetStates();
-               ViewBag.Cities = signupRepository.GetCities();
-
-               Signup signup = new Signup();
-               return View(signup);
-           }
+       */
+        [HttpGet]
+        public ActionResult GetSignupDetails()
+        {
+            List<Signup> allsignup = signupRepository.GetSignupDetails();
+      
+            return View(allsignup);
+        }
 
 
-           [HttpPost]
-           public ActionResult AddSignupDetails(Signup signup)
-           {
-               try
-               {
-                   if (ModelState.IsValid)
-                   {
-                       if (signupRepository.AddSignupDetails(signup))
-                       {
-                           ViewBag.Message = "User Registration Successful";
-                           return RedirectToAction("Signin"); // Redirect to login page after successful registration
-                       }
-                   }
-                   ViewBag.Countries = signupRepository.GetCountries();
-                   ViewBag.States = signupRepository.GetStates();
-                   ViewBag.Cities = signupRepository.GetCities();
-
-                   return View(signup);
-               }
-               catch
-               {
-                   return View();
-               }
-           }*/
-
-        // GET: /Signup/AddSignupDetails
-
-
-        /*  public ActionResult AddSignupDetails()
-          {
-              ViewBag.Countries = signupRepository.GetCountries();
-              ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
-              ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
-
-              return View(new Signup());
-          }
-
-          // POST: /Signup/AddSignupDetails
-          [HttpPost]
-          public ActionResult AddSignupDetails(Signup signup)
-          {
-              try
-              {
-                  if (ModelState.IsValid)
-                  {
-                      // Perform any additional validation or processing here
-                      // Save the signup details to the database using the repository method
-                      if (signupRepository.AddSignupDetails(signup))
-                      {
-                          ViewBag.Message = "User Registration Successful";
-                          return RedirectToAction("Signin"); // Redirect to login page after successful registration
-                      }
-                      else
-                      {
-                          ViewBag.Message = "User Registration Failed";
-                      }
-                  }
-
-                  // If ModelState is invalid or registration failed, reload the dropdown data
-                  ViewBag.Countries = signupRepository.GetCountries();
-                  ViewBag.States = new SelectList(new List<State>(), "stateId", "stateName"); // Empty initial list for States
-                  ViewBag.Cities = new SelectList(new List<City>(), "cityId", "cityName"); // Empty initial list for Cities
-
-                  return View(signup);
-              }
-              catch
-              {
-                  ViewBag.Message = "An error occurred while processing your request.";
-                  return View(signup);
-              }
-          }
-
-          // Action to fetch states based on the selected country using AJAX
-          public JsonResult GetStatesByCountry(int countryId)
-          {
-              var states = signupRepository.GetStatesByCountry(countryId);
-              return Json(states, JsonRequestBehavior.AllowGet);
-          }
-
-          // Action to fetch cities based on the selected state using AJAX
-          public JsonResult GetCitiesByState(int stateId)
-          {
-              var cities = signupRepository.GetCitiesByState(stateId);
-              return Json(cities, JsonRequestBehavior.AllowGet);
-          }
-        */
         /// <summary>
         /// Get method to view Creating  a record
         /// </summary>
@@ -164,138 +74,24 @@ namespace JobPortalManagementSystem.Controllers
         /// <param name="signup"></param>
         /// <returns></returns>
         [HttpPost]
-        /*  public ActionResult AddSignupDetails(Signup signup)
-          {
-              try
-              {
-
-                  if (ModelState.IsValid)
-                  {
-                      SignupRepository signupRepository = new SignupRepository();
-                      if (signupRepository.AddSignupDetails(signup))
-                      {
-                          ViewBag.Message = "User Registration Successful";
-                          return RedirectToAction("Signin"); // Redirect to login page after successful registration
-                      }
-                  }
-                  return View(signup);
-              }
-              catch
-              {
-                  return View();
-              }
-          }*/
+     
 
 
-
-
-        public ActionResult AddSignupDetails(Signup signup,HttpPostedFileBase file)
+     
+        public ActionResult AddSignupDetails(Signup signup, HttpPostedFileBase imageFile, HttpPostedFileBase resumeFile)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (file != null )
-                {
-                    if (Path.GetExtension(file.FileName).ToLower() == ".pdf" ||
-                        Path.GetExtension(file.FileName).ToLower() == ".jpg" ||
-                        Path.GetExtension(file.FileName).ToLower() == ".jpeg" ||
-                        Path.GetExtension(file.FileName).ToLower() == ".png")
-                    {
-                        
-                        byte[] imageData=null;
-                        if (file != null && file.ContentLength > 0)
-                        {
-                            using (var binaryReader = new BinaryReader(file.InputStream))
-                            {
-                                imageData = binaryReader.ReadBytes(file.ContentLength);
-                            }
-                        }
-                        signup.image = imageData;
-
-                      
-
-                        signupRepository.AddSignupDetails(signup);
-
-
-                    }
-                    else
-                    {
-                        ViewBag.ErrorMessage = "Please upload a valid PDF, JPG, JPEG, or PNG file.";
-                        return View(); // Return the view to show the error message
-                    }
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Please select a file to upload.";
-                    return View(); // Return the view to show the error message
-                }
-            }
-            catch (Exception)
-            {
-                // Handle any other exceptions
-                throw;
+                signupRepository.AddSignupDetails(signup);
+                return RedirectToAction("Homepage");
             }
 
-            return RedirectToAction("Homepage", "Home"); // Redirect to the homepage action of HomeController
+           
+            return View(signup);
         }
 
-        //dispay file
 
-     /*   public ActionResult DisplayFiles()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * FROM UploadedFiles", connection))
-                {
-                    var model = new List<UploadedFile>();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            model.Add(new UploadedFile
-                            {
-                                Id = (int)reader["Id"],
-                                FileName = (string)reader["FileName"],
-                                FileData = (byte[])reader["FileData"],
-
-                            });
-                        }
-                    }
-                    return View(model);
-                }
-            }
-        }
-        /// View the details of a selected signup record for editing.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public ActionResult EditSignupDetails(int? Id)
-        {
-            SignupRepository signupRepository = new SignupRepository();
-            return View(signupRepository.GetSignupDetails().Find(signup => signup.Id == Id));
-        }
-
-        /// <summary>
-        /// Edit the signup record.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="signup"></param>
-        /// <returns></returns>
-    /*    [HttpPost]
-        public ActionResult EditSignupDetails(int? Id, Signup signup)
-        {
-            try
-            {
-                SignupRepository signupRepository = new SignupRepository();
-                signupRepository.EditSignupDetails(signup);
-                return RedirectToAction("GetSignupDetails");
-            }
-            catch
-            {
-                return View();
-            }
-        }*/
+    
         /// <summary>
         /// Deleting the record
         /// </summary>
@@ -320,6 +116,47 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult EditSignupDetails(int Id)
+        {
+            Signup signup = signupRepository.GetSignUpById(Id);
+            if (signup == null)
+            {
+                return HttpNotFound();
+            }
+            return View(signup);
+        }
+
+        [HttpPost]
+        public ActionResult EditSignupDetails(Signup signup, HttpPostedFileBase imageFile, HttpPostedFileBase resumeFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (imageFile != null && imageFile.ContentLength > 0)
+                {
+                    byte[] imageData;
+                    using (var binaryReader = new BinaryReader(imageFile.InputStream))
+                    {
+                        imageData = binaryReader.ReadBytes(imageFile.ContentLength);
+                    }
+                    signup.image = imageData;
+                }
+                if (resumeFile != null && resumeFile.ContentLength > 0)
+                {
+                    byte[] resumeData;
+                    using (var binaryReader = new BinaryReader(resumeFile.InputStream))
+                    {
+                        resumeData = binaryReader.ReadBytes(resumeFile.ContentLength);
+                    }
+                    signup.resume = resumeData;
+                }
+                signupRepository.EditSignupDetails(signup);
+                return RedirectToAction("GetSignupDetails");
+            }
+
+         
+            return View(signup);
+        }
 
 
 

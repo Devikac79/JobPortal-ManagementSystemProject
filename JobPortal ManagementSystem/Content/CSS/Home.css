@@ -68,7 +68,7 @@
 
 
 .main {
-    background-image: url(/Content/Images/homepage.jpg);
+  /* background-image: url(/Content/Images/homepage.jpg);*/
     background-repeat: repeat;
     background-size: cover;
     min-height: 95vh;
@@ -107,4 +107,56 @@
 
 .link1{
     text-decoration:none;
+}
+/* Add this CSS to style the carousel */
+#imageCarousel {
+    width: 100%;
+
+}
+
+    #imageCarousel .carousel-inner {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    #imageCarousel .carousel-item img {
+        object-fit: cover;
+        height: 800px; /* Adjust the height as needed */
+    }
+
+    #imageCarousel .carousel-control-prev,
+    #imageCarousel .carousel-control-next {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #imageCarousel .carousel-control-prev-icon,
+    #imageCarousel .carousel-control-next-icon {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        border-radius: 50%;
+    }
+
+    #imageCarousel .carousel-caption {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+    }
+
+        #imageCarousel .carousel-caption h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #imageCarousel .carousel-caption .btn {
+            padding: 10px 30px;
+            font-size: 1.5rem;
+        }
+.carousel-image {
+    width: 100%;
+    height: auto;
 }

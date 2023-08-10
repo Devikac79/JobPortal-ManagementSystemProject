@@ -17,7 +17,7 @@
     @Scripts.Render("~/bundles/jqueryval")
 
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("EditSignupDetails", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
 
@@ -46,7 +46,8 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.dateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.dateOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextBoxFor(model => model.dateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+
                     @Html.ValidationMessageFor(model => model.dateOfBirth, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -138,7 +139,25 @@
                     @Html.ValidationMessageFor(model => model.confirmPassword, "", new { @class = "text-danger" })
                 </div>
             </div>
+            <div class="form-group">
+                @if (Model.image != null && Model.image.Length > 0)
+                {
+                    <div class="form-group">
+                        <label>Current Image:</label><br />
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.image)" alt="Current Job Post Image" style="max-width: 200px; max-height: 200px;" />
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                @Html.Label("Image")
+                <input type="file" name="imageFile" id="imageFile" class="form-control" />
+            </div>
 
+
+            <div class="form-group">
+                @Html.Label("Resume")
+                <input type="file" name="resumeFile" id="resumeFile" class="form-control" />
+            </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Save" class="btn btn-default" />

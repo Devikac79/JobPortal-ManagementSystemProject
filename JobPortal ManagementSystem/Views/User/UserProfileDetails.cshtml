@@ -25,16 +25,24 @@
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin: 30px auto;
-            text-align"center";
-            padding-left:100px;
+            text-align:"center";
+            padding-left:120px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            text-align: "center";
         }
 
 
         .username-heading {
             font-size: 24px;
-            text-align: center;
-            margin-bottom: 10px;
             color: #007BFF;
+            margin-bottom: 10px;
         }
 
         .dt-container {
@@ -55,36 +63,44 @@
             color: #555;
         }
 
-        .btn-container {
+       
+       .btn-container {
             text-align: center;
             margin-top: 30px;
+            padding-right:30px;
         }
 
-        .btn-primary {
+        .btn-primary, .btn-secondary {
             background-color: #007BFF;
             border-color: #007BFF;
         }
 
-        .btn-secondary {
-            background-color: #6C757D;
-            border-color: #6C757D;
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
-
-            .btn-primary:hover, .btn-secondary:hover {
-                background-color: #0056b3;
-                border-color: #0056b3;
-            }
+        .profile{
+            padding-right:40px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 profile-box">
-               
-                <div class="username-heading">
-                    @Html.DisplayFor(model => model.firstName) @Html.DisplayFor(model => model.lastName)
+                <div class="text-center profile">
+                    @if (Model.image != null && Model.image.Length > 0)
+                    {
+                        <img src="data:image/png;base64,@Convert.ToBase64String(Model.image)" alt="User Profile Image" class="profile-image img-thumbnail" />
+                    }
+                </div>
+                <div class="text-center">
+                    <div class="username-heading">
+                        @Html.DisplayFor(model => model.firstName) @Html.DisplayFor(model => model.lastName)
+                    </div>
                 </div>
                 <hr />
+
                 <div class="dt-container">
                     <span class="dt-label">@Html.DisplayNameFor(model => model.dateOfBirth)</span>
                     <span class="dd-value">@Html.DisplayFor(model => model.dateOfBirth)</span>
@@ -151,7 +167,17 @@
                     <span class="dd-value">@Html.DisplayFor(model => model.username)</span>
                 </div>
 
-               
+
+                @if (Model.resume != null && Model.resume.Length > 0)
+                {
+                    <div class="dt-container">
+                        <span class="dt-label">@Html.DisplayNameFor(model => model.resume)</span>
+                        <span class="dd-value"><a href="data:resume/pdf;base64,@Convert.ToBase64String(Model.resume)" download="resume.pdf">Download Resume</a>
+                    </div>
+                }
+                    
+
+
 
                 <div class="btn-container">
                     @Html.ActionLink("Edit", "EditUserProfile", new { id = Model.Id }, new { @class = "btn btn-primary" })

@@ -26,7 +26,7 @@ function validateEmail() {
         emailValidation.textContent = "Email cannot be empty";
         emailValidation.style.display = "block";
         return false;
-    } else if (!/^[\w-\.]+@@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
         emailValidation.textContent = "Invalid email format";
         emailValidation.style.display = "block";
         return false;

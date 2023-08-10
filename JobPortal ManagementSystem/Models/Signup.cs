@@ -16,7 +16,7 @@ namespace JobPortalManagementSystem.Models
         public string firstName { get; set; }
         [DisplayName("Last name")]
         public string lastName { get; set; }
-        [Display(Name = "Date of Birth")]
+        [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Please enter your date of birth.")]
         public DateTime dateOfBirth { get; set; }
@@ -55,6 +55,7 @@ namespace JobPortalManagementSystem.Models
         public string confirmPassword { get; set; }
         public string Role { get; set; }
         public byte[] image { get; set; }
+        public byte[] resume { get; set; }
     }
 
 }
