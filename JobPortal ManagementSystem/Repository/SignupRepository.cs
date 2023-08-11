@@ -1,15 +1,18 @@
 ﻿
 using JobPortal_ManagementSystem.Models;
+using JobPortal_ManagementSystem.Repository;
 using JobPortalManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using System.Web.Mvc;
 
 namespace JobPortalManagementSystem.Repository
 {
@@ -26,21 +29,53 @@ namespace JobPortalManagementSystem.Repository
             string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
             connection = new SqlConnection(connectionString);
         }
-        /// <summary>
-        /// Password enctrypting for database
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        private string HashPassword(string password)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
-        }
-
+       
         string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
+
+        private string Encrypt(string clearText)
+        {
+            string encryptionKey = "MAKV2SPBNI99212";
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+
+            return clearText;
+        }
+        private string Decrypt(string cipherText)
+        {
+            string encryptionKey = "MAKV2SPBNI99212";
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
+
+            return cipherText;
+        }
 
         public Signup GetUserProfileById(int userId)
         {
@@ -94,8 +129,8 @@ namespace JobPortalManagementSystem.Repository
                 command.Parameters.AddWithValue("@pincode", signup.pincode);
                 command.Parameters.AddWithValue("@country", signup.country);
                 command.Parameters.AddWithValue("@username", signup.username);
-               
-                command.Parameters.AddWithValue("@password", signup.password);
+                command.Parameters.AddWithValue("@password", Encrypt(signup.password));
+               // command.Parameters.AddWithValue("@password", signup.password);
                 //string imageBase64 = Convert.ToBase64String(signup.image);
                 // command.Parameters.AddWithValue("@image", imageBase64);
               //  command.Parameters.Add("@image", SqlDbType.VarBinary, -1).Value = signup.image;
@@ -237,8 +272,9 @@ namespace JobPortalManagementSystem.Repository
             SqlCommand command = new SqlCommand("Sp_ValidateUserAndGetRole", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@username", username);
-         
-            command.Parameters.AddWithValue("@password", password);
+            command.Parameters.AddWithValue("@password", Encrypt(password));
+
+            // command.Parameters.AddWithValue("@password", password);
 
             connection.Open();
             var role = command.ExecuteScalar() as string;
@@ -253,8 +289,8 @@ namespace JobPortalManagementSystem.Repository
             SqlCommand command = new SqlCommand("SPS_SignupByUsernameAndPassword", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", password);
-
+          //  command.Parameters.AddWithValue("@password", password);
+          command.Parameters.AddWithValue("@password", Encrypt(password));
             connection.Open();
             SqlDataReader reader = command.ExecuteReader();
 
@@ -357,7 +393,8 @@ namespace JobPortalManagementSystem.Repository
                     command.Parameters.AddWithValue("@pincode", signup.pincode);
                     command.Parameters.AddWithValue("@country", signup.country);
                     command.Parameters.AddWithValue("@username", signup.username);
-                    command.Parameters.AddWithValue("@password", signup.password);
+                    command.Parameters.AddWithValue("@password", (signup.password));
+                    // command.Parameters.AddWithValue("@password", signup.password);
                     // Convert the imageData byte array to SqlParameter of SqlDbType.VarBinary
                     /* SqlParameter imageDataParam = new SqlParameter("@image", SqlDbType.VarBinary);
                      imageDataParam.Value = signup.image ?? (object)DBNull.Value;
@@ -499,6 +536,112 @@ namespace JobPortalManagementSystem.Repository
            }
         */
 
+        public List<Country> GetCountries()
+        {
+            List<Country> countries = new List<Country>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Countries";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            countries.Add(new Country
+                            {
+                                CountryId = (int)reader["CountryId"],
+                                CountryName = (string)reader["CountryName"]
+                            });
+                        }
+                    }
+                }
+            }
+
+            return countries;
+        }
+
+
+        public List<State> GetStatesByCountry(int CountryId)
+        {
+            List<State> states = new List<State>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM States WHERE CountryId = @CountryId";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@CountryId", CountryId);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            states.Add(new State
+                            {
+                                StateId = (int)reader["StateId"],
+                                StateName = (string)reader["StateName"],
+                                CountryId = (int)reader["CountryId"]
+                            });
+                        }
+                    }
+                }
+            }
+
+            return states;
+        }
+
+        public List<City> GetCitiesByState(int StateId)
+        {
+            List<City> cities = new List<City>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Cities WHERE StateId = @StateId";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@StateId", StateId);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            cities.Add(new City
+                            {
+                                CityId = (int)reader["CityId"],
+                                CityName = (string)reader["CityName"],
+                                StateId = (int)reader["StateId"]
+                            });
+                        }
+                    }
+                }
+            }
+
+            return cities;
+        }
+
+        public void RegisterUser(UserRegistration user)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "INSERT INTO UserRegistration (CountryId, StateId, CityId) " +
+                               "VALUES (@CountryId, @StateId, @CityId)";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@CountryId", user.CountryId);
+                    command.Parameters.AddWithValue("@StateId", user.StateId);
+                    command.Parameters.AddWithValue("@CityId", user.CityId);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+       
     }
 }
    

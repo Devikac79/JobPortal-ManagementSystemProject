@@ -24,9 +24,7 @@ namespace JobPortal_ManagementSystem.Models
             public string PostGraduationGradeOrPercentage { get; set; }
         public string ResumePath { get; set; }
         public string ImagePath { get; set; }
-        public byte[] image { get; set; }
-        public byte[] resume { get; set; }
-
+      
 
 
 

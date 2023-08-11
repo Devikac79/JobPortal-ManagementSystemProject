@@ -1,33 +1,52 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿
+
+@{
+    Layout = null;
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+<h2>Cascading Dropdowns Example</h2>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
-    </div>
-</main>
+<div>
+    @Html.DropDownList("CountryId", ViewBag.Countries as SelectList, "Select Country", new { @class = "form-control" })
+</div>
+
+<div>
+    <select id="StateId" name="StateId" class="form-control">
+        <option value="">Select State</option>
+    </select>
+</div>
+
+<div>
+    <select id="CityId" name="CityId" class="form-control">
+        <option value="">Select City</option>
+    </select>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#CountryId").change(function () {
+                var countryId = $(this).val();
+                $.post("GetStates", { countryId: countryId }, function (data) {
+                    var options = '<option value="">Select State</option>';
+                    $.each(data, function (i, state) {
+                        options += '<option value="' + state.StateId + '">' + state.StateName + '</option>';
+                    });
+                    $("#StateId").html(options);
+                });
+            });
+
+            $("#StateId").change(function () {
+                var stateId = $(this).val();
+                $.post("GetCities", { stateId: stateId }, function (data) {
+                    var options = '<option value="">Select City</option>';
+                    $.each(data, function (i, city) {
+                        options += '<option value="' + city.CityId + '">' + city.CityName + '</option>';
+                    });
+                    $("#CityId").html(options);
+                });
+            });
+        });
+    </script>
+}

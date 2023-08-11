@@ -121,7 +121,7 @@
 
     #imageCarousel .carousel-item img {
         object-fit: cover;
-        height: 800px; /* Adjust the height as needed */
+        height: 100%; /* Adjust the height as needed */
     }
 
     #imageCarousel .carousel-control-prev,

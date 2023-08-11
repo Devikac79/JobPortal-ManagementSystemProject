@@ -45,8 +45,7 @@ namespace JobPortal_ManagementSystem.Repository
                 command.Parameters.AddWithValue("@Address", user.Address);
                 command.Parameters.AddWithValue("@ResumePath", user.ResumePath);
                 command.Parameters.AddWithValue("@ImagePath", user.ImagePath);
-                command.Parameters.Add("@image", SqlDbType.VarBinary, -1).Value = user.image ?? (object)DBNull.Value;
-                command.Parameters.Add("@resume", SqlDbType.VarBinary, -1).Value = user.resume ?? (object)DBNull.Value;
+              
 
                 connection.Open();
                 int i = command.ExecuteNonQuery();
@@ -121,12 +120,7 @@ namespace JobPortal_ManagementSystem.Repository
             command.Parameters.AddWithValue("@PostGraduationGradeOrPercentage", user.PostGraduationGradeOrPercentage);
             command.Parameters.AddWithValue("@ResumePath", user.ResumePath);
             command.Parameters.AddWithValue("@ImagePath", user.ImagePath);
-            SqlParameter imageDataParam = new SqlParameter("@image", SqlDbType.VarBinary);
-            imageDataParam.Value = user.image ?? (object)DBNull.Value;
-            command.Parameters.Add(imageDataParam);
-            SqlParameter resumeDataParam = new SqlParameter("@resume", SqlDbType.VarBinary);
-            resumeDataParam.Value = user.resume ?? (object)DBNull.Value;
-            command.Parameters.Add(resumeDataParam);
+            
             connection.Open();
             int i = command.ExecuteNonQuery();
             connection.Close();

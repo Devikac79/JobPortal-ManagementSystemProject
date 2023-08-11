@@ -19,164 +19,156 @@
     @Scripts.Render("~/bundles/jqueryval")
 
 
+    @using (Html.BeginForm("AddSignupDetails", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+    <section class="h-100 h-custom" style="background-color: cadetblue; ">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="card rounded-3">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img3.webp"
+                             class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                             alt="Sample photo">
+                        <div class="card-body p-4 p-md-6 ">
+                            <h3 class="h1 fw-bold mb-0 mb-4 pb-2 pb-md-0 mb-md-5 px-md-2 d-flex align-items-center justify-content-center">Sign up</h3>
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <form class="px-md-2">
+                                @Html.LabelFor(model => model.firstName, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control ", placeholder = "Enter first name", @id = "firstName", @onfocusout = "validateFirstName()" } })
+                                    @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger", @id = "firstNameValidation" })
+
+                                </div>
 
 
-    <div class="container4">
-        <div class="col-md-6 form-box">
-            <!-- Add the 'form-box' class to the column -->
-            @using (Html.BeginForm("AddSignupDetails", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
+                                @Html.LabelFor(model => model.lastName, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter last name", @id = "lastName", @onfocusout = "validateLastName()" } })
+                                    @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger", @id = "lastNameValidation" })
 
-                <div class="form-horizontal">
-                    <h4 class="text-center">Sign up</h4>
-                    <hr />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.firstName, htmlAttributes: new { @class = "control-label col-md-3" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter first name", @id = "firstName", @onfocusout = "validateFirstName()" } })
-                            @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger", @id = "firstNameValidation" })
+                                </div>
+
+                                @Html.LabelFor(model => model.dateOfBirth, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                            <div class="form-outline mb-4">
+                                
+                                    @Html.EditorFor(model => model.dateOfBirth, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Date of birth", @id = "dateOfBirth", @onfocusout = "validateDateOfBirth()" } })
+                                    @Html.ValidationMessageFor(model => model.dateOfBirth, "", new { @class = "text-danger", @id = "dateOfBirthValidation" })
+
+                                </div>
+
+                                
+                                    <div class="form-group p-2">
+                                        @Html.LabelFor(model => model.gender, new { @class = "control-label" })
+                                        <div class="radio">
+                                            @Html.RadioButtonFor(model => model.gender, "Male") Male
+                                        </div>
+                                        <div class="radio">
+                                            @Html.RadioButtonFor(model => model.gender, "Female") Female
+                                        </div>
+                                        <div class="radio">
+                                            @Html.RadioButtonFor(model => model.gender, "Other") Other
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+                                    </div>
+
+                                
+
+                                @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+
+                                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Email", @id = "email", @onfocusout = "validateEmail()" } })
+                                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger", @id = "emailValidation" })
+
+                                </div>
+
+
+                                @Html.LabelFor(model => model.phone, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+
+                                    @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Phone number", @id = "phone", @onfocusout = "validatePhone()" } })
+                                    @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger", @id = "phoneValidation" })
+
+                                </div>
+
+                                @Html.LabelFor(model => model.address, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Address", @id = "address", @onfocusout = "validateAddress()" } })
+                                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger", @id = "addressValidation" })
+
+                                </div>
+
+                                @Html.LabelFor(model => model.country, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter country", @id = "country", @onfocusout = "validateCountry()" } })
+                                    @Html.ValidationMessageFor(model => model.country, "", new { @class = "text-danger", @id = "countryValidation" })
+
+                                </div>
+
+
+                                @Html.LabelFor(model => model.state, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter State", @id = "state", @onfocusout = "validateState()" } })
+                                    @Html.ValidationMessageFor(model => model.state, "", new { @class = "text-danger", @id = "stateValidation" })
+
+                                </div>
+
+
+
+                                @Html.LabelFor(model => model.city, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.city, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter city", @id = "city", @onfocusout = "validateCity()" } })
+                                    @Html.ValidationMessageFor(model => model.city, "", new { @class = "text-danger", @id = "cityValidation" })
+                                </div>
+
+
+                                @Html.LabelFor(model => model.pincode, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.pincode, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter last name", @id = "pincode", @onfocusout = "validatePincode()" } })
+                                    @Html.ValidationMessageFor(model => model.pincode, "", new { @class = "text-danger", @id = "pincodeValidation" })
+                                </div>
+
+                                @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Username", @id = "username", @onfocusout = "validateUsername()" } })
+                                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger", @id = "usernameValidation" })
+                                </div>
+
+                                @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter password", @id = "password", @onfocusout = "validatePassword()" } })
+                                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger", @id = "PasswordValidation" })
+                                </div>
+
+                                @Html.LabelFor(model => model.confirmPassword, htmlAttributes: new { @class = "control-label form-label col-md-3" })
+                                <div class="form-outline mb-4">
+                                    @Html.EditorFor(model => model.confirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter confirm password", @id = "confirmPassword", @onfocusout = "validateConfirmPassword()" } })
+                                    @Html.ValidationMessageFor(model => model.confirmPassword, "", new { @class = "text-danger", @id = "confirmPasswordValidation" })
+                                </div>
+
+
+
+                                <div class="pt-1 mb-4 d-flex align-items-center justify-content-center">
+
+                                    <button type="submit" class="btn btn-primary text-body btn-lg mb-1 text-white">Sign up</button>                                
+                                </div>
+                                
+                                <p class="text-center text-muted mt-5 mb-0">
+                                    Have already an account?  @Html.ActionLink("Signin now", "Signin", "Home")
+                                </p>
+
+</form>
+
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.lastName, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter last name", @id = "lastName", @onfocusout = "validateLastName()" } })
-                            @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger", @id = "lastNameValidation" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.dateOfBirth, "Date of birth", htmlAttributes: new { @class = "control-label col-md-3" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.dateOfBirth, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Date of birth", @id = "dateOfBirth", @onfocusout = "validateDateOfBirth()" } })
-                            @Html.ValidationMessageFor(model => model.dateOfBirth, "", new { @class = "text-danger", @id = "dateOfBirthValidation" })
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.gender, new { @class = "control-label" })
-                        <div class="radio">
-                            @Html.RadioButtonFor(model => model.gender, "Male") Male
-                        </div>
-                        <div class="radio">
-                            @Html.RadioButtonFor(model => model.gender, "Female") Female
-                        </div>
-                        <div class="radio">
-                            @Html.RadioButtonFor(model => model.gender, "Other") Other
-                        </div>
-                        @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Email", @id = "email", @onfocusout = "validateEmail()" } })
-                            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger", @id = "emailValidation" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.phone, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Phone number", @id = "phone", @onfocusout = "validatePhone()" } })
-                            @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger", @id = "phoneValidation" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.address, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Address", @id = "address", @onfocusout = "validateAddress()" } })
-                            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger", @id = "addressValidation" })
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.country, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter country", @id = "country", @onfocusout = "validateCountry()" } })
-                            @Html.ValidationMessageFor(model => model.country, "", new { @class = "text-danger", @id = "countryValidation" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.state, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter State", @id = "state", @onfocusout = "validateState()" } })
-                            @Html.ValidationMessageFor(model => model.state, "", new { @class = "text-danger", @id = "stateValidation" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.city, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.city, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter city", @id = "city", @onfocusout = "validateCity()" } })
-                            @Html.ValidationMessageFor(model => model.city, "", new { @class = "text-danger", @id = "cityValidation" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.pincode, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.pincode, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter last name", @id = "pincode", @onfocusout = "validatePincode()" } })
-                            @Html.ValidationMessageFor(model => model.pincode, "", new { @class = "text-danger", @id = "pincodeValidation" })
-                        </div>
-                    </div>
-
-
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Username", @id = "username", @onfocusout = "validateUsername()" } })
-                            @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger", @id = "usernameValidation" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter password", @id = "password", @onfocusout = "validatePassword()" } })
-                            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger", @id = "PasswordValidation" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.confirmPassword, htmlAttributes: new { @class = "control-label col-md-4" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.confirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter confirm password", @id = "confirmPassword", @onfocusout = "validateConfirmPassword()" } })
-                            @Html.ValidationMessageFor(model => model.confirmPassword, "", new { @class = "text-danger", @id = "confirmPasswordValidation" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.Label("Image", "Image", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg, .jpeg" />
-                        <span class="text-danger" style="display: none;"></span>
-                    </div>
-                    <div class="form-group">
-                        @Html.Label("Resume", "Resume", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <input type="file" name="resumeFile" id="resumeFile" class="form-control" accept=".jpg, .jpeg" />
-                        <span class="text-danger" style="display: none;"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Register" class="btn btn-primary" />
-                    </div>
-
-
-
-
                 </div>
-            }
-
-
-            <div class="member">
-                <p>Already Signup?  @Html.ActionLink("Signin now", "Signin", "Home")</p>
             </div>
-
-
         </div>
-    </div>
 
-    <script src="~/Content/Javascript/Signup.js"></script>
-</body>
+    </section>
+
+    }
+        
+        <script src="~/Content/Javascript/Signup.js"></script>
+    </body>
 </html>

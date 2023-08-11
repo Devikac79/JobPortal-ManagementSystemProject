@@ -7,8 +7,8 @@ namespace JobPortalManagementSystem.Models
 {
     public class State
     {
-        public int stateId { get; set; }
-        public string stateName { get; set; }
-        public int countryId { get; set; }
+        public int StateId { get; set; }
+        public string StateName { get; set; }
+        public int CountryId { get; set; }
     }
 }

@@ -126,6 +126,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserRegistration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\Contact.cs" />
@@ -149,9 +150,23 @@
     <Compile Include="Repository\UserRepository.cs" />
     <Content Include="Content\CSS\.JobPost.css" />
     <Content Include="Content\CSS\Signup.css" />
+    <Content Include="Content\Images\37017445 %281%29.jpg" />
+    <Content Include="Content\Images\37017445 %282%29.jpg" />
+    <Content Include="Content\Images\37017445 %283%29.jpg" />
+    <Content Include="Content\Images\37017445 %284%29.jpg" />
+    <Content Include="Content\Images\37017445.jpg" />
     <Content Include="Content\Images\Admin.jpg" />
     <Content Include="Content\Images\homepage.jpg" />
+    <Content Include="Content\Images\homepage2.jpg" />
+    <Content Include="Content\Images\homepage3.jpg" />
+    <Content Include="Content\Images\homepage4.jpg" />
+    <Content Include="Content\Images\homepage5.jpg" />
+    <Content Include="Content\Images\homepage6.jpg" />
+    <Content Include="Content\Images\homepage7.jpg" />
+    <Content Include="Content\Images\homepage8.jpg" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\signin.jpg" />
+    <Content Include="Content\Images\signin1.jpg" />
     <Content Include="Content\Images\user.jpg" />
     <Content Include="Content\Javascript\JobPost.js" />
     <Content Include="Content\Javascript\Signup.js" />
@@ -165,6 +180,9 @@
     <Content Include="Views\Admin\ViewAppliedJobs.cshtml" />
     <Content Include="Views\Home\Upload.cshtml" />
     <Content Include="Views\Home\DisplayFiles.cshtml" />
+    <Content Include="Views\Home\RegisterUser.cshtml" />
+    <Content Include="Content\Images\Day-28.docx" />
+    <Content Include="Content\Images\Day-29.docx" />
     <None Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\User\UserProfileDetails.cshtml" />
   </ItemGroup>

@@ -195,11 +195,7 @@ namespace JobPortalManagementSystem.Controllers
                                // Redirect to UserProfileDetails action in UserController
                                return RedirectToAction("UserHomepage", "User");
                            }
-                           else if (role == "admin")
-                           {
-                               // Redirect to AdminHomepage action in AdminController
-                               return RedirectToAction("AdminHomepage", "Admin");
-                           }
+                          
                            else
                            {
                                ViewBag.Message = "Invalid role for the user.";
@@ -378,20 +374,7 @@ namespace JobPortalManagementSystem.Controllers
 
                         user.ImagePath = imageFilePath;
                     }
-                    if (Image != null )
-                    {
-                        using (var binaryReader = new BinaryReader(Image.InputStream))
-                        {
-                            user.image = binaryReader.ReadBytes(Image.ContentLength);
-                        }
-                    }
-                    if (Resume != null )
-                    {
-                        using (var binaryReader = new BinaryReader(Resume.InputStream))
-                        {
-                            user.resume = binaryReader.ReadBytes(Resume.ContentLength);
-                        }
-                    }
+                  
 
                     UserRepository userRepository = new UserRepository();
                     if (userRepository.AddDetails(user))
@@ -544,61 +527,7 @@ namespace JobPortalManagementSystem.Controllers
         {
             return View();
         }
-        [HttpPost]
-        /*  public ActionResult Upload(HttpPostedFileBase file)
-          {
-              try
-              {
-                  if (file != null && file.ContentLength > 0)
-                  {
-                      // Check if the uploaded file is a PDF
-                      if (Path.GetExtension(file.FileName).ToLower() == ".pdf")
-                      {
-                          // File is a valid PDF, proceed with saving it to the database
-
-                          byte[] fileData;
-                          using (var binaryReader = new BinaryReader(file.InputStream))
-                          {
-                              fileData = binaryReader.ReadBytes(file.ContentLength);
-                          }
-
-                          string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
-                          using (SqlConnection connection = new SqlConnection(connectionString))
-                          {
-                              connection.Open();
-                              using (SqlCommand command = new SqlCommand("InsertUploadedFile", connection))
-                              {
-                                  command.CommandType = System.Data.CommandType.StoredProcedure;
-                                  command.Parameters.AddWithValue("@FileName", file.FileName);
-                                  command.Parameters.AddWithValue("@FileData", fileData);
-
-                                  command.ExecuteNonQuery();
-                              }
-                          }
-                      }
-                      else
-                      {
-                          // Invalid file format, set error message
-                          ViewBag.ErrorMessage = "Please upload a valid PDF file.";
-                          return View(); // Return the view to show the error message
-                      }
-                  }
-                  else
-                  {
-                      // No file selected, set error message
-                      ViewBag.ErrorMessage = "Please select a file to upload.";
-                      return View(); // Return the view to show the error message
-                  }
-              }
-              catch (Exception)
-              {
-                  // Handle any other exceptions
-                  throw;
-              }
-
-              return RedirectToAction("Homepage");
-          }*/
-
+     
         public ActionResult Upload(HttpPostedFileBase file, HttpPostedFileBase image)
         {
             try
@@ -686,7 +615,115 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
+        /*   public ActionResult Index()
+           {
+               var countries = signupRepository.GetCountries();
+               ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
+               return View();
+           }
 
+           [HttpPost]
+           public JsonResult GetStates(int CountryId)
+           {
+               var states = signupRepository.GetStatesByCountry(CountryId);
+               return Json(states);
+           }
 
+           [HttpPost]
+           public JsonResult GetCities(int StateId)
+           {
+               var cities = signupRepository.GetCitiesByState(StateId);
+               return Json(cities);
+           }
+         */
+        /*    public ActionResult RegisterUser()
+            {
+
+                var countries = signupRepository.GetCountries();
+                ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
+             //   ViewBag.States = new SelectList(new List<State>(), "StateId", "StateName"); // Initialize with empty list
+              //  ViewBag.Cities = new SelectList(new List<City>(), "CityId", "CityName"); // Initialize with empty list
+
+                return View(new UserRegistration());
+            }
+
+            [HttpPost]
+            public ActionResult RegisterUser(UserRegistration model)
+            {
+                if (ModelState.IsValid)
+                {
+                    signupRepository.RegisterUser(model);
+                    // Redirect to a success page or another action
+                    return RedirectToAction("RegistrationSuccess");
+                }
+
+                // If the model is not valid, redisplay the registration form with validation errors
+                var countries = signupRepository.GetCountries();
+                ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
+
+                // Load the dropdown data based on the selected country and state
+              //  var states = signupRepository.GetStatesByCountry(model.CountryId);
+              //  ViewBag.States = new SelectList(states, "StateId", "StateName");
+
+               // var cities = signupRepository.GetCitiesByState(model.StateId);
+               // ViewBag.Cities = new SelectList(cities, "CityId", "CityName");
+
+                return View(model);
+            }
+
+           public JsonResult GetStatesByCountry(int CountryId)
+            {
+                var states = signupRepository.GetStatesByCountry(CountryId);
+                return Json(states);
+            }
+
+            [HttpPost]
+            public JsonResult GetCitiesByState(int StateId)
+            {
+                var cities = signupRepository.GetCitiesByState(StateId);
+                return Json(cities);
+            }*/
+        public ActionResult RegisterUser()
+        {
+            var model = new UserRegistration
+            {
+                Countries = signupRepository.GetCountries(),
+                States = new List<State>(),
+                Cities = new List<City>()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult RegisterUser(UserRegistration model)
+        {
+            if (ModelState.IsValid)
+            {
+                signupRepository.RegisterUser(model);
+                // Redirect to a success page or another action
+                return RedirectToAction("RegistrationSuccess");
+            }
+
+            // If the model is not valid, redisplay the registration form with validation errors
+            model.Countries = signupRepository.GetCountries();
+            model.States = signupRepository.GetStatesByCountry(model.CountryId);
+            model.Cities = signupRepository.GetCitiesByState(model.StateId);
+
+            return View(model);
+        }
+
+        public JsonResult GetStatesByCountry(int CountryId)
+        {
+            var states = signupRepository.GetStatesByCountry(CountryId);
+            return Json(states, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetCitiesByState(int StateId)
+        {
+            var cities = signupRepository.GetCitiesByState(StateId);
+            return Json(cities);
+        }
     }
 }
