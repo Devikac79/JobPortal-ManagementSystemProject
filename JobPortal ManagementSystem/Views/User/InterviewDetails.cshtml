@@ -1,0 +1,74 @@
+﻿@model JobPortal_ManagementSystem.Models.ScheduledInterview
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>InterviewDetails</title>
+</head>
+<body>
+    <div>
+        <h4>ScheduledInterview</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.InterviewId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.InterviewId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ApplicationId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ApplicationId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UserId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UserId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.JobPostId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.JobPostId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.InterviewDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.InterviewDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Location)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Location)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

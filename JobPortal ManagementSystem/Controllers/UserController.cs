@@ -60,6 +60,7 @@ namespace JobPortalManagementSystem.Controllers
                     Signup userSignup = signupRepository.GetSignupById(userId.Value);
 
                     if (userSignup != null)
+
                     {
                         return View(userSignup);
 
@@ -368,7 +369,7 @@ namespace JobPortalManagementSystem.Controllers
 
                 return View(application);
             }
-            catch (Exception ex)
+            catch
             {
                 // Handle exceptions (e.g., conversion errors, repository exceptions) here.
                 // Log the exception or perform any other error handling as needed.
@@ -376,38 +377,7 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
-        /* [HttpPost]
-         public ActionResult ApplyForJob(JobApplication application)
-         {
-             try
-             {
-                 if (ModelState.IsValid)
-                 {
-                     // Save the job application using the repository.
-                     jobApplicationRepository.SaveJobApplication(application);
-                     // You can redirect to a success page or show a success message here.
-                     return RedirectToAction("UserHomepage");
-                 }
-
-                 // If the model is not valid, return to the view with the validation errors.
-                 return View(application);
-             }
-             catch (SqlException ex)
-             {
-                 // Handle SQL exceptions (e.g., database connection issues) here.
-                 // Log the exception or perform any other error handling as needed.
-                 ModelState.AddModelError("", "An error occurred while saving the job application. Please try again later.");
-                 return View(application);
-             }
-             catch (Exception ex)
-             {
-                 // Handle other exceptions here.
-                 // Log the exception or perform any other error handling as needed.
-                 ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
-                 return View(application);
-             }
-         }
-        */
+     
 
 
 
@@ -549,6 +519,39 @@ namespace JobPortalManagementSystem.Controllers
                 // Convert the string userId to int and return
                 return int.Parse(userId);
             }*/
+
+        public ActionResult AllInterviews()
+        {
+            int userId = Convert.ToInt32(Session["UserId"]);
+
+            if (userId > 0)
+            {
+                List<ScheduledInterview> userInterviews =jobApplicationRepository.GetInterviewsByUserId(userId);
+                return View(userInterviews);
+            }
+            else
+            {
+                // Redirect to login or show an error message
+                return RedirectToAction("Login", "User");
+            }
+        }
+        public ActionResult InterviewDetails()
+        {
+            int userId = (int)Session["UserId"]; // Retrieve the user's ID from the session
+
+            ScheduledInterview interview = jobApplicationRepository.GetScheduledInterviewByUserId(userId);
+
+            if (interview == null)
+            {
+                // No scheduled interview found for the user
+                ViewBag.Message = "No scheduled interview found.";
+            }
+
+            return View(interview);
+        }
+
+        // POST: User
+
     }
 }
 

@@ -8,64 +8,13 @@ using System.Configuration;
 using JobPortal_ManagementSystem.Models;
 using JobPortalManagementSystem.Models;
 using System.Data;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace JobPortal_ManagementSystem.Repository
 {
     public class JobApplicationRepository
     {
-       // private readonly string connectionString;
 
-        /*  public JobApplicationRepository()
-          {
-              // Replace "YourConnectionString" with the actual connection string from your configuration.
-              string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
-          }
-          public Signup GetUserProfileById(int userId)
-          {
-              Signup userProfile = null;
-
-              using (var connection = new SqlConnection(connectionString))
-              {
-                  connection.Open();
-                  using (var command = new SqlCommand("SELECT firstName, email FROM Table_Signup WHERE Id = @userId", connection))
-                  {
-                      command.Parameters.AddWithValue("@userId", userId);
-
-                      using (var reader = command.ExecuteReader())
-                      {
-                          if (reader.Read())
-                          {
-                              userProfile = new Signup
-                              {
-                                  Id = userId,
-                                  firstName = reader["firstName"].ToString(),
-                                  email = reader["email"].ToString()
-                              };
-                          }
-                      }
-                  }
-              }
-
-              return userProfile;
-          }
-
-          public void SaveJobApplication(JobApplication application)
-          {
-              using (var connection = new SqlConnection(connectionString))
-              {
-                  connection.Open();
-                  using (var command = new SqlCommand("INSERT INTO Table_JobApplications (UserName, Email, userId, jobPostId, applicationDate) VALUES (@userName, @email, @userId, @jobPostId, @applicationDate)", connection))
-                  {
-                      command.Parameters.AddWithValue("@userName", application.userName);
-                      command.Parameters.AddWithValue("@email", application.email);
-                      command.Parameters.AddWithValue("@userId", application.userId);
-                      command.Parameters.AddWithValue("@jobPostId", application.jobPostId);
-                      command.Parameters.AddWithValue("@applicationDate", DateTime.Now);
-
-                      command.ExecuteNonQuery();
-                  }
-              }
-          }*/
         public Signup GetUserProfileById(int userId)
         {
             Signup userProfile = null;
@@ -73,9 +22,10 @@ namespace JobPortal_ManagementSystem.Repository
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT firstName, email FROM Table_Signup WHERE Id = @userId", connection))
+                using (var command = new SqlCommand("SPS_UserProfileById", connection))
                 {
-                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -97,49 +47,6 @@ namespace JobPortal_ManagementSystem.Repository
 
 
 
-        /*   public Signup GetUserProfileById(int userId)
-           {
-               try
-               {
-                   using (var connection = new SqlConnection(connectionString))
-                   {
-                       connection.Open();
-
-                       using (var command = new SqlCommand("SELECT firstName, email FROM Table_Signup WHERE Id = @userId", connection))
-                       {
-                           command.Parameters.AddWithValue("@userId", userId);
-
-                           using (var reader = command.ExecuteReader())
-                           {
-                               if (reader.Read())
-                               {
-                                   return new Signup
-                                   {
-                                       Id = userId,
-                                       firstName = reader["firstName"].ToString(),
-                                       email = reader["email"].ToString()
-                                   };
-                               }
-                           }
-                       }
-                   }
-
-                   return null; // Return null if no user profile is found for the given userId.
-               }
-               catch (SqlException ex)
-               {
-                   // Handle SQL exceptions (e.g., database connection issues) here.
-                   // Log the exception or perform any other error handling as needed.
-                   throw new Exception("An error occurred while retrieving user profile.", ex);
-               }
-               catch (Exception ex)
-               {
-                   // Handle other exceptions here.
-                   // Log the exception or perform any other error handling as needed.
-                   throw new Exception("An unexpected error occurred while retrieving user profile.", ex);
-               }
-           }
-        */
         string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
         public bool SaveJobApplication(JobApplication application)
         {
@@ -148,13 +55,13 @@ namespace JobPortal_ManagementSystem.Repository
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    using (var command = new SqlCommand("INSERT INTO Table_JobApplications (UserName, Email, userId, jobPostId, applicationDate) VALUES (@UserName, @Email, @userId, @jobPostId, @applicationDate)", connection))
+                    using (var command = new SqlCommand("SPI_JobApplication", connection))
                     {
+                        command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@UserName", application.UserName);
                         command.Parameters.AddWithValue("@Email", application.Email);
                         command.Parameters.AddWithValue("@userId", application.userId);
                         command.Parameters.AddWithValue("@jobPostId", application.jobPostId);
-                        command.Parameters.AddWithValue("@applicationDate", DateTime.Now);
 
                         int rowsAffected = command.ExecuteNonQuery();
                         return rowsAffected > 0;
@@ -175,18 +82,21 @@ namespace JobPortal_ManagementSystem.Repository
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT UserName, Email, jobPostId, applicationDate FROM Table_JobApplications", connection))
+                using (var command = new SqlCommand("SPS_AllAppliedJobs", connection))
                 {
+                    command.CommandType = CommandType.StoredProcedure;
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             JobApplication application = new JobApplication
                             {
+                                Id = Convert.ToInt32(reader["Id"]),
                                 UserName = reader["UserName"].ToString(),
                                 Email = reader["Email"].ToString(),
                                 jobPostId = Convert.ToInt32(reader["jobPostId"]),
-                                applicationDate = Convert.ToDateTime(reader["applicationDate"])
+                                applicationDate = Convert.ToDateTime(reader["applicationDate"]),
+                                IsScheduled = Convert.ToBoolean(reader["IsScheduled"])
                             };
                             appliedJobs.Add(application);
                         }
@@ -196,6 +106,168 @@ namespace JobPortal_ManagementSystem.Repository
 
             return appliedJobs;
         }
+
+
+
+
+        public JobApplication GetJobApplicationById(int Id)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new SqlCommand("SPS_JobApplicationById", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@Id", Id);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                JobApplication application = new JobApplication
+                                {
+                                    Id = Convert.ToInt32(reader["Id"]),
+                                    UserName = reader["UserName"].ToString(),
+                                    Email = reader["Email"].ToString(),
+                                    userId = Convert.ToInt32(reader["userId"]),
+                                    jobPostId = Convert.ToInt32(reader["jobPostId"]),
+                                    applicationDate = Convert.ToDateTime(reader["applicationDate"]),
+                                    IsScheduled = Convert.ToBoolean(reader["IsScheduled"])
+                                };
+                                return application;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                // For example: Console.WriteLine(ex.Message);
+            }
+
+            return null; // Return null if the application is not found
+        }
+
+
+        public void UpdateIsScheduled(int Id, bool isScheduled)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand("SPU_IsScheduled", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Id", Id);
+                    command.Parameters.AddWithValue("@isScheduled", isScheduled);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        public void SaveScheduledInterview(ScheduledInterview interview)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SPS_ScheduledInterviews", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@applicationId", interview.ApplicationId);
+                    command.Parameters.AddWithValue("@userId", interview.UserId);
+                    command.Parameters.AddWithValue("@jobPostId", interview.JobPostId);
+                    command.Parameters.AddWithValue("@interviewDate", interview.InterviewDate);
+                    command.Parameters.AddWithValue("@location", interview.Location);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        public ScheduledInterview GetScheduledInterviewByUserId(int userId)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SPS_ScheduledInterviewByUserId", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            ScheduledInterview interview = new ScheduledInterview
+                            {
+                                InterviewId = Convert.ToInt32(reader["InterviewId"]),
+                                UserId = Convert.ToInt32(reader["UserId"]),
+                                JobPostId = Convert.ToInt32(reader["JobPostId"]),
+                                InterviewDate = Convert.ToDateTime(reader["InterviewDate"]),
+                                Location = reader["Location"].ToString()
+                            };
+                            return interview;
+                        }
+                    }
+                }
+            }
+
+            return null; // Return null if no interview is found for the user
+        }
+        public List<ScheduledInterview> GetInterviewsByUserId(int userId)
+        {
+            List<ScheduledInterview> interviews = new List<ScheduledInterview>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SPS_InterviewsByUserId", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ScheduledInterview interview = new ScheduledInterview
+                            {
+                                InterviewId = Convert.ToInt32(reader["InterviewId"]),
+                                UserId = Convert.ToInt32(reader["UserId"]),
+                                JobPostId = Convert.ToInt32(reader["JobPostId"]),
+                                InterviewDate = Convert.ToDateTime(reader["InterviewDate"]),
+                                Location = reader["Location"].ToString()
+                            };
+                            interviews.Add(interview);
+                        }
+                    }
+                }
+            }
+
+            return interviews;
+        }
+
+        public void RejectApplication(int Id)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SPD_RejectApplication", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Id", Id);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }
 

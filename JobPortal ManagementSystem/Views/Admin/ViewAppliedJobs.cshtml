@@ -5,48 +5,50 @@
     Layout = "~/Views/Admin/AdminLayoutpage.cshtml";
 }
 
-
 <style>
     /* Custom CSS for table appearance */
     .table-responsive {
-        margin:50px;
-        min-height:400px;
+        margin: 50px;
+        min-height: 400px;
     }
 
     .table {
         text-align: center; /* Center-align table content */
     }
-    tr
-        .table th,
+
+        tr .table th,
         .table td {
             vertical-align: middle;
         }
 
     .colored-box {
-        background-color:cadetblue!important;
+        background-color: cadetblue !important;
         color: #343a40;
         padding: 10px;
         border: 1px solid #dee2e6;
     }
-  
+
         .colored-box:hover {
             background-color: #e2e6ea;
         }
-        h2{
-            text-align:center;
-            padding-bottom:20px;
-        }
+
+
+    h2 {
+        text-align: center;
+        padding-bottom: 20px;
+    }
 </style>
 <div class="table-responsive">
-    <h2>View AppliedJobs</h2>
+    <h2>View Applied Jobs</h2>
     <table class="table table-hover table-bordered">
         <thead class="thead-dark">
             <tr>
                 <th class="colored-box">@Html.DisplayNameFor(model => model.UserName)</th>
                 <th class="colored-box">@Html.DisplayNameFor(model => model.Email)</th>
-               
                 <th class="colored-box">@Html.DisplayNameFor(model => model.jobPostId)</th>
                 <th class="colored-box">@Html.DisplayNameFor(model => model.applicationDate)</th>
+              
+                <th class="colored-box">Actions</th> <!-- Add this column for buttons -->
             </tr>
         </thead>
         <tbody>
@@ -55,12 +57,27 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.UserName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                   
                     <td>@Html.DisplayFor(modelItem => item.jobPostId)</td>
                     <td>@Html.DisplayFor(modelItem => item.applicationDate)</td>
+                    
+                    <td>
+                        @if (!item.IsScheduled)
+                        {
+                            <div class="btn-group">
+                                @Html.ActionLink("Interview", "ScheduleInterview", new { Id = item.Id })||
+                                @Html.ActionLink("REject", "RejectApplication", new { Id = item.Id })||
+
+                                @*  <a href="@Url.Action("ScheduleInterview", "Admin", new { Id = item.Id })" class="btn btn-primary btn-sm">Interview</a>*@
+                                @* <a href="@Url.Action("RejectApplication", "Admin", new { Id = item.Id })" class="btn btn-danger btn-sm">Reject</a>*@
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="btn btn-success btn-sm">Interview Scheduled</span>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-

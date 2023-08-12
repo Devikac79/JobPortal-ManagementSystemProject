@@ -272,9 +272,9 @@ namespace JobPortalManagementSystem.Repository
             SqlCommand command = new SqlCommand("Sp_ValidateUserAndGetRole", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", Encrypt(password));
+           // command.Parameters.AddWithValue("@password", Encrypt(password));
 
-            // command.Parameters.AddWithValue("@password", password);
+            command.Parameters.AddWithValue("@password", password);
 
             connection.Open();
             var role = command.ExecuteScalar() as string;
@@ -289,8 +289,8 @@ namespace JobPortalManagementSystem.Repository
             SqlCommand command = new SqlCommand("SPS_SignupByUsernameAndPassword", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@username", username);
-          //  command.Parameters.AddWithValue("@password", password);
-          command.Parameters.AddWithValue("@password", Encrypt(password));
+          command.Parameters.AddWithValue("@password", password);
+         // command.Parameters.AddWithValue("@password", Encrypt(password));
             connection.Open();
             SqlDataReader reader = command.ExecuteReader();
 

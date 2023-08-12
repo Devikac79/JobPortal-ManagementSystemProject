@@ -1,4 +1,5 @@
 ﻿
+using JobPortal_ManagementSystem.Models;
 using JobPortal_ManagementSystem.Repository;
 using JobPortalManagementSystem.Models;
 using JobPortalManagementSystem.Repository;
@@ -365,6 +366,87 @@ namespace JobPortalManagementSystem.Controllers
             var appliedJobs = jobApplicationRepository.GetAllAppliedJobs();
             return View(appliedJobs);
         }
+
+
+        /*      public ActionResult ScheduleInterview()
+              {
+                  // Load data for dropdown lists (users, job posts)
+                  // ...
+
+                  return View();
+              }
+
+              [HttpPost]
+              public ActionResult ScheduleInterview(ScheduledInterview interview)
+              {
+                  if (ModelState.IsValid)
+                  {
+                     jobApplicationRepository.ScheduleInterview(interview);
+                      return RedirectToAction("ScheduledInterviews");
+                  }
+
+                  // Reload data for dropdown lists (users, job posts)
+                  // ...
+
+                  return View(interview);
+              }
+
+              public ActionResult ScheduledInterviews()
+              {
+                  var scheduledInterviews = JobApplicationRepository.GetAllScheduledInterviews();
+                  return View(scheduledInterviews);
+              }
+
+              */
+
+
+        public ActionResult ScheduleInterview(int Id)
+        {
+            JobApplication application = jobApplicationRepository.GetJobApplicationById(Id);
+
+           if (application == null)
+            {
+                // Handle the case when the application is not found
+                // You can redirect or show an error message
+                return RedirectToAction("AdminHomepage", "Admin"); // Redirect to the home page for example
+            }
+
+            ScheduledInterview interview = new ScheduledInterview
+            {
+                ApplicationId = application.Id,
+                UserId = application.userId,
+                JobPostId = application.jobPostId,
+                
+            };
+
+            return View(interview);
+        }
+
+        [HttpPost]
+        public ActionResult ScheduleInterview(ScheduledInterview interview)
+        {
+            if (ModelState.IsValid)
+            {
+                // Save the scheduled interview using the repository
+                jobApplicationRepository.SaveScheduledInterview(interview);
+
+                // Update the IsScheduled property for the corresponding job application
+                jobApplicationRepository.UpdateIsScheduled(interview.ApplicationId, true);
+
+                // You can redirect to a success page or show a success message here
+                return RedirectToAction("AdminHomepage", "Admin"); // Redirect to home page for example
+            }
+
+            // If the model is not valid, return to the view with the validation errors
+            return View(interview);
+        }
+
+        public ActionResult RejectApplication(int Id)
+        {
+            jobApplicationRepository.RejectApplication(Id);
+            return RedirectToAction("ViewAppliedJobs");
+        }
+
     }
 
 

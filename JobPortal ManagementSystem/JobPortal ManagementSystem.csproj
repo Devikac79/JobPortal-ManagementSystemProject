@@ -126,6 +126,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ScheduledInterview.cs" />
     <Compile Include="Models\UserRegistration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\City.cs" />
@@ -167,6 +168,9 @@
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\signin.jpg" />
     <Content Include="Content\Images\signin1.jpg" />
+    <Content Include="Content\Images\signup1.jpg" />
+    <Content Include="Content\Images\signup2.jpg" />
+    <Content Include="Content\Images\signup3.jpg" />
     <Content Include="Content\Images\user.jpg" />
     <Content Include="Content\Javascript\JobPost.js" />
     <Content Include="Content\Javascript\Signup.js" />
@@ -183,6 +187,9 @@
     <Content Include="Views\Home\RegisterUser.cshtml" />
     <Content Include="Content\Images\Day-28.docx" />
     <Content Include="Content\Images\Day-29.docx" />
+    <Content Include="Views\Admin\ScheduleInterview.cshtml" />
+    <Content Include="Views\User\InterviewDetails.cshtml" />
+    <Content Include="Views\User\AllInterviews.cshtml" />
     <None Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\User\UserProfileDetails.cshtml" />
   </ItemGroup>

@@ -19,11 +19,10 @@ namespace JobPortal_ManagementSystem.Models
         public int jobPostId { get; set; }
         [DisplayName("Application date")]
         public DateTime applicationDate { get; set; }
-        
-
-        // Add navigation properties for the related entities (if using Entity Framework).
-        // public virtual User User { get; set; }
-        // public virtual JobPost JobPost { get; set; }
+        [DisplayName(" Highest Qualification")]
+       
+        public bool IsScheduled { get; set; }
+       
     }
 
 }

@@ -41,34 +41,17 @@ namespace JobPortal_ManagementSystem.Repository
             }
         }
 
-        
 
-      /*public bool AddCategory(Category category)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
 
-                string query = "INSERT INTO Table_JobCategory (category) VALUES (@category)";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@category", category.category);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    return rowsAffected > 0;
-                }
-            }
-        }
-     
-*/
         public List<Category> GetAllCategories()
         {
             List<Category> categories = new List<Category>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT categoryId, category FROM Table_JobCategory";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlCommand command = new SqlCommand("SPS_AllCategories", connection))
                 {
+                    command.CommandType = CommandType.StoredProcedure;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -85,6 +68,7 @@ namespace JobPortal_ManagementSystem.Repository
             }
             return categories;
         }
+
 
     }
 }
