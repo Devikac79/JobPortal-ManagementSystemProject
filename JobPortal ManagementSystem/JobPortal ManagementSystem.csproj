@@ -190,6 +190,7 @@
     <Content Include="Views\Admin\ScheduleInterview.cshtml" />
     <Content Include="Views\User\InterviewDetails.cshtml" />
     <Content Include="Views\User\AllInterviews.cshtml" />
+    <Content Include="Views\User\AppliedJobs.cshtml" />
     <None Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\User\UserProfileDetails.cshtml" />
   </ItemGroup>

@@ -176,9 +176,10 @@ namespace JobPortalManagementSystem.Controllers
                    if (ModelState.IsValid)
                    {
                        SignupRepository signupRepository = new SignupRepository();
+
                     string role = signupRepository.GetUserRole(signin.username, signin.password);
 
-                    Signup userSignup = signupRepository.GetSignupDetailsByUsernameAndPassword(signin.username, signin.password);
+                    Signup userSignup = signupRepository.GetSignupDetailsByUsernameAndPassword(signin.username);
 
                        if (userSignup != null)
                        {
@@ -195,15 +196,16 @@ namespace JobPortalManagementSystem.Controllers
                                // Redirect to UserProfileDetails action in UserController
                                return RedirectToAction("UserHomepage", "User");
                            }
-                          
-                           else
-                           {
-                               ViewBag.Message = "Invalid role for the user.";
+
+                        else if (role == "admin")
+                        {
+                            return RedirectToAction("AdminHomepage", "Admin");
+                           // ViewBag.Message = "Invalid role for the user.";
                            }
                        }
                        else if (role == "admin")
                     {
-                        return RedirectToAction("AdminHomepage", "Admin");
+                      //  return RedirectToAction("AdminHomepage", "Admin");
                     }
                    }
 

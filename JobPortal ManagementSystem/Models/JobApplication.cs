@@ -19,10 +19,20 @@ namespace JobPortal_ManagementSystem.Models
         public int jobPostId { get; set; }
         [DisplayName("Application date")]
         public DateTime applicationDate { get; set; }
-        [DisplayName(" Highest Qualification")]
-       
+        [DisplayName(" Job Title")]
+        public string title { get; set; }
+        [DisplayName(" Company Name")]
+
+
+        public string companyName { get; set; }
+        [DisplayName("Skills")]
+        public string skills { get; set; }
+        [DisplayName("Resume")]
+        public byte[] resume { get; set; }
+
         public bool IsScheduled { get; set; }
-       
+        public bool IsApplied { get; set; } // New field to track whether the user has applied
+
     }
 
 }

@@ -129,8 +129,8 @@ namespace JobPortalManagementSystem.Repository
                 command.Parameters.AddWithValue("@pincode", signup.pincode);
                 command.Parameters.AddWithValue("@country", signup.country);
                 command.Parameters.AddWithValue("@username", signup.username);
-                command.Parameters.AddWithValue("@password", Encrypt(signup.password));
-               // command.Parameters.AddWithValue("@password", signup.password);
+              command.Parameters.AddWithValue("@password", Encrypt(signup.password));
+             //  command.Parameters.AddWithValue("@password", signup.password);
                 //string imageBase64 = Convert.ToBase64String(signup.image);
                 // command.Parameters.AddWithValue("@image", imageBase64);
               //  command.Parameters.Add("@image", SqlDbType.VarBinary, -1).Value = signup.image;
@@ -269,12 +269,12 @@ namespace JobPortalManagementSystem.Repository
         public string GetUserRole(string username, string password)
         {
             Connection();
-            SqlCommand command = new SqlCommand("Sp_ValidateUserAndGetRole", connection);
+            SqlCommand command = new SqlCommand("SPS_ValidateUserAndGetRole", connection);
             command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@username", username);
-           // command.Parameters.AddWithValue("@password", Encrypt(password));
+           command.Parameters.AddWithValue("@username", username);
+         command.Parameters.AddWithValue("@password", Encrypt(password));
 
-            command.Parameters.AddWithValue("@password", password);
+        //  command.Parameters.AddWithValue("@password", password);
 
             connection.Open();
             var role = command.ExecuteScalar() as string;
@@ -283,14 +283,14 @@ namespace JobPortalManagementSystem.Repository
             return role;
         }
 
-        public Signup GetSignupDetailsByUsernameAndPassword(string username, string password)
+        public Signup GetSignupDetailsByUsernameAndPassword(string username)
         {
             Connection();
             SqlCommand command = new SqlCommand("SPS_SignupByUsernameAndPassword", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@username", username);
-          command.Parameters.AddWithValue("@password", password);
-         // command.Parameters.AddWithValue("@password", Encrypt(password));
+     // command.Parameters.AddWithValue("@password", password);
+      // command.Parameters.AddWithValue("@password", Encrypt(password));
             connection.Open();
             SqlDataReader reader = command.ExecuteReader();
 
@@ -329,8 +329,11 @@ namespace JobPortalManagementSystem.Repository
             // Implement the logic to fetch the user details based on ID from the database.
             // Ensure to return null if the user is not found.
 
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
+              
+
                 SqlCommand command = new SqlCommand("SPS_SignupById", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@Id", Id);
@@ -355,7 +358,8 @@ namespace JobPortalManagementSystem.Repository
                         pincode = Convert.ToInt32(reader["pincode"]),
                         country = Convert.ToString(reader["country"]),
                         username = Convert.ToString(reader["username"]),
-                        password = Convert.ToString(reader["password"]),    
+                        password = Convert.ToString(reader["password"]),
+                       // password = Decrypt(Convert.ToString(reader["password"])),
                         image = reader["image"] as byte[],
                         resume = reader["resume"] as byte[],
                         // Add other properties as needed
@@ -375,6 +379,8 @@ namespace JobPortalManagementSystem.Repository
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
+              // string decryptedPassword = Decrypt(signup.password); // Replace with your decryption logic
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand("SPU_Signup", connection))
                 {
@@ -393,8 +399,9 @@ namespace JobPortalManagementSystem.Repository
                     command.Parameters.AddWithValue("@pincode", signup.pincode);
                     command.Parameters.AddWithValue("@country", signup.country);
                     command.Parameters.AddWithValue("@username", signup.username);
-                    command.Parameters.AddWithValue("@password", (signup.password));
-                    // command.Parameters.AddWithValue("@password", signup.password);
+
+                    command.Parameters.AddWithValue("@password",Encrypt(signup.password));
+                  // command.Parameters.AddWithValue("@password", decryptedPassword);
                     // Convert the imageData byte array to SqlParameter of SqlDbType.VarBinary
                     /* SqlParameter imageDataParam = new SqlParameter("@image", SqlDbType.VarBinary);
                      imageDataParam.Value = signup.image ?? (object)DBNull.Value;

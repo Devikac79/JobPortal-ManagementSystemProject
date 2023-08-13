@@ -1,0 +1,46 @@
+﻿@model IEnumerable<JobPortal_ManagementSystem.Models.JobApplication>
+
+@{
+    ViewBag.Title = "AppliedJobs";
+    Layout = "~/Views/User/UserLayoutpage.cshtml";
+}
+
+<h2>AppliedJobs</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.companyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.applicationDate)
+        </th>
+
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.companyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.applicationDate)
+        </td>
+
+
+
+    </tr>
+}
+
+</table>

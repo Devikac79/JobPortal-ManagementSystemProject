@@ -22,7 +22,7 @@ namespace JobPortal_ManagementSystem.Repository
         }
         string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
 
-        public bool AddCategory(Category category)
+            public bool AddCategory(Category category)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

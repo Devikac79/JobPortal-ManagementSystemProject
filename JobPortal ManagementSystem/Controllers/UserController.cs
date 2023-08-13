@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -89,7 +91,29 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
+        private string Decrypt(string cipherText)
+        {
+            string encryptionKey = "MAKV2SPBNI99212";
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
 
+            return cipherText;
+        }
+      //  public string EncryptedPassword { get; set; }
 
         // POST: EditUserProfile
 
@@ -104,9 +128,10 @@ namespace JobPortalManagementSystem.Controllers
                 {
                     SignupRepository signupRepository = new SignupRepository();
                     Signup userSignup = signupRepository.GetSignupById(userId.Value);
-
+                 
                     if (userSignup != null)
                     {
+                        userSignup.password = Decrypt(userSignup.password);
                         return View(userSignup);
                         //TempData["SuccessMessage"] = "User profile updated successfully";
 
@@ -338,6 +363,106 @@ namespace JobPortalManagementSystem.Controllers
 
 
 
+        //[HttpGet]
+        //public ActionResult ApplyForJob(int jobId)
+        //{
+        //    if (Session["UserId"] == null)
+        //    {
+        //        // If the user is not logged in, redirect to the login page or show an error message.
+        //        return RedirectToAction("Signin", "Home");
+        //    }
+
+        //    try
+        //    {
+        //        int userId = Convert.ToInt32(Session["UserId"]);
+        //        string userName = Session["firstName"]?.ToString();
+        //        string email = Session["email"]?.ToString();
+
+        //        JobPost jobPost = jobPostRepository.GetJobPostById(jobId);
+        //        Signup userProfile = signupRepository.GetUserProfileById(userId);
+
+        //        JobApplication application = new JobApplication
+        //        {
+        //            userId = userProfile.Id,
+        //            jobPostId = jobId,
+        //            UserName = userProfile.firstName,
+        //            Email = userProfile.email,
+        //            companyName=jobPost.companyName,
+        //            title=jobPost.title
+
+
+        //            // You can set other fields here as well.
+        //        };
+
+        //        ViewBag.JobTitle = jobPost.title; // Passing the job title to the view using ViewBag.
+
+        //        return View(application);
+        //    }
+        //    catch
+        //    {
+        //        // Handle exceptions (e.g., conversion errors, repository exceptions) here.
+        //        // Log the exception or perform any other error handling as needed.
+        //        return RedirectToAction("UserHomepage");
+        //    }
+        //}
+
+
+
+
+
+
+
+
+        //[HttpPost]
+        //public ActionResult ApplyForJob(JobApplication application, HttpPostedFileBase resumeFile)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            if (resumeFile != null && resumeFile.ContentLength > 0)
+        //            {
+        //                byte[] resumeData;
+        //                using (var binaryReader = new BinaryReader(resumeFile.InputStream))
+        //                {
+        //                    resumeData = binaryReader.ReadBytes(resumeFile.ContentLength);
+        //                }
+        //                application.resume = resumeData;
+        //            }
+        //            // bool success = jobApplicationRepository.SaveJobApplication(application);
+        //            JobApplicationRepository jobApplicationRepository=new JobApplicationRepository();
+        //            if (jobApplicationRepository.SaveJobApplication(application))
+        //            {
+        //                // Successful insertion, redirect to success page.
+        //                return RedirectToAction("UserHomepage");
+        //            }
+        //            else
+        //            {
+        //                // Insertion failed, show an error message to the user.
+        //                ModelState.AddModelError("", "An error occurred while saving the job application. Please try again later.");
+        //                return View(application);
+        //            }
+        //        }
+
+        //        // If the model is not valid, return to the view with the validation errors.
+        //        return View(application);
+        //    }
+        //    catch (SqlException ex)
+        //    {
+        //        // Handle SQL exceptions (e.g., database connection issues) here.
+        //        // Log the exception or perform any other error handling as needed.
+        //        ModelState.AddModelError("", "An error occurred while saving the job application. Please try again later.");
+        //        return View(application);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle other exceptions here.
+        //        // Log the exception or perform any other error handling as needed.
+        //        ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
+        //        return View(application);
+        //    }
+        //}
+
         [HttpGet]
         public ActionResult ApplyForJob(int jobId)
         {
@@ -356,12 +481,21 @@ namespace JobPortalManagementSystem.Controllers
                 JobPost jobPost = jobPostRepository.GetJobPostById(jobId);
                 Signup userProfile = signupRepository.GetUserProfileById(userId);
 
+                if (jobApplicationRepository.CheckIfUserAppliedForJob(userId, jobId))
+                {
+                    // User has already applied for this job, show a message or redirect.
+                    ViewBag.AlreadyAppliedMessage = "You have already applied for this job.";
+                    return RedirectToAction("UserHomepage");
+                }
+
                 JobApplication application = new JobApplication
                 {
                     userId = userProfile.Id,
                     jobPostId = jobId,
                     UserName = userProfile.firstName,
                     Email = userProfile.email,
+                    companyName = jobPost.companyName,
+                    title = jobPost.title
                     // You can set other fields here as well.
                 };
 
@@ -377,25 +511,38 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
-     
-
-
-
-
-
-
         [HttpPost]
-        public ActionResult ApplyForJob(JobApplication application)
+        public ActionResult ApplyForJob(JobApplication application, HttpPostedFileBase resumeFile)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                   // bool success = jobApplicationRepository.SaveJobApplication(application);
-                  JobApplicationRepository jobApplicationRepository=new JobApplicationRepository();
+                    int userId = Convert.ToInt32(Session["UserId"]);
+                    int jobId = application.jobPostId;
+
+                    if (jobApplicationRepository.CheckIfUserAppliedForJob(userId, jobId))
+                    {
+                        // User has already applied for this job, show a message or redirect.
+                        ViewBag.AlreadyAppliedMessage = "You have already applied for this job.";
+                        return RedirectToAction("ApplyForJob");
+                    }
+
+                    if (resumeFile != null && resumeFile.ContentLength > 0)
+                    {
+                        byte[] resumeData;
+                        using (var binaryReader = new BinaryReader(resumeFile.InputStream))
+                        {
+                            resumeData = binaryReader.ReadBytes(resumeFile.ContentLength);
+                        }
+                        application.resume = resumeData;
+                    }
+
                     if (jobApplicationRepository.SaveJobApplication(application))
                     {
-                        // Successful insertion, redirect to success page.
+                        // Successful insertion, update IsApplied and redirect to success page.
+                        jobApplicationRepository.UpdateIsApplied(userId, jobId, true);
+                        TempData["SuccessMessage"] = "Your application has been submitted successfully.";
                         return RedirectToAction("UserHomepage");
                     }
                     else
@@ -438,29 +585,9 @@ namespace JobPortalManagementSystem.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*    public ActionResult UserProfile()
+     
+        
+     /*public ActionResult UserProfile()
             {
                 int userId = GetLoggedInUserId(); // Get the logged-in user's ID;
                 Signup user = signupRepository.GetSignupDetailsById(userId);
@@ -535,23 +662,36 @@ namespace JobPortalManagementSystem.Controllers
                 return RedirectToAction("Login", "User");
             }
         }
-        public ActionResult InterviewDetails()
-        {
-            int userId = (int)Session["UserId"]; // Retrieve the user's ID from the session
+        //public ActionResult InterviewDetails()
+        //{
+        //    int userId = (int)Session["UserId"]; // Retrieve the user's ID from the session
 
-            ScheduledInterview interview = jobApplicationRepository.GetScheduledInterviewByUserId(userId);
+        //    ScheduledInterview interview = jobApplicationRepository.GetScheduledInterviewByUserId(userId);
 
-            if (interview == null)
-            {
-                // No scheduled interview found for the user
-                ViewBag.Message = "No scheduled interview found.";
-            }
+        //    if (interview == null)
+        //    {
+        //        // No scheduled interview found for the user
+        //        ViewBag.Message = "No scheduled interview found.";
+        //    }
 
-            return View(interview);
-        }
+        //    return View(interview);
+        //}
 
         // POST: User
 
+
+        public ActionResult AppliedJobs()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Signin", "Home");
+            }
+
+            int userId = Convert.ToInt32(Session["UserId"]);
+            List<JobApplication> appliedJobs = jobApplicationRepository.GetAppliedJobsForUser(userId);
+
+            return View(appliedJobs);
+        }
     }
 }
 

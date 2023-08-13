@@ -13,5 +13,12 @@ namespace JobPortal_ManagementSystem.Models
         public int JobPostId { get; set; }
         public DateTime InterviewDate { get; set; }
         public string Location { get; set; }
+        public string title { get; set; }
+        public string companyName { get; set; }
+
+      
+
+
+
     }
 }

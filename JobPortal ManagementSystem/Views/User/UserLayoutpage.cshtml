@@ -77,6 +77,11 @@
                     </li>
                     <li class="nav-item ">
 
+                        @Html.ActionLink("Applied", "AppliedJobs", "User", null, new { @class = "nav-item nav-link" })
+
+                    </li>
+                    <li class="nav-item ">
+
                         @Html.ActionLink("Interview", "AllInterviews", "User", null, new { @class = "nav-item nav-link" })
 
                     </li>
@@ -92,8 +97,8 @@
                     </li>
 
                     @*<li class="nav-item">
-                <a href="@Url.Action("Logout", "User")" class="btn nav-link btn0 mx-2">Logout</a>
-            </li>*@
+            <a href="@Url.Action("Logout", "User")" class="btn nav-link btn0 mx-2">Logout</a>
+        </li>*@
 
                 </ul>
                 <form class="d-flex" role="search">

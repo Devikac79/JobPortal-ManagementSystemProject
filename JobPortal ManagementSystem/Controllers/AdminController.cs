@@ -416,6 +416,8 @@ namespace JobPortalManagementSystem.Controllers
                 ApplicationId = application.Id,
                 UserId = application.userId,
                 JobPostId = application.jobPostId,
+                title=application.title,
+                companyName=application.companyName
                 
             };
 

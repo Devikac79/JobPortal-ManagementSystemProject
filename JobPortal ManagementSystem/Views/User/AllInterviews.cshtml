@@ -18,6 +18,9 @@
                 <th>Job Post ID</th>
                 <th>Interview Date</th>
                 <th>Location</th>
+                <th>Title</th>
+                <th>Company Name</th>
+
             </tr>
         </thead>
         <tbody>
@@ -26,8 +29,11 @@
                 <tr>
                     <td>@interview.InterviewId</td>
                     <td>@interview.JobPostId</td>
-                    <td>@interview.InterviewDate</td>
+                    <td>@interview.InterviewDate.ToString("MM/dd/yyyy")</td>
                     <td>@interview.Location</td>
+                    <td>@interview.title</td>
+                    <td>@interview.companyName</td>
+
                 </tr>
             }
         </tbody>

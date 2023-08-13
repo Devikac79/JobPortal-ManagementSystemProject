@@ -62,6 +62,65 @@ namespace JobPortal_ManagementSystem.Repository
                         command.Parameters.AddWithValue("@Email", application.Email);
                         command.Parameters.AddWithValue("@userId", application.userId);
                         command.Parameters.AddWithValue("@jobPostId", application.jobPostId);
+                        command.Parameters.AddWithValue("@title", application.title);
+                        command.Parameters.AddWithValue("@companyName", application.companyName);
+                        command.Parameters.AddWithValue("@skills", application.skills);
+                        command.Parameters.Add("@resume", SqlDbType.VarBinary, -1).Value = application.resume;
+                      
+                        int rowsAffected = command.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or perform other error handling.
+                return false;
+            }
+        }
+
+        public bool CheckIfUserAppliedForJob(int userId, int jobId)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT COUNT(*) FROM Table_JobApplications WHERE userId = @UserId AND jobPostId = @JobPostId", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@JobPostId", jobId);
+
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+        }
+        public bool HasUserAppliedForJob(int userId, int jobId)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT COUNT(*) FROM Table_JobApplications WHERE userId = @userId AND jobPostId = @jobId", connection))
+                {
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@jobId", jobId);
+
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+        }
+
+        public bool UpdateJobApplicationStatus(int applicationId, bool isApplied)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new SqlCommand("UPDATE Table_JobApplications SET IsApplied = @IsApplied WHERE Id = @Id", connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", applicationId);
+                        command.Parameters.AddWithValue("@IsApplied", isApplied);
 
                         int rowsAffected = command.ExecuteNonQuery();
                         return rowsAffected > 0;
@@ -74,6 +133,31 @@ namespace JobPortal_ManagementSystem.Repository
                 return false;
             }
         }
+        public bool UpdateIsApplied(int userId, int jobId, bool isApplied)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new SqlCommand("UPDATE Table_JobApplications SET IsApplied = @IsApplied WHERE userId = @UserId AND jobPostId = @JobId", connection))
+                    {
+                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@JobId", jobId);
+                        command.Parameters.AddWithValue("@IsApplied", isApplied);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or perform other error handling.
+                return false;
+            }
+        }
+
 
         public List<JobApplication> GetAllAppliedJobs()
         {
@@ -96,7 +180,11 @@ namespace JobPortal_ManagementSystem.Repository
                                 Email = reader["Email"].ToString(),
                                 jobPostId = Convert.ToInt32(reader["jobPostId"]),
                                 applicationDate = Convert.ToDateTime(reader["applicationDate"]),
-                                IsScheduled = Convert.ToBoolean(reader["IsScheduled"])
+                                IsScheduled = Convert.ToBoolean(reader["IsScheduled"]),
+                                title = reader["title"].ToString(),
+                                companyName = reader["companyName"].ToString(),
+                                skills = reader["skills"].ToString(),
+                                resume = reader["resume"] as byte[]
                             };
                             appliedJobs.Add(application);
                         }
@@ -134,7 +222,10 @@ namespace JobPortal_ManagementSystem.Repository
                                     userId = Convert.ToInt32(reader["userId"]),
                                     jobPostId = Convert.ToInt32(reader["jobPostId"]),
                                     applicationDate = Convert.ToDateTime(reader["applicationDate"]),
-                                    IsScheduled = Convert.ToBoolean(reader["IsScheduled"])
+                                    IsScheduled = Convert.ToBoolean(reader["IsScheduled"]),
+                                    title = reader["title"].ToString(),
+                                    companyName = reader["companyName"].ToString()
+
                                 };
                                 return application;
                             }
@@ -175,7 +266,7 @@ namespace JobPortal_ManagementSystem.Repository
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SPS_ScheduledInterviews", connection))
+                using (var command = new SqlCommand("SPS_ScheduledInterview", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@applicationId", interview.ApplicationId);
@@ -183,6 +274,8 @@ namespace JobPortal_ManagementSystem.Repository
                     command.Parameters.AddWithValue("@jobPostId", interview.JobPostId);
                     command.Parameters.AddWithValue("@interviewDate", interview.InterviewDate);
                     command.Parameters.AddWithValue("@location", interview.Location);
+                    command.Parameters.AddWithValue("@title", interview.title);
+                    command.Parameters.AddWithValue("@companyName", interview.companyName);
 
                     command.ExecuteNonQuery();
                 }
@@ -190,36 +283,39 @@ namespace JobPortal_ManagementSystem.Repository
         }
 
 
-        public ScheduledInterview GetScheduledInterviewByUserId(int userId)
-        {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SqlCommand("SPS_ScheduledInterviewByUserId", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@UserId", userId);
+        //public ScheduledInterview GetScheduledInterviewByUserId(int userId)
+        //{
+        //    using (var connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        using (var command = new SqlCommand("SPS_ScheduledInterviewByUserId", connection))
+        //        {
+        //            command.CommandType = CommandType.StoredProcedure;
+        //            command.Parameters.AddWithValue("@UserId", userId);
 
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            ScheduledInterview interview = new ScheduledInterview
-                            {
-                                InterviewId = Convert.ToInt32(reader["InterviewId"]),
-                                UserId = Convert.ToInt32(reader["UserId"]),
-                                JobPostId = Convert.ToInt32(reader["JobPostId"]),
-                                InterviewDate = Convert.ToDateTime(reader["InterviewDate"]),
-                                Location = reader["Location"].ToString()
-                            };
-                            return interview;
-                        }
-                    }
-                }
-            }
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                if (reader.Read())
+        //                {
+        //                    ScheduledInterview interview = new ScheduledInterview
+        //                    {
+        //                        InterviewId = Convert.ToInt32(reader["InterviewId"]),
+        //                        UserId = Convert.ToInt32(reader["UserId"]),
+        //                        JobPostId = Convert.ToInt32(reader["JobPostId"]),
+        //                        InterviewDate = Convert.ToDateTime(reader["InterviewDate"]),
+        //                        Location = reader["Location"].ToString()
+        //                    };
+        //                    return interview;
+        //                }
+        //            }
+        //        }
+        //    }
 
-            return null; // Return null if no interview is found for the user
-        }
+        //    return null; // Return null if no interview is found for the user
+        //}
+
+
+
         public List<ScheduledInterview> GetInterviewsByUserId(int userId)
         {
             List<ScheduledInterview> interviews = new List<ScheduledInterview>();
@@ -242,7 +338,9 @@ namespace JobPortal_ManagementSystem.Repository
                                 UserId = Convert.ToInt32(reader["UserId"]),
                                 JobPostId = Convert.ToInt32(reader["JobPostId"]),
                                 InterviewDate = Convert.ToDateTime(reader["InterviewDate"]),
-                                Location = reader["Location"].ToString()
+                                Location = reader["Location"].ToString(),
+                                title = reader["title"].ToString(),
+                                companyName = reader["companyName"].ToString()
                             };
                             interviews.Add(interview);
                         }
@@ -267,6 +365,37 @@ namespace JobPortal_ManagementSystem.Repository
                 }
             }
         }
+
+
+
+        public List<JobApplication> GetAppliedJobsForUser(int userId)
+        {
+            List<JobApplication> appliedJobs = new List<JobApplication>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("SP_GetAppliedJobsForUser", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@UserId", userId);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    JobApplication jobApplication = new JobApplication
+                    {
+                        title = reader["title"].ToString(),
+                        companyName = reader["companyName"].ToString(),
+                         applicationDate = Convert.ToDateTime(reader["applicationDate"])
+                    };
+                    appliedJobs.Add(jobApplication);
+                }
+            }
+
+            return appliedJobs;
+        }
+
 
     }
 }
