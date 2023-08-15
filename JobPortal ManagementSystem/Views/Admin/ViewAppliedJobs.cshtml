@@ -79,10 +79,13 @@
                         @if (!item.IsScheduled)
                         {
                             <div class="btn-group">
-                                @Html.ActionLink("Interview", "ScheduleInterview", new { Id = item.Id, @class = "btn btn-primary btn-sm" })|
-                                @Html.ActionLink("Reject", "RejectApplication", new { Id = item.Id, @class = "btn btn-danger btn-sm" })
+                                <div class="btn-group p-1">
+                                    @Html.ActionLink("Interview", "ScheduleInterview", new { Id = item.Id }, new { @class = "btn btn-primary btn-sm mx-2" })
+                                    @Html.ActionLink("Reject", "RejectApplication", new { Id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                                </div>
 
-                              
+
+
                             </div>
                         }
                         else

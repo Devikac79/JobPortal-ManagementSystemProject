@@ -1,4 +1,3 @@
-< !--Function to validate the username(with email validation)-->
     function validateUsername() {
         var usernameInput = document.getElementById("username");
         var username = usernameInput.value.trim();
@@ -18,14 +17,13 @@
         return true;
     }
 
-    < !--Function to validate the password(minimum 3 characters)-- >
         function validatePassword() {
             var passwordInput = document.getElementById("password");
             var password = passwordInput.value.trim();
             var passwordValidation = document.getElementById("passwordValidation");
 
             if (password.length < 3) {
-                passwordValidation.textContent = "Password should be at least 3 characters";
+                passwordValidation.textContent = "Password should be valid";
                 passwordValidation.style.display = "block";
                 return false;
             }
@@ -34,25 +32,46 @@
             return true;
         }
 
-            document.getElementById("username").addEventListener("focusout", validateUsername);
+document.getElementById("username").addEventListener("focusout", validateUsername);
 document.getElementById("password").addEventListener("focusout", validatePassword);
 
-// Function to validate the Signin form on submission
-// Function to validate the Signin form on button click
-function validateSigninFormOnSubmit() {
-    if (validateUsername() && validatePassword()) {
-        if (confirm("Form submitted successfully!\nClick OK to redirect to the homepage.")) {
-            window.location.href = "/"; // Replace "/" with your homepage URL
-        }
-        return true;
-    } else {
-        return false;
-    }
-}
+document.getElementById("signinForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent default form submission
 
-// Attach the form validation function to the form's submit event
-document.getElementById("SubmitButton").addEventListener("submit", function (event) {
-    if (!validateSigninFormOnSubmit()) {
-        event.preventDefault(); // Prevent form submission if validation fails
+    // Validate username and password fields
+    if (!validateUsername() || !validatePassword()) {
+        alert("Please correct the validation errors before submitting.");
+        return;
     }
+
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/Home/Signin", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    if (response.role === "user") {
+                        alert("Login successful as user.");
+                        window.location.href = "/User/UserHomepage"; // Redirect to user homepage
+                    } else if (response.role === "admin") {
+                        alert("Login successful as admin.");
+                        window.location.href = "/Admin/AdminHomepage"; // Redirect to admin homepage
+                    }
+                } else {
+                    alert("Invalid username or password.");
+                }
+            } else {
+                alert("An error occurred during login.");
+            }
+        }
+    };
+
+    var data = "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
+    xhr.send(data);
 });

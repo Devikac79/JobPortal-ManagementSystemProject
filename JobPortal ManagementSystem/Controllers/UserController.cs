@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -35,17 +36,16 @@ namespace JobPortalManagementSystem.Controllers
             jobApplicationRepository = new JobApplicationRepository();
         }
 
-
-
-
-
         public ActionResult Signin()
         {
             return View();
         }
 
 
-
+        /// <summary>
+        /// Get user profile details
+        /// </summary>
+        /// <returns></returns>
 
         // GET: UserProfileDetails
         public ActionResult UserProfileDetails()
@@ -83,14 +83,16 @@ namespace JobPortalManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that occur during fetching the user's profile details
-                // Logging, error handling, or custom error messages can be implemented here
                 ViewBag.Message = "An error occurred: " + ex.Message;
                 return View("UserNotFound");
             }
         }
 
-
+        /// <summary>
+        /// Decrypt code
+        /// </summary>
+        /// <param name="cipherText"></param>
+        /// <returns></returns>
         private string Decrypt(string cipherText)
         {
             string encryptionKey = "MAKV2SPBNI99212";
@@ -113,10 +115,11 @@ namespace JobPortalManagementSystem.Controllers
 
             return cipherText;
         }
-      //  public string EncryptedPassword { get; set; }
-
-        // POST: EditUserProfile
-
+     
+        /// <summary>
+        /// Edit user profile get method
+        /// </summary>
+        /// <returns></returns>
         public ActionResult EditUserProfile()
         {
             try
@@ -157,38 +160,14 @@ namespace JobPortalManagementSystem.Controllers
                 return View("UserNotFound");
             }
         }
+        /// <summary>
+        /// post get user profile 
+        /// </summary>
+        /// <param name="signup"></param>
+        /// <param name="imageFile"></param>
+        /// <param name="resumeFile"></param>
+        /// <returns></returns>
 
-        // POST: EditUserProfile
-        /*  [HttpPost]
-           public ActionResult EditUserProfile(Signup signup)
-           {
-               try
-               {
-
-
-                   if (ModelState.IsValid)
-                   {
-
-                       SignupRepository signupRepository = new SignupRepository();
-                       if (signupRepository.EditSignupDetails(signup))
-                       {
-                           // Set TempData message for successful update
-                           TempData["SuccessMessage"] = "User profile updated successfully";
-                          // return RedirectToAction("UserProfileDetails", "User");
-                       }
-                       return RedirectToAction("UserProfileDetails", "User");
-                   }
-                   return View(signup);
-
-               }
-               catch (Exception ex)
-               {
-                   // Handle any exceptions that occur during editing the user's profile
-                   // Logging, error handling, or custom error messages can be implemented here
-                   ViewBag.Message = "An error occurred: " + ex.Message;
-                   return View(signup);
-               }
-           }*/
         [HttpPost]
         public ActionResult EditUserProfile(Signup signup, HttpPostedFileBase imageFile, HttpPostedFileBase resumeFile)
         {
@@ -222,100 +201,26 @@ namespace JobPortalManagementSystem.Controllers
 
 
 
-        /*   [HttpPost]
-           public ActionResult EditUserProfile(Signup signup, HttpPostedFileBase profileImage, HttpPostedFileBase resumeFile)
-           {
-               try
-               {
-                   if (ModelState.IsValid)
-                   {
-                       byte[] profileImageBytes = null;
-                       byte[] resumeFileBytes = null;
 
-                       // Check if a profile image file was uploaded
-                       if (profileImage != null && profileImage.ContentLength > 0)
-                       {
-                           using (var binaryReader = new BinaryReader(profileImage.InputStream))
-                           {
-                               profileImageBytes = binaryReader.ReadBytes(profileImage.ContentLength);
-                           }
-                       }
-
-                       // Check if a resume file was uploaded
-                       if (resumeFile != null && resumeFile.ContentLength > 0)
-                       {
-                           using (var binaryReader = new BinaryReader(resumeFile.InputStream))
-                           {
-                               resumeFileBytes = binaryReader.ReadBytes(resumeFile.ContentLength);
-                           }
-                       }
-
-
-                    //   SignupRepository signupRepository = new SignupRepository();
-                     //  signup.profileImage = profileImageBytes;
-                     //  signup.resumeFile = resumeFileBytes;
-
-                       SignupRepository signupRepository = new SignupRepository();
-                       if (signupRepository.EditSignupDetails(signup, profileImageBytes, resumeFileBytes))
-                       {
-                           // Set TempData message for successful update
-                           TempData["SuccessMessage"] = "User profile updated successfully";
-                           return RedirectToAction("UserProfileDetails", "User");
-                       }
-                   }
-                   return View(signup);
-               }
-               catch (Exception ex)
-               {
-                   // Handle any exceptions that occur during editing the user's profile
-                   // Logging, error handling, or custom error messages can be implemented here
-                   ViewBag.Message = "An error occurred: " + ex.Message;
-                   return View(signup);
-               }
-           }
-        */
-
-
-
-
-
-
-
-
-
-
-
-
-        public ActionResult About()
+        /// <summary>
+        /// About
+        /// </summary>
+        /// <returns></returns>
+         public ActionResult About()
         {
             return View();
         }
+
+        /// <summary>
+        /// Add contact
+        /// </summary>
+        /// <returns></returns>
         public ActionResult AddContact()
         {
             return View();
         }
 
-        /*    [HttpPost]
-            public ActionResult AddContact(Contact contact)
-            {
-                try
-                {
-                    if (ModelState.IsValid)
-                    {
-                        ContactRepository signupRepository = new ContactRepository();
-                        if (signupRepository.AddContact(contact))
-                        {
-                            ViewBag.Message = "User Details Added Successfully";
-
-                        }
-                    }
-                    return RedirectToAction("AddContact", "Home");
-                }
-                catch
-                {
-                    return View();
-                }
-            }*/
+       
         [HttpPost]
         public ActionResult AddContact(Contact contact)
         {
@@ -345,11 +250,23 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all posts
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetAllPosts()
         {
             List<JobPost> allPosts = jobPostRepository.GetAllPosts();
             return View("GetAllPosts", allPosts);
         }
+
+
+
+        /// <summary>
+        /// Get details of job post
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Details(int Id)
         {
@@ -361,107 +278,11 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
-
-
-        //[HttpGet]
-        //public ActionResult ApplyForJob(int jobId)
-        //{
-        //    if (Session["UserId"] == null)
-        //    {
-        //        // If the user is not logged in, redirect to the login page or show an error message.
-        //        return RedirectToAction("Signin", "Home");
-        //    }
-
-        //    try
-        //    {
-        //        int userId = Convert.ToInt32(Session["UserId"]);
-        //        string userName = Session["firstName"]?.ToString();
-        //        string email = Session["email"]?.ToString();
-
-        //        JobPost jobPost = jobPostRepository.GetJobPostById(jobId);
-        //        Signup userProfile = signupRepository.GetUserProfileById(userId);
-
-        //        JobApplication application = new JobApplication
-        //        {
-        //            userId = userProfile.Id,
-        //            jobPostId = jobId,
-        //            UserName = userProfile.firstName,
-        //            Email = userProfile.email,
-        //            companyName=jobPost.companyName,
-        //            title=jobPost.title
-
-
-        //            // You can set other fields here as well.
-        //        };
-
-        //        ViewBag.JobTitle = jobPost.title; // Passing the job title to the view using ViewBag.
-
-        //        return View(application);
-        //    }
-        //    catch
-        //    {
-        //        // Handle exceptions (e.g., conversion errors, repository exceptions) here.
-        //        // Log the exception or perform any other error handling as needed.
-        //        return RedirectToAction("UserHomepage");
-        //    }
-        //}
-
-
-
-
-
-
-
-
-        //[HttpPost]
-        //public ActionResult ApplyForJob(JobApplication application, HttpPostedFileBase resumeFile)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            if (resumeFile != null && resumeFile.ContentLength > 0)
-        //            {
-        //                byte[] resumeData;
-        //                using (var binaryReader = new BinaryReader(resumeFile.InputStream))
-        //                {
-        //                    resumeData = binaryReader.ReadBytes(resumeFile.ContentLength);
-        //                }
-        //                application.resume = resumeData;
-        //            }
-        //            // bool success = jobApplicationRepository.SaveJobApplication(application);
-        //            JobApplicationRepository jobApplicationRepository=new JobApplicationRepository();
-        //            if (jobApplicationRepository.SaveJobApplication(application))
-        //            {
-        //                // Successful insertion, redirect to success page.
-        //                return RedirectToAction("UserHomepage");
-        //            }
-        //            else
-        //            {
-        //                // Insertion failed, show an error message to the user.
-        //                ModelState.AddModelError("", "An error occurred while saving the job application. Please try again later.");
-        //                return View(application);
-        //            }
-        //        }
-
-        //        // If the model is not valid, return to the view with the validation errors.
-        //        return View(application);
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        // Handle SQL exceptions (e.g., database connection issues) here.
-        //        // Log the exception or perform any other error handling as needed.
-        //        ModelState.AddModelError("", "An error occurred while saving the job application. Please try again later.");
-        //        return View(application);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle other exceptions here.
-        //        // Log the exception or perform any other error handling as needed.
-        //        ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
-        //        return View(application);
-        //    }
-        //}
+        /// <summary>
+        /// Apply job
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
 
         [HttpGet]
         public ActionResult ApplyForJob(int jobId)
@@ -510,12 +331,19 @@ namespace JobPortalManagementSystem.Controllers
                 return RedirectToAction("UserHomepage");
             }
         }
-
+        /// <summary>
+        /// Apply job post method
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="resumeFile"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ApplyForJob(JobApplication application, HttpPostedFileBase resumeFile)
         {
             try
             {
+
+
                 if (ModelState.IsValid)
                 {
                     int userId = Convert.ToInt32(Session["UserId"]);
@@ -585,67 +413,10 @@ namespace JobPortalManagementSystem.Controllers
 
 
 
-     
-        
-     /*public ActionResult UserProfile()
-            {
-                int userId = GetLoggedInUserId(); // Get the logged-in user's ID;
-                Signup user = signupRepository.GetSignupDetailsById(userId);
-                return View(user);
-            }
-
-            [HttpGet]
-            public ActionResult EditUserProfile()
-            {
-                int userId = GetLoggedInUserId(); // Get the logged-in user's ID;
-                Signup user = signupRepository.GetSignupDetailsById(userId);
-
-                return View(user);
-            }
-            [HttpPost]
-            public ActionResult EditUserProfile(Signup user)
-            {
-                if (ModelState.IsValid)
-                {
-                    SignupRepository signupRepository = new SignupRepository();
-                    bool isUpdated = signupRepository.UpdateUserProfile(user);
-                    if (isUpdated)
-                    {
-                        return RedirectToAction("UserProfile");
-                    }
-                    // Handle update failure
-                }
-                // Handle invalid model state
-
-                return View(user);
-            }
-    /*
-            [HttpPost]
-            public ActionResult AddEducation(Education education)
-            {
-                int userId = // Get the logged-in user's ID;
-                SignupRepository signupRepository = new SignupRepository();
-                bool isAdded = signupRepository.AddEducationDetails(userId, education);
-                return Json(new { success = isAdded });
-            }
-
-            [HttpPost]
-            public ActionResult AddExperience(Experience experience)
-            {
-                int userId = // Get the logged-in user's ID;
-                SignupRepository signupRepository = new SignupRepository();
-                bool isAdded = signupRepository.AddExperienceDetails(userId, experience);
-                return Json(new { success = isAdded });
-            }
-
-            private int GetLoggedInUserId()
-            {
-                // Assuming you are using ASP.NET Identity for authentication
-                var userId = User.Identity.GetUserId();
-
-                // Convert the string userId to int and return
-                return int.Parse(userId);
-            }*/
+     /// <summary>
+     /// GEt interview details
+     /// </summary>
+     /// <returns></returns>
 
         public ActionResult AllInterviews()
         {
@@ -662,23 +433,10 @@ namespace JobPortalManagementSystem.Controllers
                 return RedirectToAction("Login", "User");
             }
         }
-        //public ActionResult InterviewDetails()
-        //{
-        //    int userId = (int)Session["UserId"]; // Retrieve the user's ID from the session
-
-        //    ScheduledInterview interview = jobApplicationRepository.GetScheduledInterviewByUserId(userId);
-
-        //    if (interview == null)
-        //    {
-        //        // No scheduled interview found for the user
-        //        ViewBag.Message = "No scheduled interview found.";
-        //    }
-
-        //    return View(interview);
-        //}
-
-        // POST: User
-
+    /// <summary>
+    /// Get Applied Job details
+    /// </summary>
+    /// <returns></returns>
 
         public ActionResult AppliedJobs()
         {

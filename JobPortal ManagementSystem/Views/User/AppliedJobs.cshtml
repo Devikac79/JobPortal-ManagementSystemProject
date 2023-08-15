@@ -5,42 +5,76 @@
     Layout = "~/Views/User/UserLayoutpage.cshtml";
 }
 
-<h2>AppliedJobs</h2>
+<style>
+  
+    /* Custom styles */
+    .data-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 600px;
+       
+    }
+    h2{
+        padding-top:20px;
+        padding-bottom:30px;
+    }
+    .data-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        width: 80%;
+        margin: 10px auto;
+        padding: 15px;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease; /* Add transition for smooth effect */
+        background-color:white;
+    }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.companyName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.applicationDate)
-        </th>
+        .data-card:hover {
+            transform: scale(1.05); /* Zoom effect on hover */
+        }
+
+    .data-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        padding-bottom: 10px;
+    }
+
+    .data-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+    }
 
 
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.companyName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.applicationDate)
-        </td>
+    .gradient-custom-2 {
+        /* fallback for old browsers */
+        background:lightcoral red;
+        /* Chrome 10-25, Safari 5.1-6 */
+        /*background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1));*/
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        /*background: linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1))
+    }*/
+</style>
 
 
 
-    </tr>
-}
 
-</table>
+<div class="data-container gradient-custom-2">
+    <h2>Applied jobs</h2>
+
+    @foreach (var item in Model)
+    {
+        <div class="data-card">
+            <div class="data-content">
+                <div>@Html.DisplayFor(modelItem => item.title)</div>
+                <div>@Html.DisplayFor(modelItem => item.companyName)</div>
+                <div>@item.applicationDate.ToString("yyyy-MM-dd")</div>
+            </div>
+        </div>
+    }
+</div>

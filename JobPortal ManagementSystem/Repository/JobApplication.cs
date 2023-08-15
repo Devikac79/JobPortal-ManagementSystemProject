@@ -14,7 +14,11 @@ namespace JobPortal_ManagementSystem.Repository
 {
     public class JobApplicationRepository
     {
-
+        /// <summary>
+        /// Get user profile details
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public Signup GetUserProfileById(int userId)
         {
             Signup userProfile = null;
@@ -48,6 +52,13 @@ namespace JobPortal_ManagementSystem.Repository
 
 
         string connectionString = ConfigurationManager.ConnectionStrings["GetDataBaseConnection"].ToString();
+
+
+        /// <summary>
+        /// Save Job Apllication 
+        /// </summary>
+        /// <param name="application"></param>
+        /// <returns></returns>
         public bool SaveJobApplication(JobApplication application)
         {
             try
@@ -79,13 +90,21 @@ namespace JobPortal_ManagementSystem.Repository
             }
         }
 
+        /// <summary>
+        /// Checking if user applied for job
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         public bool CheckIfUserAppliedForJob(int userId, int jobId)
         {
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM Table_JobApplications WHERE userId = @UserId AND jobPostId = @JobPostId", connection))
+                using (var command = new SqlCommand("SP_CheckUserJobApplication", connection))
                 {
+                    command.CommandType = CommandType.StoredProcedure;
+
                     command.Parameters.AddWithValue("@UserId", userId);
                     command.Parameters.AddWithValue("@JobPostId", jobId);
 
@@ -94,45 +113,16 @@ namespace JobPortal_ManagementSystem.Repository
                 }
             }
         }
-        public bool HasUserAppliedForJob(int userId, int jobId)
-        {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM Table_JobApplications WHERE userId = @userId AND jobPostId = @jobId", connection))
-                {
-                    command.Parameters.AddWithValue("@userId", userId);
-                    command.Parameters.AddWithValue("@jobId", jobId);
 
-                    int count = Convert.ToInt32(command.ExecuteScalar());
-                    return count > 0;
-                }
-            }
-        }
 
-        public bool UpdateJobApplicationStatus(int applicationId, bool isApplied)
-        {
-            try
-            {
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    using (var command = new SqlCommand("UPDATE Table_JobApplications SET IsApplied = @IsApplied WHERE Id = @Id", connection))
-                    {
-                        command.Parameters.AddWithValue("@Id", applicationId);
-                        command.Parameters.AddWithValue("@IsApplied", isApplied);
 
-                        int rowsAffected = command.ExecuteNonQuery();
-                        return rowsAffected > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or perform other error handling.
-                return false;
-            }
-        }
+        /// <summary>
+        /// Update the applied field
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="jobId"></param>
+        /// <param name="isApplied"></param>
+        /// <returns></returns>
         public bool UpdateIsApplied(int userId, int jobId, bool isApplied)
         {
             try
@@ -140,8 +130,10 @@ namespace JobPortal_ManagementSystem.Repository
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    using (var command = new SqlCommand("UPDATE Table_JobApplications SET IsApplied = @IsApplied WHERE userId = @UserId AND jobPostId = @JobId", connection))
+                    using (var command = new SqlCommand("SP_UpdateJobApplicationStatus", connection))
                     {
+                        command.CommandType = CommandType.StoredProcedure;
+
                         command.Parameters.AddWithValue("@UserId", userId);
                         command.Parameters.AddWithValue("@JobId", jobId);
                         command.Parameters.AddWithValue("@IsApplied", isApplied);
@@ -158,6 +150,10 @@ namespace JobPortal_ManagementSystem.Repository
             }
         }
 
+        /// <summary>
+        /// To get all aapplied jobs
+        /// </summary>
+        /// <returns></returns>
 
         public List<JobApplication> GetAllAppliedJobs()
         {
@@ -197,7 +193,11 @@ namespace JobPortal_ManagementSystem.Repository
 
 
 
-
+        /// <summary>
+        /// Get all applied jon by id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public JobApplication GetJobApplicationById(int Id)
         {
             try
@@ -242,7 +242,11 @@ namespace JobPortal_ManagementSystem.Repository
             return null; // Return null if the application is not found
         }
 
-
+        /// <summary>
+        /// Update the schedule field
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="isScheduled"></param>
         public void UpdateIsScheduled(int Id, bool isScheduled)
         {
             using (var connection = new SqlConnection(connectionString))
@@ -260,7 +264,10 @@ namespace JobPortal_ManagementSystem.Repository
             }
         }
 
-
+        /// <summary>
+        /// Save the interview scheduled details
+        /// </summary>
+        /// <param name="interview"></param>
         public void SaveScheduledInterview(ScheduledInterview interview)
         {
             using (var connection = new SqlConnection(connectionString))
@@ -283,38 +290,12 @@ namespace JobPortal_ManagementSystem.Repository
         }
 
 
-        //public ScheduledInterview GetScheduledInterviewByUserId(int userId)
-        //{
-        //    using (var connection = new SqlConnection(connectionString))
-        //    {
-        //        connection.Open();
-        //        using (var command = new SqlCommand("SPS_ScheduledInterviewByUserId", connection))
-        //        {
-        //            command.CommandType = CommandType.StoredProcedure;
-        //            command.Parameters.AddWithValue("@UserId", userId);
-
-        //            using (var reader = command.ExecuteReader())
-        //            {
-        //                if (reader.Read())
-        //                {
-        //                    ScheduledInterview interview = new ScheduledInterview
-        //                    {
-        //                        InterviewId = Convert.ToInt32(reader["InterviewId"]),
-        //                        UserId = Convert.ToInt32(reader["UserId"]),
-        //                        JobPostId = Convert.ToInt32(reader["JobPostId"]),
-        //                        InterviewDate = Convert.ToDateTime(reader["InterviewDate"]),
-        //                        Location = reader["Location"].ToString()
-        //                    };
-        //                    return interview;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return null; // Return null if no interview is found for the user
-        //}
-
-
+     
+        /// <summary>
+        /// Get interview based on id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
 
         public List<ScheduledInterview> GetInterviewsByUserId(int userId)
         {
@@ -351,6 +332,11 @@ namespace JobPortal_ManagementSystem.Repository
             return interviews;
         }
 
+
+        /// <summary>
+        /// Reject by admin 
+        /// </summary>
+        /// <param name="Id"></param>
         public void RejectApplication(int Id)
         {
             using (var connection = new SqlConnection(connectionString))
@@ -367,7 +353,11 @@ namespace JobPortal_ManagementSystem.Repository
         }
 
 
-
+        /// <summary>
+        /// Get details of applied jobs
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<JobApplication> GetAppliedJobsForUser(int userId)
         {
             List<JobApplication> appliedJobs = new List<JobApplication>();
@@ -397,8 +387,59 @@ namespace JobPortal_ManagementSystem.Repository
         }
 
 
+        /// <summary>
+        /// Reject by admin 
+        /// </summary>
+        /// <param name="Id"></param>
+       
+
     }
 }
 
 
+
+
+
+
+
+
+//public bool HasUserAppliedForJob(int userId, int jobId)
+//{
+//    using (var connection = new SqlConnection(connectionString))
+//    {
+//        connection.Open();
+//        using (var command = new SqlCommand("SELECT COUNT(*) FROM Table_JobApplications WHERE userId = @userId AND jobPostId = @jobId", connection))
+//        {
+//            command.Parameters.AddWithValue("@userId", userId);
+//            command.Parameters.AddWithValue("@jobId", jobId);
+
+//            int count = Convert.ToInt32(command.ExecuteScalar());
+//            return count > 0;
+//        }
+//    }
+//}
+
+//public bool UpdateJobApplicationStatus(int applicationId, bool isApplied)
+//{
+//    try
+//    {
+//        using (var connection = new SqlConnection(connectionString))
+//        {
+//            connection.Open();
+//            using (var command = new SqlCommand("UPDATE Table_JobApplications SET IsApplied = @IsApplied WHERE Id = @Id", connection))
+//            {
+//                command.Parameters.AddWithValue("@Id", applicationId);
+//                command.Parameters.AddWithValue("@IsApplied", isApplied);
+
+//                int rowsAffected = command.ExecuteNonQuery();
+//                return rowsAffected > 0;
+//            }
+//        }
+//    }
+//    catch (Exception ex)
+//    {
+//        // Log the exception or perform other error handling.
+//        return false;
+//    }
+//}
 

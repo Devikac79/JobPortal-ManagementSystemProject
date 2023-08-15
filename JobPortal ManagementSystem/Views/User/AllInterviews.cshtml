@@ -2,44 +2,97 @@
 
 @{
     ViewBag.Title = "User Dashboard";
- 
     Layout = "~/Views/User/UserLayoutpage.cshtml";
 }
 
-<h2>Welcome to Your Dashboard</h2>
+<style>
+    /* Custom styles */
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 600px; /* Adjust the minimum height as needed */
+        background-color: #FFCCCB;
+    }
 
-@if (Model.Count > 0)
-{
-    <h3>Your Scheduled Interviews</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Interview ID</th>
-                <th>Job Post ID</th>
-                <th>Interview Date</th>
-                <th>Location</th>
-                <th>Title</th>
-                <th>Company Name</th>
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        width: 80%;
+        margin: 10px auto;
+        padding: 15px;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+       
+    }
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var interview in Model)
-            {
+    .card-content {
+        padding: 10px 0;
+    }
+
+    .no-interviews {
+        margin-top: 20px;
+    }
+
+    /* Style for the table header */
+    table {
+        border-collapse: collapse;
+        width: 80%;
+        margin: 20px auto;
+        background-color: white;
+    }
+
+    th {
+        background-color:lightcoral; /* Change this color as needed */
+        color: #333;
+        padding: 10px;
+        text-align: center;
+    }
+
+    td {
+        padding: 8px;
+        text-align: center;
+    }
+    .no-interviews{
+        text-align:center;
+    }
+
+    h2 {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2>Your scheduled interviews</h2>
+
+    @if (Model.Count > 0)
+    {
+        
+        <table>
+            <thead>
                 <tr>
-                    <td>@interview.InterviewId</td>
-                    <td>@interview.JobPostId</td>
-                    <td>@interview.InterviewDate.ToString("MM/dd/yyyy")</td>
-                    <td>@interview.Location</td>
-                    <td>@interview.title</td>
-                    <td>@interview.companyName</td>
-
+                    <th>Title</th>
+                    <th>Company Name</th>
+                    <th>Location</th>
+                    <th>Date</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No scheduled interviews available.</p>
-}
+            </thead>
+            <tbody>
+                @foreach (var interview in Model)
+                {
+                    <tr>
+                        <td>@interview.title</td>
+                        <td>@interview.companyName</td>
+                        <td>@interview.Location</td>
+                        <td>@interview.InterviewDate.ToString("MM/dd/yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="no-interviews">No scheduled interviews available.</p>
+    }
+</div>

@@ -16,6 +16,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+
     <style>
         .btn0 {
             height: 52px !important;
@@ -36,6 +39,26 @@
                 background: rgb(248,11,11);
                 transition: all 0.4s;
             }
+
+        .custom-dropdown-item {
+            background-color: dodgerblue;
+            color: black !important;
+            border: 1px solid black;
+            transition: color 0.3s;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+            .custom-dropdown-item:hover {
+                color: red !important;
+                box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+            }
+
+        .dropdown-menu {
+            width: 50px;
+            padding: 0;
+            text-align:center;
+            left:10px;
+        }
 
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -72,18 +95,27 @@
 
                     <li class="nav-item ">
 
-                        @Html.ActionLink("Job", "GetAllPosts", "User", null, new { @class = "nav-item nav-link" })
+                        @Html.ActionLink("All jobs", "GetAllPosts", "User", null, new { @class = "nav-item nav-link" })
 
                     </li>
-                    <li class="nav-item ">
+                    @*<li class="nav-item ">
 
-                        @Html.ActionLink("Applied", "AppliedJobs", "User", null, new { @class = "nav-item nav-link" })
+                            @Html.ActionLink("Applied", "AppliedJobs", "User", null, new { @class = "nav-item nav-link" })
 
-                    </li>
-                    <li class="nav-item ">
+                        </li>
+                        <li class="nav-item ">
 
-                        @Html.ActionLink("Interview", "AllInterviews", "User", null, new { @class = "nav-item nav-link" })
+                            @Html.ActionLink("Interview", "AllInterviews", "User", null, new { @class = "nav-item nav-link" })
 
+                        </li>*@
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="jobsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Job status
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="jobsDropdown">
+                            @Html.ActionLink("Applied", "AppliedJobs", "User", null, new { @class = "dropdown-item custom-dropdown-item" })
+                            @Html.ActionLink("Interview", "AllInterviews", "User", null, new { @class = "dropdown-item custom-dropdown-item" })
+                        </div>
                     </li>
                     <li class="nav-item ">
 
@@ -97,12 +129,12 @@
                     </li>
 
                     @*<li class="nav-item">
-            <a href="@Url.Action("Logout", "User")" class="btn nav-link btn0 mx-2">Logout</a>
-        </li>*@
+                            <a href="@Url.Action("Logout", "User")" class="btn nav-link btn0 mx-2">Logout</a>
+                        </li>*@
 
                 </ul>
                 <form class="d-flex" role="search">
-              
+
                     @Html.ActionLink("Logout", "Logout", "User", null, new { @class = "btn0 mx-2" })
 
 
@@ -117,88 +149,62 @@
     @RenderBody()
 
 
-    <!-- Remove the container if you want to extend the Footer to full width. -->
-    <div class="">
-        <!-- Footer -->
-        <footer class="text-center text-white" style="background-color: rgba(0, 0, 0, 0.2) ">
-            <!-- Grid container -->
-            <div class="container">
-                <!-- Section: Links -->
-                <section class="mt-5">
-                    <!-- Grid row-->
-                    <div class="nav-link row text-center d-flex justify-content-center pt-5">
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class=" font-weight-bold">
 
-                                @Html.ActionLink("Home", "UserHomepage", "User", null, new { @class = "nav-item nav-link text-black" })
-                            </h6>
-                        </div>
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class=" font-weight-bold">
+    <footer class="text-center mt-0" style="background-color: #FFF4F3">
+        <section class="mt-3">
+            <div class="row text-center d-flex justify-content-center pt-5 mb-4">
+                <div class="col-md-2">
+                    <h6 class="font-weight-bold">
+                        @Html.ActionLink("Home", "UserHomepage", "User", null, new { @class = "nav-item nav-link text-black" })
+                    </h6>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="font-weight-bold">
+                        @Html.ActionLink("Job", "GetAllPosts", "User", null, new { @class = "nav-item nav-link text-black" })
+                    </h6>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="font-weight-bold">
 
-                                @Html.ActionLink("Job", "GetAllPosts", "User", null, new { @class = "nav-item nav-link text-black" })
-                            </h6>
-                        </div>
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class=" font-weight-bold">
-
-                                @Html.ActionLink("About", "About", "User", null, new { @class = "nav-item nav-link text-black" })
-                            </h6>
-                        </div>
-
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-2">
-                            <h6 class=" font-weight-bold">
-                                @Html.ActionLink("Contact", "AddContact", "User", null, new { @class = "nav-item nav-link text-black" })
-                            </h6>
-                        </div>
-                        <!-- Grid column -->
-                    </div>
-                    <!-- Grid row-->
-                </section>
-                <!-- Section: Links -->
-
-                <hr class="my-5 border-dark" />
-
-                <!-- Section: Text -->
-                <section class="mb-5">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-lg-8">
-                            <p class="text-black">
-                                "If one advances confidently in the direction of his dreams, and endeavors to live the life which he has imagined, he will meet with a success unexpected in common hours." - Henry David Thoreau, writer. "Choose a job you love, and you will never have to work a day in your life."
-                            </p>
-                        </div>
-                    </div>
-                </section>
-                <section class="text-center mb-5">
-                    <section class="text-center mb-5">
-                        <a href="https://www.facebook.com/" class="px-4" target="_blank"><i class="fa fa-facebook"></i></a>
-                        <a href="https://twitter.com/" class="px-4" target="_blank"><i class="fa fa-twitter"></i></a>
-                        <a href="https://www.instagram.com/" class="px-4" target="_blank"><i class="fa fa-instagram"></i></a>
-                        <a href="https://www.linkedin.com/" class="px-4" target="_blank"><i class="fa fa-linkedin"></i></a>
-                    </section>
-
+                        @Html.ActionLink("About", "About", "User", null, new { @class = "nav-item nav-link text-black" })
+                    </h6>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="font-weight-bold">
+                        @Html.ActionLink("Contact", "AddContact", "User", null, new { @class = "nav-item nav-link text-black" })
+                    </h6>
+                </div>
             </div>
-            <!-- Grid container -->
-            <!-- Copyright -->
-            <div class="text-center p-3"
-                 style="background-color: rgba(0, 0, 0, 0.2)">
-                © 2020 Copyright:
-                <a class="text-white" href="https://mdbootstrap.com/">JobPortal.com</a>
+        </section>
+        <hr class=" border-dark" />
+        <section class="mb-3">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <p class="text-black">
+                        "If one advances confidently in the direction of his dreams, and endeavors to live the life which he has imagined, he will meet with a success unexpected in common hours." - Henry David Thoreau, writer. "Choose a job you love, and you will never have to work a day in your life."
+                    </p>
+                </div>
             </div>
-            <!-- Copyright -->
-        </footer>
-        <!-- Footer -->
-    </div>
+        </section>
+        <section class="text-center mb-3">
+            <a href="https://www.facebook.com/" class="px-4" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com/" class="px-4" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="px-4" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/" class="px-4" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </section>
+        <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.2)">
+            © 2020 Copyright:
+            <a class="text-white" href="https://mdbootstrap.com/">JobPortal.com</a>
+        </div>
+    </footer>
+
+
     <!-- End of .container -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-   
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
 </body>
 </html>
+

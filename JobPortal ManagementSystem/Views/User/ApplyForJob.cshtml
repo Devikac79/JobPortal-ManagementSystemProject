@@ -5,101 +5,170 @@
     Layout = "~/Views/User/UserLayoutpage.cshtml";
 }
 <style>
+
     h4 {
         text-align: center;
         color: deepskyblue;
         padding-top: 20px;
     }
+
+    .custom-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+
+    .card-header {
+        background-color: cadetblue;
+    }
 </style>
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            @using (Html.BeginForm("ApplyForJob", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-
-            <div class="form-horizontal">
-                <h4>Apply For Job</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @if (ViewBag.AlreadyAppliedMessage != null)
-                {
-                    <div class="alert alert-info">@ViewBag.AlreadyAppliedMessage</div>
-                }
-               
-                else if (!Model.IsApplied)
-                {
-                    <!-- Form fields -->
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+@*<body>*@
+    <div class="container7 mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <h4 class="card-title">Apply For Job</h4>
                     </div>
+                    <div class="card-body p-3">
+                        @using (Html.BeginForm("ApplyForJob", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
 
-                    <!-- Email -->
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                    </div>
+                            <div class="form-horizontal p-2">
 
-                    <!-- userId -->
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.userId, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.userId, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.userId, "", new { @class = "text-danger" })
-                    </div>
 
-                    <!-- jobPostId -->
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.jobPostId, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.jobPostId, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.jobPostId, "", new { @class = "text-danger" })
-                    </div>
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @if (ViewBag.AlreadyAppliedMessage != null)
+                                {
+                                    <div class="alert alert-info">@ViewBag.AlreadyAppliedMessage</div>
+                                }
 
-                    <!-- applicationDate -->
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.applicationDate, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.applicationDate, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.applicationDate, "", new { @class = "text-danger" })
-                    </div>
+                                @if (!Model.IsApplied)
+                                {
+                                    <div class="form-group p-2">
+                                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label p-1" })
+                                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="form-group p-2">
+                                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label p-1" })
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.companyName, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.skills, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.skills, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.skills, "", new { @class = "text-danger" })
-                    </div>
+                                    @*<div class="form-group p-2">
+                                            @Html.LabelFor(model => model.userId, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.userId, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.userId, "", new { @class = "text-danger" })
+                                        </div>
 
-                    <div class="form-group">
-                        @Html.Label("Resume")
-                        <input type="file" name="resumeFile" id="resumeFile" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <div class="text-center mt-3">
-                            <input type="submit" value="Apply" class="btn btn-primary" />
-                        </div>
-                    </div>
-                }
-                }
 
+                                        <div class="form-group p-2">
+                                            @Html.LabelFor(model => model.jobPostId, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.jobPostId, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.jobPostId, "", new { @class = "text-danger" })
+                                        </div>*@
+
+                                    <!-- applicationDate -->
+                                    <div class="form-group p-2">
+                                        @Html.LabelFor(model => model.applicationDate, htmlAttributes: new { @class = "control-label p-1" })
+                                        @Html.EditorFor(model => model.applicationDate, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.applicationDate, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group p-2">
+                                        @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label p-1" })
+                                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group p-2">
+                                        @Html.LabelFor(model => model.companyName, htmlAttributes: new { @class = "control-label p-1" })
+                                        @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group p-2">
+                                        @Html.LabelFor(model => model.skills, htmlAttributes: new { @class = "control-label p-1" })
+                                        @Html.EditorFor(model => model.skills, new { htmlAttributes = new { @class = "form-control", @id = "skills", placeholder = "Enter your skills" } })
+                                        @*  @Html.ValidationMessageFor(model => model.skills, "", new { @class = "text-danger",@id="skillsValidation" })*@
+                                        <span id="skillsValidation" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group p-2">
+                                        @Html.Label("Resume")
+                                        <input type="file" name="resumeFile" id="resumeFile" class="form-control" placeholder="Upload resume (.pdf only allowed)" />
+                                        <span id="resumeValidation" class="text-danger"></span>
+                                    </div>
+
+
+
+
+                                    <div class="form-group text-center p-2">
+                                        <input type="submit" value="Apply" id="applyButton" class="btn btn-primary" />
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                    </div>
+                </div>
             </div>
-            }
         </div>
-    </div>
-</div>
+
+      
+            <script>
+                $(document).ready(function () {
+                    $("#applyButton").click(function (event) {
+
+
+
+
+                        var skillsInput = $("#skills").val();
+                        var skillsValidation = $("#skillsValidation");
+                        var resumeFileInput = $("#resumeFile")[0];
+                        var resumeValidation = $("#resumeValidation");
+
+                        if (skillsInput.trim() === "") {
+                            skillsValidation.text("Skills cannot be empty");
+                            skillsValidation.show();
+                            event.preventDefault();
+                        } else {
+                            skillsValidation.text("");
+                            skillsValidation.hide();
+                        }
+
+                        var resumeFileInput = $("#resumeFile")[0];
+                        var resumeValidation = $("#resumeValidation");
+
+                        if (resumeFileInput.files.length === 0) {
+                            resumeValidation.text("Resume file cannot be empty");
+                            resumeValidation.show();
+                            event.preventDefault();
+                        } else {
+                            var allowedExtensions = ["pdf"];
+                            var fileExtension = resumeFileInput.files[0].name.split('.').pop().toLowerCase();
+
+                            if (!allowedExtensions.includes(fileExtension)) {
+                                resumeValidation.text("Only PDF files are allowed");
+                                resumeValidation.show();
+                                event.preventDefault();
+                            } else {
+                                resumeValidation.text("");
+                                resumeValidation.hide();
+                            }
+                        }
+
+                        if (resumeValidation.text() === "") {
+                            alert("Application successfully submitted!");
+                        }
+                    });
+                });
+            </script>
+    

@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
 using System.Web.UI.WebControls;
+using JobPortal_ManagementSystem.Error;
 
 namespace JobPortalManagementSystem.Controllers
 {
@@ -44,13 +45,7 @@ namespace JobPortalManagementSystem.Controllers
         /// Control view record page
         /// </summary>
         /// <returns></returns>
-       /* public ActionResult GetSignupDetails()
-        {
-            SignupRepository signupRepository = new SignupRepository();
-            ModelState.Clear();
-            return View(signupRepository.GetSignupDetails());
-        }
-       */
+       
         [HttpGet]
         public ActionResult GetSignupDetails()
         {
@@ -74,24 +69,34 @@ namespace JobPortalManagementSystem.Controllers
         /// <param name="signup"></param>
         /// <returns></returns>
         [HttpPost]
-     
 
 
-     
+
+
         public ActionResult AddSignupDetails(Signup signup, HttpPostedFileBase imageFile, HttpPostedFileBase resumeFile)
         {
-            if (ModelState.IsValid)
+            try
             {
-                signupRepository.AddSignupDetails(signup);
-                return RedirectToAction("Homepage");
-            }
+                if (ModelState.IsValid)
+                {
+                    signupRepository.AddSignupDetails(signup);
+                    return RedirectToAction("Homepage");
+                }
 
-           
-            return View(signup);
+                return View(signup);
+            }
+            catch (Exception ex)
+            {
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
+            }
         }
 
 
-    
+
         /// <summary>
         /// Deleting the record
         /// </summary>
@@ -114,7 +119,11 @@ namespace JobPortalManagementSystem.Controllers
                 return View();
             }
         }
-
+        /// <summary>
+        /// Edit sign up details
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
 
         [HttpGet]
         public ActionResult EditSignupDetails(int Id)
@@ -127,9 +136,18 @@ namespace JobPortalManagementSystem.Controllers
             return View(signup);
         }
 
+        /// <summary>
+        /// Edit Sign up details post
+        /// </summary>
+        /// <param name="signup"></param>
+        /// <param name="imageFile"></param>
+        /// <param name="resumeFile"></param>
+        /// <returns></returns>
+        
         [HttpPost]
         public ActionResult EditSignupDetails(Signup signup, HttpPostedFileBase imageFile, HttpPostedFileBase resumeFile)
         {
+
             if (ModelState.IsValid)
             {
                 if (imageFile != null && imageFile.ContentLength > 0)
@@ -167,7 +185,11 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
-
+        /// <summary>
+        /// Signin 
+        /// </summary>
+        /// <param name="signin"></param>
+        /// <returns></returns>
            [HttpPost]
            public ActionResult Signin(Signin signin)
            {
@@ -190,22 +212,41 @@ namespace JobPortalManagementSystem.Controllers
                            Session["UserId"] = userSignup.Id;
                            Session["UserRole"] = role;
 
-
-                           if (role == "user")
-                           {
-                               // Redirect to UserProfileDetails action in UserController
-                               return RedirectToAction("UserHomepage", "User");
-                           }
-
-                        else if (role == "admin")
+                        if (!string.IsNullOrEmpty(role))
                         {
-                            return RedirectToAction("AdminHomepage", "Admin");
-                           // ViewBag.Message = "Invalid role for the user.";
-                           }
-                       }
-                       else if (role == "admin")
+                            if (role == "user")
+                            {
+                                return Json(new { success = true, role = "user" });
+                            }
+                            else if (role == "admin")
+                            {
+                                return Json(new { success = true, role = "admin" });
+                            }
+                        }
+
+                        return Json(new { success = false }); // Invalid username or password
+                    }
+
+                    //   if (role == "user")
+                    //   {
+
+                    //    TempData["AlertMessage"] = "Login successful as user.";
+
+                    //    // Redirect to UserProfileDetails action in UserController
+                    //    return RedirectToAction("UserHomepage", "User");
+                    //   }
+
+                    //else if (role == "admin")
+                    //{
+                    //    return RedirectToAction("AdminHomepage", "Admin");
+                    //   // ViewBag.Message = "Invalid role for the user.";
+                    //   }
+                    //}
+
+                
+                       else
                     {
-                      //  return RedirectToAction("AdminHomepage", "Admin");
+                       return RedirectToAction("Homepage", "Admin");
                     }
                    }
 
@@ -221,7 +262,7 @@ namespace JobPortalManagementSystem.Controllers
            }
 
 
-       
+
         public ActionResult UserProfileDetails(int Id)
         {
             try
@@ -267,17 +308,30 @@ namespace JobPortalManagementSystem.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// GEt contact method
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetContact()
         {
             ContactRepository contactRepository = new ContactRepository();
             ModelState.Clear();
             return View(contactRepository.GetContact());
         }
+        /// <summary>
+        /// Add contact
+        /// </summary>
+        /// <returns></returns>
         public ActionResult AddContact()
         {
+
             return View();
         }
-
+        /// <summary>
+        /// Add contact post
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddContact(Contact contact)
         {
@@ -294,66 +348,36 @@ namespace JobPortalManagementSystem.Controllers
                 }
                 return RedirectToAction("AddContact","Home");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
             }
         }
-        public ActionResult GetImage(string filePath)
-        {
-            // Read the image file into a byte array
-            byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
-
-            // Determine the content type of the image based on its file extension
-            string contentType = "image/jpeg"; // You may need to adjust this based on the actual file type
-
-            // Return the image as a FileResult with the appropriate content type
-            return File(imageBytes, contentType);
-        }
-
-        public ActionResult GetDetails()
-        {
-            UserRepository userRepository = new UserRepository();
-            ModelState.Clear();
-            return View(userRepository.GetDetails());
 
 
-        }
         /// <summary>
-        /// Get method to view Creating  a record
+        /// Add details of user
         /// </summary>
         /// <returns></returns>
-        /*    public ActionResult AddDetails()
-            {
-                return View();
-            }
-
-         /*  [HttpPost]
-           public ActionResult AddDetails(User user)
-           {
-               try
-               {
-
-                   if (ModelState.IsValid)
-                   {
-                      UserRepository userRepository = new UserRepository();
-                       if (userRepository.AddDetails(user))
-                       {
-                           ViewBag.Message = "User Registration Successful";
-                           return RedirectToAction("Homepage"); // Redirect to login page after successful registration
-                       }
-                   }
-                   return View(user);
-               }
-               catch
-               {
-                   return View();
-               }
-           }*/
+      
         public ActionResult AddDetails()
         {
             return View();
         }
+
+        /// <summary>
+        /// Add details of user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="ResumeFile"></param>
+        /// <param name="ImageFile"></param>
+        /// <param name="Image"></param>
+        /// <param name="Resume"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddDetails(User user,HttpPostedFileBase ResumeFile,HttpPostedFileBase ImageFile,HttpPostedFileBase Image,HttpPostedFileBase Resume)
         {
@@ -390,39 +414,16 @@ namespace JobPortalManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                // Handle the exception appropriately, log it, and show an error message to the user.
-                ViewBag.ErrorMessage = "An error occurred: " + ex.Message;
+                ErrHandler.WriteError(ex.Message);
+                // Optionally, handle the error or display a friendly message to the user
                 return View();
             }
         }
-        /*     public ActionResult EditDetails(int? Id)
-             {
-                 UserRepository userRepository = new UserRepository();
-                 return View(userRepository.GetDetails().Find(user => user.Id == Id));
-             }
-
-             /// <summary>
-             /// Edit the signup record.
-             /// </summary>
-             /// <param name="Id"></param>
-             /// <param name="signup"></param>
-             /// <returns></returns>
-             [HttpPost]
-             public ActionResult EditDetails(int? Id, User user)
-             {
-                 try
-                 {
-                     UserRepository userRepository = new UserRepository();
-                     userRepository.EditDetails(user);
-                     return RedirectToAction("GetDetails");
-                 }
-                 catch
-                 {
-                     return View();
-                 }
-             }
-        */
-
+       /// <summary>
+       /// Edit details
+       /// </summary>
+       /// <param name="Id"></param>
+       /// <returns></returns>
 
         [HttpGet]
         public ActionResult EditDetails(int? Id)
@@ -435,7 +436,14 @@ namespace JobPortalManagementSystem.Controllers
 
             return View(user);
         }
-
+        /// <summary>
+        /// Edit user profile
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="user"></param>
+        /// <param name="ResumeFile"></param>
+        /// <param name="ImageFile"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EditDetails(int? Id, User user, HttpPostedFileBase ResumeFile, HttpPostedFileBase ImageFile)
         {
@@ -501,7 +509,16 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
+        public ActionResult Error()
+        {
+            return View();
+        }
 
+
+        /// <summary>
+        /// GEt all posts
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetAllPosts()
         {
             List<JobPost> allPosts = jobPostRepository.GetAllPosts();
@@ -580,10 +597,11 @@ namespace JobPortalManagementSystem.Controllers
                     return View(); // Return the view to show the error message
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Handle any other exceptions
-                throw;
+                ErrHandler.WriteError(ex.Message);
+                // Optionally, handle the error or display a friendly message to the user
+                return View();
             }
 
             return RedirectToAction("Homepage", "Home"); // Redirect to the homepage action of HomeController
@@ -727,6 +745,27 @@ namespace JobPortalManagementSystem.Controllers
         {
             var cities = signupRepository.GetCitiesByState(StateId);
             return Json(cities);
+        }
+
+        public ActionResult GetImage(string filePath)
+        {
+            // Read the image file into a byte array
+            byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+            // Determine the content type of the image based on its file extension
+            string contentType = "image/jpeg"; // You may need to adjust this based on the actual file type
+
+            // Return the image as a FileResult with the appropriate content type
+            return File(imageBytes, contentType);
+        }
+
+        public ActionResult GetDetails()
+        {
+            UserRepository userRepository = new UserRepository();
+            ModelState.Clear();
+            return View(userRepository.GetDetails());
+
+
         }
     }
 }

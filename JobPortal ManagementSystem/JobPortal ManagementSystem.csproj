@@ -123,6 +123,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Error\ErrHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -172,6 +173,7 @@
     <Content Include="Content\Images\signup2.jpg" />
     <Content Include="Content\Images\signup3.jpg" />
     <Content Include="Content\Images\user.jpg" />
+    <Content Include="Content\Javascript\InterviewSchedule.js" />
     <Content Include="Content\Javascript\JobPost.js" />
     <Content Include="Content\Javascript\Signup.js" />
     <Content Include="Views\User\GetSignupDetails.cshtml" />
@@ -191,6 +193,7 @@
     <Content Include="Views\User\InterviewDetails.cshtml" />
     <Content Include="Views\User\AllInterviews.cshtml" />
     <Content Include="Views\User\AppliedJobs.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
     <None Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\User\UserProfileDetails.cshtml" />
   </ItemGroup>

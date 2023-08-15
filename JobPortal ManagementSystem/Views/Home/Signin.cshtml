@@ -14,6 +14,16 @@
     </head>
 
     <body>
+
+
+
+        @if (TempData["AlertMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["AlertMessage"]
+            </div>
+        }
+
         @using (Html.BeginForm("Signin", "Home", FormMethod.Post, new { id = "signinForm" }))
         {
             @Html.AntiForgeryToken()
@@ -34,7 +44,7 @@
                                             </div>
 
                                             <form>
-                                             
+
 
                                                 <div class="form-outline mb-2">
                                                     @Html.LabelFor(m => m.username, "Username", new { @class = "label" })
@@ -43,23 +53,23 @@
                                                 </div>
 
                                                 <div class="form-outline mb-2">
-                                                      @Html.LabelFor(m => m.password, "Password", new { @class = "label" })
+                                                    @Html.LabelFor(m => m.password, "Password", new { @class = "label" })
                                                     @Html.PasswordFor(m => m.password, new { @class = "form-control", placeholder = "Enter your password", id = "password" })
                                                     @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger", id = "passwordValidation" })
 
                                                 </div>
 
-                                                <div class="text-center pt-4 mb-6 pb-1 p-3">
-                                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" id="SubmitButton" type="submit">
+                                                <div class="text-center pt-4 mb-6 pb-1 p-7 ">
+                                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 pt-2 pb-2" id="signinButton" type="submit">
                                                         Sign in
                                                     </button>
-                                                  
+
 
                                                 </div>
 
                                                 <div class="d-flex align-items-center justify-content-center pb-4">
-                                                    <p class="mb-0 me-2">Don't have an account? @Html.ActionLink("Signup now", "AddSignupDetails", "Home")</p>
-                                                   
+                                                    <p class="mb-0 me-2">Don't have an account? @Html.ActionLink("Signup now", "AddSignupDetails", "Home", null, new { @class = "" })</p>
+
                                                 </div>
 
                                             </form>
@@ -98,7 +108,9 @@
 
 
 
-    <script src="~/Content/Javascript/signin.js"></script>
+       
+        <script src="~/Content/Javascript/signin.js"></script>
 
+       
     </body>
 </html>

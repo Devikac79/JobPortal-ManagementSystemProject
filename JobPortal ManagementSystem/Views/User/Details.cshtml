@@ -13,7 +13,11 @@
 
     <style>
         /* Custom CSS */
-      
+
+
+        body {
+            background-color: #FFCCCB;
+        }
 
         .job-details-container {
             background-color: #fff;
@@ -21,6 +25,7 @@
             border: 1px solid #dee2e6; /* Add a border */
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+           
         }
 
         .job-title {
@@ -85,10 +90,10 @@
                             <dd class="col-md-8">@Model.location</dd>
 
                             <dt class="col-md-4">Min Salary</dt>
-                            <dd class="col-md-8">$@Model.minSalary</dd>
+                            <dd class="col-md-8">&#8377;@Model.minSalary</dd>
 
                             <dt class="col-md-4">Max Salary</dt>
-                            <dd class="col-md-8">$@Model.maxSalary</dd>
+                            <dd class="col-md-8">&#8377;@Model.maxSalary</dd>
 
                             <dt class="col-md-4">Post Date</dt>
                             <dd class="col-md-8">@Model.postDate.ToString("yyyy-MM-dd")</dd>

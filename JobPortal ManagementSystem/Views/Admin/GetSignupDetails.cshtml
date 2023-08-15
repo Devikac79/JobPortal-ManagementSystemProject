@@ -18,7 +18,7 @@
         }
 
         th {
-            background-color: #007BFF !important;
+            background-color: cadetblue !important;
             height: 50px;
         }
 
@@ -69,10 +69,11 @@
                         <td>@Html.DisplayFor(modelItem => item.username)</td>
                         <td>
                             <p>
-                                @Html.ActionLink("Delete", "DeleteSignupDetails", new { Id = item.Id }) 
+                                @Html.ActionLink("Delete", "DeleteUser", new { Id = item.Id }) 
 
                             </p>
                             
+
                         </td>
 
                     </tr>

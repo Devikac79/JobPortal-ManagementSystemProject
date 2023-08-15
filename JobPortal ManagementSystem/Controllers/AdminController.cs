@@ -20,11 +20,13 @@ namespace JobPortalManagementSystem.Controllers
         private readonly JobPostRepository repository;
         private readonly CategoryRepository categoryRepository;
         private readonly JobApplicationRepository jobApplicationRepository;
+        private readonly SignupRepository signupRepository;
 
         public AdminController()
         {
             repository = new JobPostRepository();
             jobApplicationRepository =new JobApplicationRepository();
+            signupRepository=new SignupRepository();
         }
 
         // GET: Admin
@@ -38,47 +40,12 @@ namespace JobPortalManagementSystem.Controllers
             return View();
         }
 
-        /*  public ActionResult GetJobPostDetails()
-          {
-               ModelState.Clear();
-              return View(repository.GetJobPostDetails());
-          }
+       
 
-
-
-
-
-          public ActionResult AddJobPost()
-          {
-
-              return View();
-          }
-
-          [HttpPost]
-          public ActionResult AddJobPost(JobPost jobPost)
-          {
-              try
-              {
-
-                  if (ModelState.IsValid)
-                  {
-                      JobPostRepository jobPostRepository = new JobPostRepository();
-                      if (jobPostRepository.AddJobPost(jobPost))
-                      {
-                          ViewBag.Message = "job posted Successful";
-                          return RedirectToAction("AdminHomepage"); // Redirect to login page after successful registration
-                      }
-                  }
-                  return View(jobPost);
-              }
-              catch
-              {
-                  return View();
-              }
-
-          }*/
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             List<Category> categories = repository.GetAllCategories();
@@ -109,6 +76,11 @@ namespace JobPortalManagementSystem.Controllers
            }
         */
 
+        /// <summary>
+        /// Add Job Post
+        /// </summary>
+        /// <returns></returns>
+
         [HttpGet]
         public ActionResult AddPost()
         {
@@ -117,7 +89,12 @@ namespace JobPortalManagementSystem.Controllers
 
             return View();
         }
-
+        /// <summary>
+        /// Add post post method
+        /// </summary>
+        /// <param name="post"></param>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddPost(JobPost post, HttpPostedFileBase imageFile)
         {
@@ -154,6 +131,12 @@ namespace JobPortalManagementSystem.Controllers
             ViewBag.Categories = new SelectList(categories, "categoryId", "category");
             return View(post);
         }
+
+
+        /// <summary>
+        /// Get all posts
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult GetAllPosts()
         {
@@ -173,7 +156,11 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
-
+        /// <summary>
+        /// Edit Job Post
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult EditJobPost(int Id)
         {
@@ -188,6 +175,13 @@ namespace JobPortalManagementSystem.Controllers
             return View(post);
         }
        
+
+        /// <summary>
+        /// Edit Job Post
+        /// </summary>
+        /// <param name="post"></param>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EditJobPost(JobPost post, HttpPostedFileBase imageFile)
         {
@@ -212,7 +206,10 @@ namespace JobPortalManagementSystem.Controllers
             return View(post);
         }
 
-
+        /// <summary>
+        /// Get contact
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetContact()
         {
             ContactRepository contactRepository = new ContactRepository();
@@ -221,7 +218,7 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
-
+        
         public ActionResult AddCategory()
         {
             return View();
@@ -248,11 +245,21 @@ namespace JobPortalManagementSystem.Controllers
                 return View();
             }
         }
+        /// <summary>
+        /// GEt all categories
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetAllCategories()
         {
             List<Category> allCategories = repository.GetAllCategories();
             return View(allCategories);
         }
+
+        /// <summary>
+        /// Delete Job Post
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult DeleteJobPost(int Id)
         {
@@ -267,7 +274,12 @@ namespace JobPortalManagementSystem.Controllers
 
             return View(jobPost); // Pass the job post to the view for confirmation
         }
-
+        /// <summary>
+        /// DeleteJob Post
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="jobPost"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult DeleteJobPost(int Id,JobPost jobPost)
         {
@@ -285,13 +297,20 @@ namespace JobPortalManagementSystem.Controllers
                 return View();
             }
         }
-
+        /// <summary>
+        /// Get SIgnup Details
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetSignupDetails()
         {
             SignupRepository signupRepository = new SignupRepository();
             ModelState.Clear();
             return View(signupRepository.GetSignupDetails());
         }
+        /// <summary>
+        /// Logout 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Logout()
         {
             // Clear session data
@@ -303,28 +322,94 @@ namespace JobPortalManagementSystem.Controllers
 
 
 
-        /*  public ActionResult DeleteSignupDetails(int Id, Signup signup)
-          {
-              try
-              {
-                  SignupRepository signupRepository = new SignupRepository();
-                //  Signup signup = signupRepository.GetSignupById(Id);
+        /// <summary>
+        /// GEt all applied jobs
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ViewAppliedJobs()
+        {
+            var appliedJobs = jobApplicationRepository.GetAllAppliedJobs();
+            return View(appliedJobs);
+        }
+
+        /// <summary>
+        /// Schedule interview
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public ActionResult ScheduleInterview(int Id)
+        {
+            JobApplication application = jobApplicationRepository.GetJobApplicationById(Id);
+
+            if (application == null)
+            {
+                // Handle the case when the application is not found
+                // You can redirect or show an error message
+                return RedirectToAction("AdminHomepage", "Admin"); // Redirect to the home page for example
+            }
+
+            ScheduledInterview interview = new ScheduledInterview
+            {
+                ApplicationId = application.Id,
+                UserId = application.userId,
+                JobPostId = application.jobPostId,
+                title = application.title,
+                companyName = application.companyName
+
+            };
+
+            return View(interview);
+        }
+        /// <summary>
+        /// Schedule interview
+        /// </summary>
+        /// <param name="interview"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        public ActionResult ScheduleInterview(ScheduledInterview interview)
+        {
+            if (ModelState.IsValid)
+            {
+                // Save the scheduled interview using the repository
+                jobApplicationRepository.SaveScheduledInterview(interview);
+
+                // Update the IsScheduled property for the corresponding job application
+                jobApplicationRepository.UpdateIsScheduled(interview.ApplicationId, true);
+
+                // You can redirect to a success page or show a success message here
+                return RedirectToAction("AdminHomepage", "Admin"); // Redirect to home page for example
+            }
+
+            // If the model is not valid, return to the view with the validation errors
+            return View(interview);
+        }
+        /// <summary>
+        /// Reject application
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public ActionResult RejectApplication(int Id)
+        {
+            jobApplicationRepository.RejectApplication(Id);
+            return RedirectToAction("ViewAppliedJobs");
+        }
 
 
 
 
-                  if (signupRepository.DeleteSignupDetails(Id))
-                  {
-                      ViewBag.AlertMessage("User details deleted successfully");
-                  }
-                  return RedirectToAction("AdminHomepage","Admin");
-              }
-              catch
-              {
-                  return View();
-              }
-          }
-        */
+
+
+
+        public ActionResult DeleteUser(int Id)
+        {
+            signupRepository.DeleteUser(Id);
+            return RedirectToAction("GetSignupDetails");
+        }
+
+
+
+
         public ActionResult DeleteDetails(int Id) // Signup signup
         {
 
@@ -360,101 +445,14 @@ namespace JobPortalManagementSystem.Controllers
 
       
 
-        // Action to view all applied jobs
-        public ActionResult ViewAppliedJobs()
-        {
-            var appliedJobs = jobApplicationRepository.GetAllAppliedJobs();
-            return View(appliedJobs);
-        }
 
 
-        /*      public ActionResult ScheduleInterview()
-              {
-                  // Load data for dropdown lists (users, job posts)
-                  // ...
 
-                  return View();
-              }
-
-              [HttpPost]
-              public ActionResult ScheduleInterview(ScheduledInterview interview)
-              {
-                  if (ModelState.IsValid)
-                  {
-                     jobApplicationRepository.ScheduleInterview(interview);
-                      return RedirectToAction("ScheduledInterviews");
-                  }
-
-                  // Reload data for dropdown lists (users, job posts)
-                  // ...
-
-                  return View(interview);
-              }
-
-              public ActionResult ScheduledInterviews()
-              {
-                  var scheduledInterviews = JobApplicationRepository.GetAllScheduledInterviews();
-                  return View(scheduledInterviews);
-              }
-
-              */
-
-
-        public ActionResult ScheduleInterview(int Id)
-        {
-            JobApplication application = jobApplicationRepository.GetJobApplicationById(Id);
-
-           if (application == null)
-            {
-                // Handle the case when the application is not found
-                // You can redirect or show an error message
-                return RedirectToAction("AdminHomepage", "Admin"); // Redirect to the home page for example
-            }
-
-            ScheduledInterview interview = new ScheduledInterview
-            {
-                ApplicationId = application.Id,
-                UserId = application.userId,
-                JobPostId = application.jobPostId,
-                title=application.title,
-                companyName=application.companyName
-                
-            };
-
-            return View(interview);
-        }
-
-        [HttpPost]
-        public ActionResult ScheduleInterview(ScheduledInterview interview)
-        {
-            if (ModelState.IsValid)
-            {
-                // Save the scheduled interview using the repository
-                jobApplicationRepository.SaveScheduledInterview(interview);
-
-                // Update the IsScheduled property for the corresponding job application
-                jobApplicationRepository.UpdateIsScheduled(interview.ApplicationId, true);
-
-                // You can redirect to a success page or show a success message here
-                return RedirectToAction("AdminHomepage", "Admin"); // Redirect to home page for example
-            }
-
-            // If the model is not valid, return to the view with the validation errors
-            return View(interview);
-        }
-
-        public ActionResult RejectApplication(int Id)
-        {
-            jobApplicationRepository.RejectApplication(Id);
-            return RedirectToAction("ViewAppliedJobs");
-        }
-
+       
+    
+    
+    
     }
-
-
-
-
-
 }
 
 

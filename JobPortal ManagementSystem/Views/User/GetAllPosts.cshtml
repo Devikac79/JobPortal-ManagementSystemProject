@@ -33,13 +33,24 @@
         text-align:center;
     }
     .gradient-custom-2 {
+        background-color: #FFCCCB;
         /* fallback for old browsers */
-        background: #fbc2eb;
+        /*background: #fbc2eb;*/
         /* Chrome 10-25, Safari 5.1-6 */
-        background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1));
+        /*background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1));*/
         /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        background: linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1))
+        /*background: linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1))*/
     }
+
+    /* Custom styles for zoom effect */
+    .zoom-on-hover {
+        transition: transform 0.3s;
+    }
+
+        .zoom-on-hover:hover {
+            transform: scale(1.05);
+        }
+
 </style>
 <body class="gradient-custom-2">
     <div class="container3 ">
@@ -49,15 +60,14 @@
         {
             <div class="row justify-content-center">
                 @foreach (var post in Model)
-                {
-                    <div class="col-12 col-md-6 mb-4">
-                        <div class="card h-100">
+                {<div class="col-12 col-md-6 mb-4">
+                        <div class="card h-100 zoom-on-hover">
                             <div class="card-header">
                                 <h5 class="card-title">@post.title</h5>
                             </div>
                             <div class="card-body">
                                 <p class="card-text"><strong>Location:</strong> @post.location</p>
-                                <p class="card-text"><strong>Salary:</strong> $@post.minSalary - $@post.maxSalary</p>
+                                <p class="card-text"><strong>Salary:</strong> &#8377;@post.minSalary - &#8377;@post.maxSalary</p>
                                 <p class="card-text"><strong>Posted:</strong> @post.postDate.ToString("yyyy-MM-dd")</p>
                                 <p class="card-text"><strong>End Date:</strong> @post.endDate.ToString("yyyy-MM-dd")</p>
                                 <p class="card-text"><strong>Category:</strong> @post.jobCategory</p>
@@ -70,6 +80,7 @@
                             </div>
                         </div>
                     </div>
+
                 }
             </div>
         }

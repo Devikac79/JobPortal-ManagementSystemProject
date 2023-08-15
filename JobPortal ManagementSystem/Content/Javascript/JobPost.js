@@ -66,6 +66,15 @@ function disablePreviousDates() {
 // Call the disablePreviousDates function on load time to initialize the postDate field with the minimum date restriction.
 disablePreviousDates();
 
+function disablePreviousDatesEnd() {
+    const postDateField = document.getElementById('endDate');
+    const today = new Date().toISOString().split('T')[0];
+    postDateField.setAttribute('min', today);
+}
+
+// Call the disablePreviousDates function on load time to initialize the postDate field with the minimum date restriction.
+disablePreviousDatesEnd();
+
 // Validation function for the description field
 function validateDescription() {
     const descriptionField = document.getElementById('description').value.trim();

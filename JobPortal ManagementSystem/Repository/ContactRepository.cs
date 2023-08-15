@@ -29,36 +29,56 @@ namespace JobPortalManagementSystem.Repository
         /// </summary>
         /// <param name="contact"></param>
         /// <returns></returns>
-            public bool AddContact(Contact contact)
+        public bool AddContact(Contact contact)
+        {
+            try
             {
                 Connection();
-                SqlCommand command = new SqlCommand("SPI_Contact", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@name", contact.name);
-                command.Parameters.AddWithValue("@email", contact.email);
-                command.Parameters.AddWithValue("@subject", contact.subject);
+                using (SqlCommand command = new SqlCommand("SPI_Contact", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@name", contact.name);
+                    command.Parameters.AddWithValue("@email", contact.email);
+                    command.Parameters.AddWithValue("@subject", contact.subject);
+                    command.Parameters.AddWithValue("@message", contact.message);
 
-                command.Parameters.AddWithValue("@message", contact.message);
-                connection.Open();
-                int i = command.ExecuteNonQuery();
-                connection.Close();
-                if (i > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    connection.Open();
+                    int i = command.ExecuteNonQuery();
+
+                    if (i > 0)
+
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
+            //catch (Exception ex)
+            //{
+            //    // Handle the exception or log it as needed
+            //    Console.WriteLine("An error occurred: " + ex.Message);
+            //    return false;
+            //}
+            finally
+            {
+                if (connection != null && connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
 
 
         /// <summary>
-        /// Get COntact
+        /// Get contact Method
         /// </summary>
         /// <returns></returns>
-            public List<Contact> GetContact()
-            {
+        public List<Contact> GetContact()
+         {
+
                 Connection();
                 List<Contact> ContactList = new List<Contact>();
                 SqlCommand command = new SqlCommand("SPS_Contact", connection);
