@@ -8,9 +8,15 @@ namespace JobPortal_ManagementSystem.Models
 {
     public class ScheduledInterview
     {
+
+
         public int InterviewId { get; set; }
+
+        [DisplayName("Application id")]
         public int ApplicationId { get; set; } // Added ApplicationId property
+        [DisplayName("User id")]
         public int UserId { get; set; }
+        [DisplayName("Job post id")]
         public int JobPostId { get; set; }
 
         [DisplayName("Interview date")]
@@ -21,7 +27,7 @@ namespace JobPortal_ManagementSystem.Models
         [DisplayName("Job title")]
         public string title { get; set; }
 
-        [DisplayName("company name")]
+        [DisplayName("Company name")]
         public string companyName { get; set; }
 
       

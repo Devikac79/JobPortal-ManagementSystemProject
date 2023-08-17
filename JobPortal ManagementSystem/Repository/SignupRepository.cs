@@ -484,115 +484,117 @@ namespace JobPortalManagementSystem.Repository
             }
         }
 
-
-        public List<Country> GetCountries()
-        {
-            List<Country> countries = new List<Country>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Countries";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            countries.Add(new Country
-                            {
-                                CountryId = (int)reader["CountryId"],
-                                CountryName = (string)reader["CountryName"]
-                            });
-                        }
-                    }
-                }
-            }
-
-            return countries;
-        }
-
-
-        public List<State> GetStatesByCountry(int CountryId)
-        {
-            List<State> states = new List<State>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM States WHERE CountryId = @CountryId";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@CountryId", CountryId);
-                    connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            states.Add(new State
-                            {
-                                StateId = (int)reader["StateId"],
-                                StateName = (string)reader["StateName"],
-                                CountryId = (int)reader["CountryId"]
-                            });
-                        }
-                    }
-                }
-            }
-
-            return states;
-        }
-
-        public List<City> GetCitiesByState(int StateId)
-        {
-            List<City> cities = new List<City>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM Cities WHERE StateId = @StateId";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@StateId", StateId);
-                    connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            cities.Add(new City
-                            {
-                                CityId = (int)reader["CityId"],
-                                CityName = (string)reader["CityName"],
-                                StateId = (int)reader["StateId"]
-                            });
-                        }
-                    }
-                }
-            }
-
-            return cities;
-        }
-
-        public void RegisterUser(UserRegistration user)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "INSERT INTO UserRegistration (CountryId, StateId, CityId) " +
-                               "VALUES (@CountryId, @StateId, @CityId)";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@CountryId", user.CountryId);
-                    command.Parameters.AddWithValue("@StateId", user.StateId);
-                    command.Parameters.AddWithValue("@CityId", user.CityId);
-
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
-       
     }
 }
+
+
+/*   public List<Country> GetCountries()
+   {
+       List<Country> countries = new List<Country>();
+
+       using (SqlConnection connection = new SqlConnection(connectionString))
+       {
+           string query = "SELECT * FROM Countries";
+           using (SqlCommand command = new SqlCommand(query, connection))
+           {
+               connection.Open();
+               using (SqlDataReader reader = command.ExecuteReader())
+               {
+                   while (reader.Read())
+                   {
+                       countries.Add(new Country
+                       {
+                           CountryId = (int)reader["CountryId"],
+                           CountryName = (string)reader["CountryName"]
+                       });
+                   }
+               }
+           }
+       }
+
+       return countries;
+   }
+
+
+   public List<State> GetStatesByCountry(int CountryId)
+   {
+       List<State> states = new List<State>();
+
+       using (SqlConnection connection = new SqlConnection(connectionString))
+       {
+           string query = "SELECT * FROM States WHERE CountryId = @CountryId";
+           using (SqlCommand command = new SqlCommand(query, connection))
+           {
+               command.Parameters.AddWithValue("@CountryId", CountryId);
+               connection.Open();
+               using (SqlDataReader reader = command.ExecuteReader())
+               {
+                   while (reader.Read())
+                   {
+                       states.Add(new State
+                       {
+                           StateId = (int)reader["StateId"],
+                           StateName = (string)reader["StateName"],
+                           CountryId = (int)reader["CountryId"]
+                       });
+                   }
+               }
+           }
+       }
+
+       return states;
+   }
+
+   public List<City> GetCitiesByState(int StateId)
+   {
+       List<City> cities = new List<City>();
+
+       using (SqlConnection connection = new SqlConnection(connectionString))
+       {
+           string query = "SELECT * FROM Cities WHERE StateId = @StateId";
+           using (SqlCommand command = new SqlCommand(query, connection))
+           {
+               command.Parameters.AddWithValue("@StateId", StateId);
+               connection.Open();
+               using (SqlDataReader reader = command.ExecuteReader())
+               {
+                   while (reader.Read())
+                   {
+                       cities.Add(new City
+                       {
+                           CityId = (int)reader["CityId"],
+                           CityName = (string)reader["CityName"],
+                           StateId = (int)reader["StateId"]
+                       });
+                   }
+               }
+           }
+       }
+
+       return cities;
+   }
+
+   public void RegisterUser(UserRegistration user)
+   {
+       using (SqlConnection connection = new SqlConnection(connectionString))
+       {
+           string query = "INSERT INTO UserRegistration (CountryId, StateId, CityId) " +
+                          "VALUES (@CountryId, @StateId, @CityId)";
+
+           using (SqlCommand command = new SqlCommand(query, connection))
+           {
+               command.Parameters.AddWithValue("@CountryId", user.CountryId);
+               command.Parameters.AddWithValue("@StateId", user.StateId);
+               command.Parameters.AddWithValue("@CityId", user.CityId);
+
+               connection.Open();
+               command.ExecuteNonQuery();
+           }
+       }
+   }
+*/
+
+
 
 
 

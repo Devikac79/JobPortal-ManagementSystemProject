@@ -5,6 +5,9 @@
     Layout = "~/Views/User/UserLayoutpage.cshtml";
 }
 <style>
+    body {
+        padding-top: 100px;
+    }
 
     h4 {
         text-align: center;
@@ -26,7 +29,7 @@
         background-color: cadetblue;
     }
 </style>
-@*<body>*@
+
     <div class="container7 mt-4">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -63,7 +66,7 @@
                                     </div>
 
 
-                                    @*<div class="form-group p-2">
+                                    <div class="form-group p-2">
                                             @Html.LabelFor(model => model.userId, htmlAttributes: new { @class = "control-label" })
                                             @Html.EditorFor(model => model.userId, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(model => model.userId, "", new { @class = "text-danger" })
@@ -74,7 +77,7 @@
                                             @Html.LabelFor(model => model.jobPostId, htmlAttributes: new { @class = "control-label" })
                                             @Html.EditorFor(model => model.jobPostId, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(model => model.jobPostId, "", new { @class = "text-danger" })
-                                        </div>*@
+                                        </div>
 
                                     <!-- applicationDate -->
                                     <div class="form-group p-2">

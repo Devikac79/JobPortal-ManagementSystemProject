@@ -19,19 +19,21 @@
     /* Add custom styles for the heading */
     .page-heading {
         /*background-color: cadetblue;*/
-        color:black;
+        color: black;
         padding: 10px;
         text-align: center;
         margin-bottom: 20px;
     }
-    .card-body{
-        padding-left:100px;
+
+    .card-body {
+        padding-left: 100px;
     }
     /* Add custom styles for the post title */
     .card-header {
         background-color: cadetblue;
-        text-align:center;
+        text-align: center;
     }
+
     .gradient-custom-2 {
         background-color: #FFCCCB;
         /* fallback for old browsers */
@@ -51,10 +53,19 @@
             transform: scale(1.05);
         }
 
+    body {
+        padding-top: 150px;
+    }
 </style>
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet" />
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet" />
 <body class="gradient-custom-2">
     <div class="container3 ">
-        <h2 class="page-heading">All Posts</h2>
+        @*  <h2 class="page-heading">All Posts</h2>*@
 
         @if (Model != null && Model.Any())
         {

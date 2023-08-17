@@ -1,0 +1,26 @@
+
+
+Log Entry : 
+08/15/2023 11:11:38
+Error in: https://localhost:44308/Home/AddContact. Error Message: Could not find stored procedure 'SP_Contact'.
+__________
+
+Log Entry : 
+08/15/2023 11:22:06
+Error in: https://localhost:44308/Home/AddContact. Error Message: Could not find stored procedure 'SP_Contact'.
+__________
+
+Log Entry : 
+08/15/2023 11:24:14
+Error in: https://localhost:44308/Home/AddContact. Error Message: Could not find stored procedure 'SP_Contact'.
+__________
+
+Log Entry : 
+08/15/2023 11:30:18
+Error in: https://localhost:44308/Home/AddContact. Error Message: Could not find stored procedure 'SP_Contact'.
+__________
+
+Log Entry : 
+08/15/2023 11:41:50
+Error in: https://localhost:44308/Home/GetContact. Error Message: Could not find stored procedure 'SP_Contact'.
+__________

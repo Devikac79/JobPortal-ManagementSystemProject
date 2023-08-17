@@ -284,13 +284,33 @@ namespace JobPortal_ManagementSystem.Repository
                     command.Parameters.AddWithValue("@title", interview.title);
                     command.Parameters.AddWithValue("@companyName", interview.companyName);
 
+
                     command.ExecuteNonQuery();
                 }
             }
         }
 
 
-     
+        //public void SaveScheduledInterview(ScheduledInterview interview)
+        //{
+        //    using (var connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        using (var command = new SqlCommand("INSERT INTO ScheduledInterviews (ApplicationId, UserId, JobPostId, InterviewDate, Location) VALUES (@applicationId, @userId, @jobPostId, @interviewDate, @location)", connection))
+        //        {
+        //            command.Parameters.AddWithValue("@applicationId", interview.ApplicationId);
+        //            command.Parameters.AddWithValue("@userId", interview.UserId);
+        //            command.Parameters.AddWithValue("@jobPostId", interview.JobPostId);
+        //            command.Parameters.AddWithValue("@interviewDate", interview.InterviewDate);
+        //            command.Parameters.AddWithValue("@location", interview.Location);
+        //            command.Parameters.AddWithValue("@title", interview.title);
+        //            command.Parameters.AddWithValue("@companyName", interview.companyName);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+
+
         /// <summary>
         /// Get interview based on id
         /// </summary>

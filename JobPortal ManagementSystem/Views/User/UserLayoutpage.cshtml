@@ -70,7 +70,7 @@
     </script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
         <div class="container">
 
             <a class="navbar-brand" href="#">
@@ -82,7 +82,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav m-auto mb-2  mb-lg-0">
                     <li class="nav-item">
                         @Html.ActionLink("Home", "UserHomepage", "User", null, new { @class = "nav-item nav-link" })
 
@@ -100,14 +100,14 @@
                     </li>
                     @*<li class="nav-item ">
 
-                            @Html.ActionLink("Applied", "AppliedJobs", "User", null, new { @class = "nav-item nav-link" })
+            @Html.ActionLink("Applied", "AppliedJobs", "User", null, new { @class = "nav-item nav-link" })
 
-                        </li>
-                        <li class="nav-item ">
+        </li>
+        <li class="nav-item ">
 
-                            @Html.ActionLink("Interview", "AllInterviews", "User", null, new { @class = "nav-item nav-link" })
+            @Html.ActionLink("Interview", "AllInterviews", "User", null, new { @class = "nav-item nav-link" })
 
-                        </li>*@
+        </li>*@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="jobsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Job status
@@ -127,13 +127,20 @@
                         @Html.ActionLink("Contact", "AddContact", "User", null, new { @class = "nav-item nav-link" })
 
                     </li>
+                  
 
                     @*<li class="nav-item">
-                            <a href="@Url.Action("Logout", "User")" class="btn nav-link btn0 mx-2">Logout</a>
-                        </li>*@
+            <a href="@Url.Action("Logout", "User")" class="btn nav-link btn0 mx-2">Logout</a>
+        </li>*@
 
                 </ul>
+
+                
                 <form class="d-flex" role="search">
+                    <div class="pt-3"> Welcome,@Session["Username"]!</div>
+                   @* <div class="pt-3">  Welcome, @ViewBag.Username!</div>*@
+                    <!-- Rest of the user homepage content -->
+
 
                     @Html.ActionLink("Logout", "Logout", "User", null, new { @class = "btn0 mx-2" })
 
@@ -194,7 +201,7 @@
         </section>
         <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.2)">
             © 2020 Copyright:
-            <a class="text-white" href="https://mdbootstrap.com/">JobPortal.com</a>
+            <a class="text-white" href="">JobPortal.com</a>
         </div>
     </footer>
 

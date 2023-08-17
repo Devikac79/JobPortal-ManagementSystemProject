@@ -26,6 +26,9 @@
            
           
         }
+        body{
+            padding-top:100px;
+        }
     </style>
 
 
@@ -50,13 +53,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.companyName, htmlAttributes: new { @class = "control-label col-md-4 p-1" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "form-control", @id = "companyName", @onfocusout = "validateCompanyName()", placeholder = "Enter Company Name" } })
-                    @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger", @id = "companyNameValidationMessage" })
-                </div>
-            </div>
+
 
             <div class="form-group">
                 @Html.LabelFor(model => model.location, htmlAttributes: new { @class = "control-label col-md-4 p-1" })
@@ -91,7 +88,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.endDate,  htmlAttributes: new { @class = "control-label col-md-4 p-1" })
+                @Html.LabelFor(model => model.endDate, htmlAttributes: new { @class = "control-label col-md-4 p-1" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.endDate, new { htmlAttributes = new { @class = "form-control", @id = "endDate", @onchange = "disablePreviousDatesEnd()" } })
                     @Html.ValidationMessageFor(model => model.endDate, "", new { @class = "text-danger", @id = "endDateValidationMessage" })
@@ -99,7 +96,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.description,  htmlAttributes: new { @class = "control-label col-md-4 p-1" })
+                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-4 p-1" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control", @id = "description", @onfocusout = "validateDescription()", placeholder = "Enter Job description" } })
                     @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger", @id = "descriptionValidationMessage" })
@@ -115,7 +112,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.jobNature,  htmlAttributes: new { @class = "control-label col-md-4 p-1" })
+                @Html.LabelFor(model => model.jobNature, htmlAttributes: new { @class = "control-label col-md-4 p-1" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.jobNature, new { htmlAttributes = new { @class = "form-control", @id = "jobNature", @onfocusout = "validateJobNature()", placeholder = "Enter Job Nature" } })
                     @Html.ValidationMessageFor(model => model.jobNature, "", new { @class = "text-danger", @id = "jobNatureValidationMessage" })
@@ -123,7 +120,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.categoryId,  htmlAttributes: new { @class = "control-label col-md-4 p-1" })
+                @Html.LabelFor(m => m.categoryId, htmlAttributes: new { @class = "control-label col-md-4 p-1" })
                 @Html.DropDownListFor(m => m.categoryId, ViewBag.Categories as SelectList, "Select a Category", new { @class = "form-control", @id = "categoryId" })
             </div>
 
@@ -135,6 +132,13 @@
                 @Html.Label("Image", "Image", htmlAttributes: new { @class = "control-label col-md-2" })
                 <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg, .jpeg" />
                 <span id="imageValidationMessage" class="text-danger" style="display: none;"></span>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.companyName, htmlAttributes: new { @class = "control-label col-md-4 p-1" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "form-control", @id = "companyName", @onfocusout = "validateCompanyName()", placeholder = "Enter Company Name" } })
+                    @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger", @id = "companyNameValidationMessage" })
+                </div>
             </div>
             <br />
 

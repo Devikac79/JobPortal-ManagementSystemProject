@@ -5,20 +5,33 @@
     Layout = "~/Views/User/UserLayoutpage.cshtml";
 }
 
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet" />
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet" />
 <style>
-  
+    body {
+        padding-top: 100px;
+        /*background-image: url(/Content/Images/userpage3.jpg);*/
+        background-size: cover;
+        background-color: #FFCCCB;
+    }
     /* Custom styles */
     .data-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         min-height: 600px;
-       
     }
-    h2{
-        padding-top:20px;
-        padding-bottom:30px;
+
+    h2 {
+        padding-top: 20px;
+        padding-bottom: 30px;
     }
+
     .data-card {
         border: 1px solid #ccc;
         border-radius: 8px;
@@ -27,7 +40,8 @@
         padding: 15px;
         box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease; /* Add transition for smooth effect */
-        background-color:white;
+        background-color: white;
+        /*background-color: cadetblue;*/
     }
 
         .data-card:hover {
@@ -53,7 +67,7 @@
 
     .gradient-custom-2 {
         /* fallback for old browsers */
-        background:lightcoral red;
+        background: lightcoral red;
         /* Chrome 10-25, Safari 5.1-6 */
         /*background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1));*/
         /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */

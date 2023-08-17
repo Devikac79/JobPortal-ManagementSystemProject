@@ -54,7 +54,9 @@ namespace JobPortalManagementSystem.Models
         [DisplayName("Confirm password")]
         public string confirmPassword { get; set; }
         public string Role { get; set; }
+        [DisplayName("Image")]
         public byte[] image { get; set; }
+        [DisplayName("Resume")]
         public byte[] resume { get; set; }
     }
 

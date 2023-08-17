@@ -34,7 +34,7 @@ namespace JobPortalManagementSystem.Repository
             try
             {
                 Connection();
-                using (SqlCommand command = new SqlCommand("SPI_Contact", connection))
+                using (SqlCommand command = new SqlCommand("SP_Contact", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@name", contact.name);
@@ -56,12 +56,7 @@ namespace JobPortalManagementSystem.Repository
                     }
                 }
             }
-            //catch (Exception ex)
-            //{
-            //    // Handle the exception or log it as needed
-            //    Console.WriteLine("An error occurred: " + ex.Message);
-            //    return false;
-            //}
+          
             finally
             {
                 if (connection != null && connection.State != ConnectionState.Closed)

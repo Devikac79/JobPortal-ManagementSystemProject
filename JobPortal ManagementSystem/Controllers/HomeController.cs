@@ -32,8 +32,8 @@ namespace JobPortalManagementSystem.Controllers
 
 
         private readonly SignupRepository signupRepository;
-        private readonly UserRepository userRepository;
-
+      private readonly UserRepository userRepository; 
+      //  private readonly UserRepository _locationRepository = new UserRepository();
         public HomeController()
         {
             userRepository = new UserRepository();
@@ -114,9 +114,13 @@ namespace JobPortalManagementSystem.Controllers
                 }
                 return RedirectToAction("GetDetails");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
             }
         }
         /// <summary>
@@ -128,12 +132,25 @@ namespace JobPortalManagementSystem.Controllers
         [HttpGet]
         public ActionResult EditSignupDetails(int Id)
         {
-            Signup signup = signupRepository.GetSignUpById(Id);
-            if (signup == null)
+            try
             {
-                return HttpNotFound();
+
+
+                Signup signup = signupRepository.GetSignUpById(Id);
+                if (signup == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(signup);
             }
-            return View(signup);
+            catch (Exception ex)
+            {
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
+            }
         }
 
         /// <summary>
@@ -147,33 +164,43 @@ namespace JobPortalManagementSystem.Controllers
         [HttpPost]
         public ActionResult EditSignupDetails(Signup signup, HttpPostedFileBase imageFile, HttpPostedFileBase resumeFile)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                if (imageFile != null && imageFile.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
-                    byte[] imageData;
-                    using (var binaryReader = new BinaryReader(imageFile.InputStream))
+                    if (imageFile != null && imageFile.ContentLength > 0)
                     {
-                        imageData = binaryReader.ReadBytes(imageFile.ContentLength);
+                        byte[] imageData;
+                        using (var binaryReader = new BinaryReader(imageFile.InputStream))
+                        {
+                            imageData = binaryReader.ReadBytes(imageFile.ContentLength);
+                        }
+                        signup.image = imageData;
                     }
-                    signup.image = imageData;
-                }
-                if (resumeFile != null && resumeFile.ContentLength > 0)
-                {
-                    byte[] resumeData;
-                    using (var binaryReader = new BinaryReader(resumeFile.InputStream))
+                    if (resumeFile != null && resumeFile.ContentLength > 0)
                     {
-                        resumeData = binaryReader.ReadBytes(resumeFile.ContentLength);
+                        byte[] resumeData;
+                        using (var binaryReader = new BinaryReader(resumeFile.InputStream))
+                        {
+                            resumeData = binaryReader.ReadBytes(resumeFile.ContentLength);
+                        }
+                        signup.resume = resumeData;
                     }
-                    signup.resume = resumeData;
+                    signupRepository.EditSignupDetails(signup);
+                    return RedirectToAction("GetSignupDetails");
                 }
-                signupRepository.EditSignupDetails(signup);
-                return RedirectToAction("GetSignupDetails");
-            }
 
-         
-            return View(signup);
+
+                return View(signup);
+            }
+            catch (Exception ex)
+            {
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
+            }
         }
 
 
@@ -210,7 +237,9 @@ namespace JobPortalManagementSystem.Controllers
 
                            // Store user ID and role in session
                            Session["UserId"] = userSignup.Id;
-                           Session["UserRole"] = role;
+                        Session["Username"] =userSignup.firstName;
+
+                        Session["UserRole"] = role;
 
                         if (!string.IsNullOrEmpty(role))
                         {
@@ -252,14 +281,15 @@ namespace JobPortalManagementSystem.Controllers
 
                    return View();
                }
-               catch (Exception ex)
-               {
-                   // Handle any exceptions that occur during authentication or redirection
-                   // Logging, error handling, or custom error messages can be implemented here
-                   ViewBag.Message = "An error occurred: " + ex.Message;
-                   return View();
-               }
-           }
+            catch (Exception ex)
+            {
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
+            }
+        }
 
 
 
@@ -282,10 +312,11 @@ namespace JobPortalManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that occur during fetching the user's profile details
-                // Logging, error handling, or custom error messages can be implemented here
-                ViewBag.Message = "An error occurred: " + ex.Message;
-                return View("UserNotFound");
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
             }
         }
 
@@ -314,9 +345,21 @@ namespace JobPortalManagementSystem.Controllers
         /// <returns></returns>
         public ActionResult GetContact()
         {
-            ContactRepository contactRepository = new ContactRepository();
-            ModelState.Clear();
-            return View(contactRepository.GetContact());
+            try
+            {
+                ContactRepository contactRepository = new ContactRepository();
+                ModelState.Clear();
+                return View(contactRepository.GetContact());
+            }
+            catch (Exception ex)
+            {
+                // Log the error using the error handling mechanism
+                ErrHandler.WriteError(ex.Message);
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
+            }
+
         }
         /// <summary>
         /// Add contact
@@ -599,9 +642,11 @@ namespace JobPortalManagementSystem.Controllers
             }
             catch (Exception ex)
             {
+                // Log the error using the error handling mechanism
                 ErrHandler.WriteError(ex.Message);
-                // Optionally, handle the error or display a friendly message to the user
-                return View();
+
+                // Optionally, you can handle the exception or return an error view
+                return View("Error");
             }
 
             return RedirectToAction("Homepage", "Home"); // Redirect to the homepage action of HomeController
@@ -627,7 +672,7 @@ namespace JobPortalManagementSystem.Controllers
                                 Id = (int)reader["Id"],
                                 FileName = (string)reader["FileName"],
                                 FileData = (byte[])reader["FileData"],
-                               
+
                             });
                         }
                     }
@@ -636,136 +681,169 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
-        /*   public ActionResult Index()
-           {
-               var countries = signupRepository.GetCountries();
-               ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
-               return View();
-           }
 
-           [HttpPost]
-           public JsonResult GetStates(int CountryId)
-           {
-               var states = signupRepository.GetStatesByCountry(CountryId);
-               return Json(states);
-           }
+        
 
-           [HttpPost]
-           public JsonResult GetCities(int StateId)
-           {
-               var cities = signupRepository.GetCitiesByState(StateId);
-               return Json(cities);
-           }
-         */
-        /*    public ActionResult RegisterUser()
-            {
 
-                var countries = signupRepository.GetCountries();
-                ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
-             //   ViewBag.States = new SelectList(new List<State>(), "StateId", "StateName"); // Initialize with empty list
-              //  ViewBag.Cities = new SelectList(new List<City>(), "CityId", "CityName"); // Initialize with empty list
 
-                return View(new UserRegistration());
-            }
-
-            [HttpPost]
-            public ActionResult RegisterUser(UserRegistration model)
-            {
-                if (ModelState.IsValid)
-                {
-                    signupRepository.RegisterUser(model);
-                    // Redirect to a success page or another action
-                    return RedirectToAction("RegistrationSuccess");
-                }
-
-                // If the model is not valid, redisplay the registration form with validation errors
-                var countries = signupRepository.GetCountries();
-                ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
-
-                // Load the dropdown data based on the selected country and state
-              //  var states = signupRepository.GetStatesByCountry(model.CountryId);
-              //  ViewBag.States = new SelectList(states, "StateId", "StateName");
-
-               // var cities = signupRepository.GetCitiesByState(model.StateId);
-               // ViewBag.Cities = new SelectList(cities, "CityId", "CityName");
-
-                return View(model);
-            }
-
-           public JsonResult GetStatesByCountry(int CountryId)
-            {
-                var states = signupRepository.GetStatesByCountry(CountryId);
-                return Json(states);
-            }
-
-            [HttpPost]
-            public JsonResult GetCitiesByState(int StateId)
-            {
-                var cities = signupRepository.GetCitiesByState(StateId);
-                return Json(cities);
-            }*/
-        public ActionResult RegisterUser()
+        public ActionResult CreateUser()
         {
-            var model = new UserRegistration
-            {
-                Countries = signupRepository.GetCountries(),
-                States = new List<State>(),
-                Cities = new List<City>()
-            };
-
-            return View(model);
+            var countries = userRepository.GetCountries();
+            ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
+            return View();
         }
 
         [HttpPost]
-        public ActionResult RegisterUser(UserRegistration model)
+        public ActionResult CreateUser(UserRegistration user)
         {
-            if (ModelState.IsValid)
-            {
-                signupRepository.RegisterUser(model);
-                // Redirect to a success page or another action
-                return RedirectToAction("RegistrationSuccess");
-            }
-
-            // If the model is not valid, redisplay the registration form with validation errors
-            model.Countries = signupRepository.GetCountries();
-            model.States = signupRepository.GetStatesByCountry(model.CountryId);
-            model.Cities = signupRepository.GetCitiesByState(model.StateId);
-
-            return View(model);
-        }
-
-        public JsonResult GetStatesByCountry(int CountryId)
-        {
-            var states = signupRepository.GetStatesByCountry(CountryId);
-            return Json(states, JsonRequestBehavior.AllowGet);
+            userRepository.SaveUserRegistration(user);
+            return RedirectToAction("Index", "Home"); // Redirect to a different page.
         }
 
         [HttpPost]
-        public JsonResult GetCitiesByState(int StateId)
+        public ActionResult GetStatesByCountry(int countryId)
         {
-            var cities = signupRepository.GetCitiesByState(StateId);
+            var states = userRepository.GetStatesByCountryId(countryId);
+            return Json(states);
+        }
+
+        [HttpPost]
+        public ActionResult GetCitiesByState(int stateId)
+        {
+            var cities = userRepository.GetCitiesByStateId(stateId);
             return Json(cities);
-        }
-
-        public ActionResult GetImage(string filePath)
-        {
-            // Read the image file into a byte array
-            byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
-
-            // Determine the content type of the image based on its file extension
-            string contentType = "image/jpeg"; // You may need to adjust this based on the actual file type
-
-            // Return the image as a FileResult with the appropriate content type
-            return File(imageBytes, contentType);
-        }
-
-        public ActionResult GetDetails()
-        {
-            UserRepository userRepository = new UserRepository();
-            ModelState.Clear();
-            return View(userRepository.GetDetails());
-
-
         }
     }
 }
+
+/*   public ActionResult Index()
+   {
+       var countries = signupRepository.GetCountries();
+       ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
+       return View();
+   }
+
+   [HttpPost]
+   public JsonResult GetStates(int CountryId)
+   {
+       var states = signupRepository.GetStatesByCountry(CountryId);
+       return Json(states);
+   }
+
+   [HttpPost]
+   public JsonResult GetCities(int StateId)
+   {
+       var cities = signupRepository.GetCitiesByState(StateId);
+       return Json(cities);
+   }
+ */
+/*    public ActionResult RegisterUser()
+    {
+
+        var countries = signupRepository.GetCountries();
+        ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
+     //   ViewBag.States = new SelectList(new List<State>(), "StateId", "StateName"); // Initialize with empty list
+      //  ViewBag.Cities = new SelectList(new List<City>(), "CityId", "CityName"); // Initialize with empty list
+
+        return View(new UserRegistration());
+    }
+
+    [HttpPost]
+    public ActionResult RegisterUser(UserRegistration model)
+    {
+        if (ModelState.IsValid)
+        {
+            signupRepository.RegisterUser(model);
+            // Redirect to a success page or another action
+            return RedirectToAction("RegistrationSuccess");
+        }
+
+        // If the model is not valid, redisplay the registration form with validation errors
+        var countries = signupRepository.GetCountries();
+        ViewBag.Countries = new SelectList(countries, "CountryId", "CountryName");
+
+        // Load the dropdown data based on the selected country and state
+      //  var states = signupRepository.GetStatesByCountry(model.CountryId);
+      //  ViewBag.States = new SelectList(states, "StateId", "StateName");
+
+       // var cities = signupRepository.GetCitiesByState(model.StateId);
+       // ViewBag.Cities = new SelectList(cities, "CityId", "CityName");
+
+        return View(model);
+    }
+
+   public JsonResult GetStatesByCountry(int CountryId)
+    {
+        var states = signupRepository.GetStatesByCountry(CountryId);
+        return Json(states);
+    }
+
+    [HttpPost]
+    public JsonResult GetCitiesByState(int StateId)
+    {
+        var cities = signupRepository.GetCitiesByState(StateId);
+        return Json(cities);
+    }*/
+/*  public ActionResult RegisterUser()
+  {
+      var model = new UserRegistration
+      {
+          Countries = signupRepository.GetCountries(),
+          States = new List<State>(),
+          Cities = new List<City>()
+      };
+
+      return View(model);
+  }
+
+  [HttpPost]
+  public ActionResult RegisterUser(UserRegistration model)
+  {
+      if (ModelState.IsValid)
+      {
+          signupRepository.RegisterUser(model);
+          // Redirect to a success page or another action
+          return RedirectToAction("RegistrationSuccess");
+      }
+
+      // If the model is not valid, redisplay the registration form with validation errors
+      model.Countries = signupRepository.GetCountries();
+      model.States = signupRepository.GetStatesByCountry(model.CountryId);
+      model.Cities = signupRepository.GetCitiesByState(model.StateId);
+
+      return View(model);
+  }
+
+  public JsonResult GetStatesByCountry(int CountryId)
+  {
+      var states = signupRepository.GetStatesByCountry(CountryId);
+      return Json(states, JsonRequestBehavior.AllowGet);
+  }
+
+  [HttpPost]
+  public JsonResult GetCitiesByState(int StateId)
+  {
+      var cities = signupRepository.GetCitiesByState(StateId);
+      return Json(cities);
+  }
+
+  public ActionResult GetImage(string filePath)
+  {
+      // Read the image file into a byte array
+      byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+      // Determine the content type of the image based on its file extension
+      string contentType = "image/jpeg"; // You may need to adjust this based on the actual file type
+
+      // Return the image as a FileResult with the appropriate content type
+      return File(imageBytes, contentType);
+  }
+
+  public ActionResult GetDetails()
+  {
+      UserRepository userRepository = new UserRepository();
+      ModelState.Clear();
+      return View(userRepository.GetDetails());
+
+
+  }*/

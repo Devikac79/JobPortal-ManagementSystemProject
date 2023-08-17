@@ -152,9 +152,9 @@ namespace JobPortalManagementSystem.Repository
                     command.Parameters.AddWithValue("@jobCategory", jobPost.jobCategory);
                     command.Parameters.AddWithValue("@jobNature", jobPost.jobNature);
                     command.Parameters.AddWithValue("@categoryId", jobPost.categoryId);
-                   // command.Parameters.AddWithValue("@imageData", jobPost.imageData ?? (object)DBNull.Value);
+                   command.Parameters.AddWithValue("@imageData", jobPost.imageData ?? (object)DBNull.Value);
                    // command.Parameters.AddWithValue("@profile", applicationForm.profile ?? (object)DBNull.Value);
-                    command.Parameters.Add("@imageData", SqlDbType.VarBinary, -1).Value = jobPost.imageData;
+                    //command.Parameters.Add("@imageData", SqlDbType.VarBinary, -1).Value = jobPost.imageData;
                    command.Parameters.AddWithValue("@companyName", jobPost.companyName);
                     command.ExecuteNonQuery();
                 }

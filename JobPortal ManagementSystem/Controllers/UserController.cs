@@ -22,7 +22,22 @@ namespace JobPortalManagementSystem.Controllers
         // GET: User
         public ActionResult UserHomepage()
         {
-            return View();
+            // Retrieve username from session
+            string username = Session["Username"] as string;
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                // Pass the username to the view
+                ViewBag.Username = username;
+
+                // Render the user's homepage
+                return View();
+            }
+            else
+            {
+                // Redirect to login if not authenticated
+                return RedirectToAction("Login");
+            }
         }
 
         private readonly JobPostRepository jobPostRepository;
@@ -53,6 +68,8 @@ namespace JobPortalManagementSystem.Controllers
             try
             {
                 // Retrieve the user ID and role from the session
+              
+
                 int? userId = Session["UserId"] as int?;
                 string userRole = Session["UserRole"] as string;
                 ViewBag.SuccessMessage = TempData["SuccessMessage"] as string;
@@ -126,6 +143,7 @@ namespace JobPortalManagementSystem.Controllers
             {
                 // Retrieve the user ID from the session
                 int? userId = Session["UserId"] as int?;
+                string username = Session["Username"] as string;
 
                 if (userId.HasValue && userId.Value > 0)
                 {
@@ -226,6 +244,8 @@ namespace JobPortalManagementSystem.Controllers
         {
             try
             {
+                
+
                 if (ModelState.IsValid)
                 {
                     ContactRepository signupRepository = new ContactRepository();
@@ -270,6 +290,8 @@ namespace JobPortalManagementSystem.Controllers
         [HttpGet]
         public ActionResult Details(int Id)
         {
+        
+
             // Fetch the job post details by id from the repository
             JobPost post = jobPostRepository.GetJobPostById(Id);
 
@@ -347,6 +369,8 @@ namespace JobPortalManagementSystem.Controllers
                 if (ModelState.IsValid)
                 {
                     int userId = Convert.ToInt32(Session["UserId"]);
+                    string username = Session["Username"] as string;
+
                     int jobId = application.jobPostId;
 
                     if (jobApplicationRepository.CheckIfUserAppliedForJob(userId, jobId))
@@ -420,6 +444,8 @@ namespace JobPortalManagementSystem.Controllers
 
         public ActionResult AllInterviews()
         {
+         
+
             int userId = Convert.ToInt32(Session["UserId"]);
 
             if (userId > 0)
@@ -442,6 +468,8 @@ namespace JobPortalManagementSystem.Controllers
         {
             if (Session["UserId"] == null)
             {
+               
+
                 return RedirectToAction("Signin", "Home");
             }
 

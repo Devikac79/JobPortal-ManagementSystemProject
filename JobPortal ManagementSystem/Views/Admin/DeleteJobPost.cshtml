@@ -5,109 +5,139 @@
     Layout = "~/Views/Admin/AdminLayoutpage.cshtml";
 }
 
-<h2>DeleteJobPost</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-top: 100px;
+            background-color: #f5f5f5;
+        }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>JobPost</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-        <dd>
-            @Html.DisplayFor(model => model.title)
-        </dd>
+        .delete-form {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin: auto;
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.location)
-        </dt>
+            .delete-form h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
 
-        <dd>
-            @Html.DisplayFor(model => model.location)
-        </dd>
+            .delete-form h3 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.minSalary)
-        </dt>
+            .delete-form table {
+                width: 100%;
+                margin-bottom: 15px;
+            }
 
-        <dd>
-            @Html.DisplayFor(model => model.minSalary)
-        </dd>
+            .delete-form th, .delete-form td {
+                padding: 8px;
+                border-bottom: 1px solid #ddd;
+            }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.maxSalary)
-        </dt>
+            .delete-form th {
+                text-align: left;
+                font-weight: bold;
+                width: 40%;
+            }
 
-        <dd>
-            @Html.DisplayFor(model => model.maxSalary)
-        </dd>
+            .delete-form td {
+                text-align: left;
+                color: #666;
+            }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.postDate)
-        </dt>
+        .form-actions {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="center-content">
+        <div class="delete-form">
+            <h2>Delete Job Post</h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.postDate)
-        </dd>
+            <h3>Are you sure you want to delete this?</h3>
+            <hr/>
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.title)</th>
+                    <td>@Html.DisplayFor(model => model.title)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.location)</th>
+                    <td>@Html.DisplayFor(model => model.location)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.minSalary)</th>
+                    <td>@Html.DisplayFor(model => model.minSalary)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.maxSalary)</th>
+                    <td>@Html.DisplayFor(model => model.maxSalary)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.postDate)</th>
+                    <td>@Html.DisplayFor(model => model.postDate)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.endDate)</th>
+                    <td>@Html.DisplayFor(model => model.endDate)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.description)</th>
+                    <td>@Html.DisplayFor(model => model.description)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.jobCategory)</th>
+                    <td>@Html.DisplayFor(model => model.jobCategory)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.jobNature)</th>
+                    <td>@Html.DisplayFor(model => model.jobNature)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.categoryId)</th>
+                    <td>@Html.DisplayFor(model => model.categoryId)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.companyName)</th>
+                    <td>@Html.DisplayFor(model => model.companyName)</td>
+                </tr>
+            </table>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.endDate)
-        </dt>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.endDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.jobCategory)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.jobCategory)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.jobNature)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.jobNature)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.categoryId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.categoryId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.companyName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.companyName)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-danger" /> |
+                    <a href="@Url.Action("Index", "Admin")" class="btn btn-secondary">Cancel</a>
+                </div>
+            }
         </div>
-    }
-</div>
+    </div>
+</body>
+</html>

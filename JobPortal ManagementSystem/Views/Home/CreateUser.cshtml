@@ -1,0 +1,61 @@
+﻿@model JobPortal_ManagementSystem.Models.UserRegistration
+
+@{
+    ViewBag.Title = "Create User";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        <h2>Create User</h2>
+
+        @Html.Label("Country")
+        @Html.DropDownListFor(model => model.CountryId, ViewBag.Countries as SelectList, "Select a country", new { id = "countryDropdown" })
+
+        @Html.Label("State")
+        <select id="stateDropdown" name="StateId"></select>
+
+        @Html.Label("City")
+        <select id="cityDropdown" name="CityId"></select>
+
+        @*@Html.Label("User ID")
+        @Html.TextBoxFor(model => model.UserId)*@
+
+        <input type="submit" value="Create User" />
+    }
+
+    <script>
+        $(document).ready(function () {
+            $("#countryDropdown").change(function () {
+                var countryId = $(this).val();
+                $.post("/Home/GetStatesByCountry", { countryId: countryId }, function (data) {
+                    var stateDropdown = $("#stateDropdown");
+                    stateDropdown.empty();
+                    stateDropdown.append($('<option></option>').val('').text('Select a state'));
+                    $.each(data, function (index, item) {
+                        stateDropdown.append($('<option></option>').val(item.StateId).text(item.StateName));
+                    });
+                });
+            });
+
+            $("#stateDropdown").change(function () {
+                var stateId = $(this).val();
+                $.post("/Home/GetCitiesByState", { stateId: stateId }, function (data) {
+                    var cityDropdown = $("#cityDropdown");
+                    cityDropdown.empty();
+                    cityDropdown.append($('<option></option>').val('').text('Select a city'));
+                    $.each(data, function (index, item) {
+                        cityDropdown.append($('<option></option>').val(item.CityId).text(item.CityName));
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

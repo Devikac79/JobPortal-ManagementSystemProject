@@ -9,14 +9,19 @@
 <head>
     <meta charset="utf-8" />
     <title>Job Post Details</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          rel="stylesheet" />
     <style>
         /* Custom CSS */
 
 
         body {
             background-color: #FFCCCB;
+            padding-top: 100px;
         }
 
         .job-details-container {
@@ -25,14 +30,13 @@
             border: 1px solid #dee2e6; /* Add a border */
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-           
         }
 
         .job-title {
             color: #007bff;
             font-size: 24px;
             font-weight: bold;
-            padding-bottom:30px;
+            padding-bottom: 30px;
         }
 
         .job-details {
@@ -42,9 +46,11 @@
             .job-details dt {
                 font-weight: bold;
             }
-            dd{
-                padding-right:20px;
-            }
+
+        dd {
+            padding-right: 20px;
+        }
+
         .job-image {
             max-width: 300px;
             border-radius: 5px;
@@ -75,63 +81,65 @@
     </style>
 </head>
 <body>
-    <div class="container mt-5 ">
-        <div class="job-details-container">
-            @if (Model != null)
-            {
-                <div class="row">
-                    <div class="col-md-6">
-                        <h2 class="job-title">@Model.title</h2>
-                        <dl class="row">
-                            <dt class="col-md-4">Company Name</dt>
-                            <dd class="col-md-8">@Model.companyName</dd>
+    
+        <div class="container mt-5 py-4 " style="max-width: 60%;">
+            <div class="job-details-container">
+                @if (Model != null)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 class="job-title">@Model.title</h2>
+                            <dl class="row">
+                                <dt class="col-md-6">Company Name</dt>
+                                <dd class="col-md-6">@Model.companyName</dd>
 
-                            <dt class="col-md-4">Location</dt>
-                            <dd class="col-md-8">@Model.location</dd>
+                                <dt class="col-md-6">Location</dt>
+                                <dd class="col-md-6">@Model.location</dd>
 
-                            <dt class="col-md-4">Min Salary</dt>
-                            <dd class="col-md-8">&#8377;@Model.minSalary</dd>
+                                <dt class="col-md-6">Min Salary</dt>
+                                <dd class="col-md-6">&#8377;@Model.minSalary</dd>
 
-                            <dt class="col-md-4">Max Salary</dt>
-                            <dd class="col-md-8">&#8377;@Model.maxSalary</dd>
+                                <dt class="col-md-6">Max Salary</dt>
+                                <dd class="col-md-6">&#8377;@Model.maxSalary</dd>
 
-                            <dt class="col-md-4">Post Date</dt>
-                            <dd class="col-md-8">@Model.postDate.ToString("yyyy-MM-dd")</dd>
+                                <dt class="col-md-6">Post Date</dt>
+                                <dd class="col-md-6">@Model.postDate.ToString("yyyy-MM-dd")</dd>
 
-                            <dt class="col-md-4">End Date</dt>
-                            <dd class="col-md-8">@Model.endDate.ToString("yyyy-MM-dd")</dd>
+                                <dt class="col-md-6">End Date</dt>
+                                <dd class="col-md-6">@Model.endDate.ToString("yyyy-MM-dd")</dd>
 
-                            <dt class="col-md-4">Description</dt>
-                            <dd class="col-md-8">@Model.description</dd>
+                                <dt class="col-md-6">Description</dt>
+                                <dd class="col-md-6">@Model.description</dd>
 
-                            <dt class="col-md-4">Job Category</dt>
-                            <dd class="col-md-8">@Model.jobCategory</dd>
+                                <dt class="col-md-6">Job Category</dt>
+                                <dd class="col-md-6">@Model.jobCategory</dd>
 
-                            <dt class="col-md-4">Job Nature</dt>
-                            <dd class="col-md-8">@Model.jobNature</dd>
-                        </dl>
-                    </div>
-
-                    @* Display the image if available *@
-                    @if (Model.imageData != null && Model.imageData.Length > 0)
-                    {
-                        <div class="col-md-6 text-center">
-                            <img src="data:image/png;base64,@Convert.ToBase64String(Model.imageData)" alt="Job Post Image" class="job-image img-thumbnail" />
+                                <dt class="col-md-6">Job Nature</dt>
+                                <dd class="col-md-6">@Model.jobNature</dd>
+                            </dl>
                         </div>
-                    }
-                </div>
 
-                <div class="row justify-content-center mt-4 apply-button">
-                    <div class="col-md-6 text-center">
-                        <a href="@Url.Action("ApplyForJob", "User", new { jobId = Model.Id })" class="btn btn-primary">Apply for Job</a>
+                        @* Display the image if available *@
+                        @if (Model.imageData != null && Model.imageData.Length > 0)
+                        {
+                            <div class="col-md-6 text-center">
+                                <img src="data:image/png;base64,@Convert.ToBase64String(Model.imageData)" alt="Job Post Image" class="job-image img-thumbnail" />
+                            </div>
+                        }
                     </div>
-                </div>
-            }
-            else
-            {
-                <p class="not-found">Job post not found.</p>
-            }
+
+                    <div class="row justify-content-center mt-4 apply-button">
+                        <div class="col-md-6 text-center">
+                            <a href="@Url.Action("ApplyForJob", "User", new { jobId = Model.Id })" class="btn btn-primary">Apply for Job</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="not-found">Job post not found.</p>
+                }
+            </div>
         </div>
-    </div>
+    </main>
 </body>
 </html>
