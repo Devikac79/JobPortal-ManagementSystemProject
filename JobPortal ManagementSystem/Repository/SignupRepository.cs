@@ -94,32 +94,36 @@ namespace JobPortalManagementSystem.Repository
         /// <returns></returns>
         public Signup GetUserProfileById(int userId)
         {
-            Signup userProfile = null;
+           
+                Signup userProfile = null;
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SqlCommand("SP_GetUserProfileById", connection))
+                using (var connection = new SqlConnection(connectionString))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@UserId", userId);
-
-                    using (var reader = command.ExecuteReader())
+                    connection.Open();
+                    using (var command = new SqlCommand("SP_GetUserProfileById", connection))
                     {
-                        if (reader.Read())
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@UserId", userId);
+
+                        using (var reader = command.ExecuteReader())
                         {
-                            userProfile = new Signup
+                            if (reader.Read())
                             {
-                                Id = userId,
-                                firstName = reader["firstName"].ToString(),
-                                email = reader["email"].ToString()
-                            };
+                                userProfile = new Signup
+                                {
+                                    Id = userId,
+                                    firstName = reader["firstName"].ToString(),
+                                    email = reader["email"].ToString()
+                                };
+                            }
                         }
                     }
                 }
-            }
 
-            return userProfile;
+                return userProfile;
+            
+           
+
         }
 
 
@@ -129,8 +133,7 @@ namespace JobPortalManagementSystem.Repository
         /// <param name="signup"></param>
         public bool AddSignupDetails(Signup signup)
         {
-            try
-            {
+            
                 Connection();
                 SqlCommand command = new SqlCommand("SPI_Signup", connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -146,13 +149,13 @@ namespace JobPortalManagementSystem.Repository
                 command.Parameters.AddWithValue("@pincode", signup.pincode);
                 command.Parameters.AddWithValue("@country", signup.country);
                 command.Parameters.AddWithValue("@username", signup.username);
-              command.Parameters.AddWithValue("@password", Encrypt(signup.password));
-             //  command.Parameters.AddWithValue("@password", signup.password);
+                command.Parameters.AddWithValue("@password", Encrypt(signup.password));
+                //command.Parameters.AddWithValue("@password", signup.password);
                 //string imageBase64 = Convert.ToBase64String(signup.image);
-                // command.Parameters.AddWithValue("@image", imageBase64);
-              //  command.Parameters.Add("@image", SqlDbType.VarBinary, -1).Value = signup.image;
-              //  command.Parameters.Add("@resume", SqlDbType.VarBinary, -1).Value = signup.resume;
-                //  command.Parameters.AddWithValue("@image", signup.image);
+                //command.Parameters.AddWithValue("@image", imageBase64);
+                //command.Parameters.Add("@image", SqlDbType.VarBinary, -1).Value = signup.image;
+                //command.Parameters.Add("@resume", SqlDbType.VarBinary, -1).Value = signup.resume;
+                //command.Parameters.AddWithValue("@image", signup.image);
 
                 connection.Open();
                 int i = command.ExecuteNonQuery();
@@ -165,13 +168,8 @@ namespace JobPortalManagementSystem.Repository
                 {
                     return false;
                 }
-            }
-            catch (Exception ex)
-            {
-                
-                Console.WriteLine("An error occurred while adding signup details: " + ex.Message);
-                return false;
-            }
+            
+           
         }
 
         /// <summary>
@@ -180,71 +178,82 @@ namespace JobPortalManagementSystem.Repository
         /// <returns></returns>
         public List<Signup> GetSignupDetails()
         {
-            List<Signup> allsignup = new List<Signup>();
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SPS_Signup", connection))
+            
+                List<Signup> allsignup = new List<Signup>();
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataReader datarow = command.ExecuteReader())
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("SPS_Signup", connection))
                     {
-                        while (datarow.Read())
+                        command.CommandType = CommandType.StoredProcedure;
+                        using (SqlDataReader datarow = command.ExecuteReader())
                         {
-                            Signup signup = new Signup
+                            while (datarow.Read())
                             {
-                                Id = Convert.ToInt32(datarow["Id"]),
-                                firstName = Convert.ToString(datarow["firstName"]),
-                                lastName = Convert.ToString(datarow["lastName"]),
-                                dateOfBirth = Convert.ToDateTime(datarow["dateOfBirth"]),
-                                gender = Convert.ToString(datarow["gender"]),
-                                email = Convert.ToString(datarow["email"]),
-                                phone = Convert.ToString(datarow["phone"]),
-                                address = Convert.ToString(datarow["address"]),
-                                city = Convert.ToString(datarow["city"]),
-                                state = Convert.ToString(datarow["state"]),
-                                pincode = Convert.ToInt32(datarow["pincode"]),
-                                country = Convert.ToString(datarow["country"]),
-                                username = Convert.ToString(datarow["username"]),
-                                image = datarow["image"] as byte[],
-                                resume = datarow["resume"] as byte[],
-                            };
-                            allsignup.Add(signup);
+                                Signup signup = new Signup
+                                {
+                                    Id = Convert.ToInt32(datarow["Id"]),
+                                    firstName = Convert.ToString(datarow["firstName"]),
+                                    lastName = Convert.ToString(datarow["lastName"]),
+                                    dateOfBirth = Convert.ToDateTime(datarow["dateOfBirth"]),
+                                    gender = Convert.ToString(datarow["gender"]),
+                                    email = Convert.ToString(datarow["email"]),
+                                    phone = Convert.ToString(datarow["phone"]),
+                                    address = Convert.ToString(datarow["address"]),
+                                    city = Convert.ToString(datarow["city"]),
+                                    state = Convert.ToString(datarow["state"]),
+                                    pincode = Convert.ToInt32(datarow["pincode"]),
+                                    country = Convert.ToString(datarow["country"]),
+                                    username = Convert.ToString(datarow["username"]),
+                                    image = datarow["image"] as byte[],
+                                    resume = datarow["resume"] as byte[],
+                                };
+                                allsignup.Add(signup);
+                            }
                         }
                     }
                 }
-            }
-            return allsignup;
+                return allsignup;
+            
+           
+
         }
 
 
 
 
-     
 
-        /// <summary>
-        /// Deleting the signup record of the memeber with specific id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public bool DeleteSignupDetails(int Id)
-        {
-            Connection();
-            SqlCommand command = new SqlCommand("SPD_Signup", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@Id", Id);
-            connection.Open();
-            int i = command.ExecuteNonQuery();
-            connection.Close();
-            if (i > 0)
+
+    /// <summary>
+    /// Deleting the signup record of the memeber with specific id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public bool DeleteSignupDetails(int Id)
+    {
+            try
             {
-                return true;
+                Connection();
+                SqlCommand command = new SqlCommand("SPD_Signup", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Id", Id);
+                connection.Open();
+                int i = command.ExecuteNonQuery();
+                connection.Close();
+                if (i > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            finally
             {
-                return false;
+                connection.Close();
             }
-        }
+    }
 
         /// <summary>
         /// Get user role
@@ -255,19 +264,27 @@ namespace JobPortalManagementSystem.Repository
 
         public string GetUserRole(string username, string password)
         {
-            Connection();
-            SqlCommand command = new SqlCommand("SPS_ValidateUserAndGetRole", connection);
-            command.CommandType = CommandType.StoredProcedure;
-           command.Parameters.AddWithValue("@username", username);
-         command.Parameters.AddWithValue("@password", Encrypt(password));
+            try
+            {
 
-        //  command.Parameters.AddWithValue("@password", password);
+                Connection();
+                SqlCommand command = new SqlCommand("SPS_ValidateUserAndGetRole", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@username", username);
+                command.Parameters.AddWithValue("@password", Encrypt(password));
 
-            connection.Open();
-            var role = command.ExecuteScalar() as string;
-            connection.Close();
+                //  command.Parameters.AddWithValue("@password", password);
 
-            return role;
+                connection.Open();
+                var role = command.ExecuteScalar() as string;
+                connection.Close();
+
+                return role;
+            }
+            finally
+            {
+                connection.Close();
+            }
         }
         /// <summary>
         /// Get userdetails by username
@@ -276,6 +293,7 @@ namespace JobPortalManagementSystem.Repository
         /// <returns></returns>
         public Signup GetSignupDetailsByUsernameAndPassword(string username)
         {
+           
             Connection();
             SqlCommand command = new SqlCommand("SPS_SignupByUsernameAndPassword", connection);
             command.CommandType = CommandType.StoredProcedure;
@@ -468,24 +486,45 @@ namespace JobPortalManagementSystem.Repository
 
 
 
-
+        /// <summary>
+        /// Delete user
+        /// </summary>
+        /// <param name="Id"></param>
         public void DeleteUser(int Id)
         {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SqlCommand("SPD_DeleteUser", connection))
+            
+                using (var connection = new SqlConnection(connectionString))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@Id", Id);
+                    connection.Open();
+                    using (var command = new SqlCommand("SPD_DeleteUser", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@Id", Id);
 
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
+                    }
+
                 }
-            }
         }
+
+        
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*   public List<Country> GetCountries()

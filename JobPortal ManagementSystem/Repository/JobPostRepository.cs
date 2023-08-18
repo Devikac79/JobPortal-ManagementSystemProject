@@ -104,16 +104,23 @@ namespace JobPortalManagementSystem.Repository
         /// </summary>
         /// <param name="categoryIds"></param>
         /// <returns></returns>
+        /// 
         public List<Category> GetCategoriesByIds(List<int> categoryIds)
         {
             List<Category> categories = new List<Category>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT categoryId, category FROM Table_JobCategory WHERE categoryId IN (" + string.Join(",", categoryIds) + ")";
-                using (SqlCommand command = new SqlCommand(query, connection))
+
+                using (SqlCommand command = new SqlCommand("SPS_GetCategoriesByIds", connection))
                 {
-                    command.Parameters.AddWithValue("@CategoryIds", string.Join(",", categoryIds));
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Create a parameter for the categoryIds input
+                    SqlParameter param = new SqlParameter("@CategoryIds", SqlDbType.VarChar);
+                    param.Value = string.Join(",", categoryIds);
+                    command.Parameters.Add(param);
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -130,6 +137,39 @@ namespace JobPortalManagementSystem.Repository
             }
             return categories;
         }
+
+
+
+
+
+        //public List<Category> GetCategoriesByIds(List<int> categoryIds)
+        //{
+        //    List<Category> categories = new List<Category>();
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        string query = "SELECT categoryId, category FROM Table_JobCategory WHERE categoryId IN (" + string.Join(",", categoryIds) + ")";
+        //        using (SqlCommand command = new SqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@CategoryIds", string.Join(",", categoryIds));
+        //            using (SqlDataReader reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    Category category = new Category
+        //                    {
+        //                        categoryId = Convert.ToInt32(reader["categoryId"]),
+        //                        category = Convert.ToString(reader["category"])
+        //                    };
+        //                    categories.Add(category);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return categories;
+        //}
+
+
         /// <summary>
         /// Add post
         /// </summary>
@@ -152,10 +192,10 @@ namespace JobPortalManagementSystem.Repository
                     command.Parameters.AddWithValue("@jobCategory", jobPost.jobCategory);
                     command.Parameters.AddWithValue("@jobNature", jobPost.jobNature);
                     command.Parameters.AddWithValue("@categoryId", jobPost.categoryId);
-                   command.Parameters.AddWithValue("@imageData", jobPost.imageData ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@imageData", jobPost.imageData ?? (object)DBNull.Value);
                    // command.Parameters.AddWithValue("@profile", applicationForm.profile ?? (object)DBNull.Value);
                     //command.Parameters.Add("@imageData", SqlDbType.VarBinary, -1).Value = jobPost.imageData;
-                   command.Parameters.AddWithValue("@companyName", jobPost.companyName);
+                    command.Parameters.AddWithValue("@companyName", jobPost.companyName);
                     command.ExecuteNonQuery();
                 }
             }
@@ -167,39 +207,42 @@ namespace JobPortalManagementSystem.Repository
         /// <returns></returns>
         public JobPost GetJobPostById(int Id)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SP_GetJobPostById", connection))
+            
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@Id", Id);
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("SP_GetJobPostById", connection))
                     {
-                        if (reader.Read())
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@Id", Id);
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            JobPost post = new JobPost
+                            if (reader.Read())
                             {
-                                Id = Convert.ToInt32(reader["Id"]),
-                                title = Convert.ToString(reader["title"]),
-                                location = Convert.ToString(reader["location"]),
-                                minSalary = Convert.ToInt32(reader["minSalary"]),
-                                maxSalary = Convert.ToInt32(reader["maxSalary"]),
-                                postDate = Convert.ToDateTime(reader["postDate"]),
-                                endDate = Convert.ToDateTime(reader["endDate"]),
-                                description = Convert.ToString(reader["description"]),
-                                jobCategory = Convert.ToString(reader["jobCategory"]),
-                                jobNature = Convert.ToString(reader["jobNature"]),
-                                categoryId = Convert.ToInt32(reader["categoryId"]),
-                                imageData = reader["imageData"] as byte[],
-                                companyName = Convert.ToString(reader["companyName"])
-                            };
-                            return post;
+                                JobPost post = new JobPost
+                                {
+                                    Id = Convert.ToInt32(reader["Id"]),
+                                    title = Convert.ToString(reader["title"]),
+                                    location = Convert.ToString(reader["location"]),
+                                    minSalary = Convert.ToInt32(reader["minSalary"]),
+                                    maxSalary = Convert.ToInt32(reader["maxSalary"]),
+                                    postDate = Convert.ToDateTime(reader["postDate"]),
+                                    endDate = Convert.ToDateTime(reader["endDate"]),
+                                    description = Convert.ToString(reader["description"]),
+                                    jobCategory = Convert.ToString(reader["jobCategory"]),
+                                    jobNature = Convert.ToString(reader["jobNature"]),
+                                    categoryId = Convert.ToInt32(reader["categoryId"]),
+                                    imageData = reader["imageData"] as byte[],
+                                    companyName = Convert.ToString(reader["companyName"])
+                                };
+                                return post;
+                            }
                         }
                     }
                 }
-            }
-            return null;
+                return null;
+            
+           
         }
         /// <summary>
         /// Update Job Post
@@ -239,10 +282,9 @@ namespace JobPortalManagementSystem.Repository
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public bool DeleteJobPost(int Id)
+        public void DeleteJobPost(int Id)
         {
-            try
-            {
+           
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand("SPD_JobPost", connection))
@@ -250,17 +292,13 @@ namespace JobPortalManagementSystem.Repository
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@Id", Id);
                         connection.Open();
-                        int affectedRows = command.ExecuteNonQuery();
-                        return affectedRows > 0;
-                    }
+                    command.ExecuteNonQuery();
                 }
-            }
-            catch 
-            {
-                
-                return false;
-            }
+                }
         }
+
+    
+
 
 
     }

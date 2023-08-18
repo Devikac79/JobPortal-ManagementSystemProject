@@ -32,7 +32,7 @@ namespace JobPortalManagementSystem.Controllers
 
 
         private readonly SignupRepository signupRepository;
-      private readonly UserRepository userRepository; 
+        private readonly UserRepository userRepository; 
       //  private readonly UserRepository _locationRepository = new UserRepository();
         public HomeController()
         {
@@ -63,16 +63,14 @@ namespace JobPortalManagementSystem.Controllers
         {
             return View();
         }
+
+
         /// <summary>
         /// Post method to assign created value to database
         /// </summary>
         /// <param name="signup"></param>
         /// <returns></returns>
         [HttpPost]
-
-
-
-
         public ActionResult AddSignupDetails(Signup signup, HttpPostedFileBase imageFile, HttpPostedFileBase resumeFile)
         {
             try
@@ -235,10 +233,9 @@ namespace JobPortalManagementSystem.Controllers
                           // string role = signupRepository.GetUserRole(signin.username, signin.password);
 
 
-                           // Store user ID and role in session
-                           Session["UserId"] = userSignup.Id;
+                        // Store user ID and role in session
+                        Session["UserId"] = userSignup.Id;
                         Session["Username"] =userSignup.firstName;
-
                         Session["UserRole"] = role;
 
                         if (!string.IsNullOrEmpty(role))
@@ -281,14 +278,14 @@ namespace JobPortalManagementSystem.Controllers
 
                    return View();
                }
-            catch (Exception ex)
-            {
-                // Log the error using the error handling mechanism
-                ErrHandler.WriteError(ex.Message);
+                 catch (Exception ex)
+                {
+                 // Log the error using the error handling mechanism
+                 ErrHandler.WriteError(ex.Message);
 
                 // Optionally, you can handle the exception or return an error view
                 return View("Error");
-            }
+                 }
         }
 
 

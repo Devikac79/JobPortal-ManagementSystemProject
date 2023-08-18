@@ -407,11 +407,7 @@ namespace JobPortal_ManagementSystem.Repository
         }
 
 
-        /// <summary>
-        /// Reject by admin 
-        /// </summary>
-        /// <param name="Id"></param>
-       
+ 
 
     }
 }

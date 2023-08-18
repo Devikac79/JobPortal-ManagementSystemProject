@@ -48,7 +48,7 @@
         </div>
 
         <div class="container form-container">
-            @using (Html.BeginForm("AddContact", "Admin", FormMethod.Post, new { id = "contactForm" }))
+            @using (Html.BeginForm("AddContact", "User", FormMethod.Post, new { id = "contactForm" }))
             {
                 @Html.AntiForgeryToken()
 

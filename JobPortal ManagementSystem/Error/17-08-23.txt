@@ -1,0 +1,5 @@
+
+Log Entry : 
+08/17/2023 08:13:21
+Error in: https://localhost:44308/Home/AddContact. Error Message: Could not find stored procedure 'SP_Contact'.
+__________

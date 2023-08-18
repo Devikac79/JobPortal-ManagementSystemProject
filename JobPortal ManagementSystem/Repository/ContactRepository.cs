@@ -34,7 +34,7 @@ namespace JobPortalManagementSystem.Repository
             try
             {
                 Connection();
-                using (SqlCommand command = new SqlCommand("SP_Contact", connection))
+                using (SqlCommand command = new SqlCommand("SPI_Contact", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@name", contact.name);
@@ -72,8 +72,8 @@ namespace JobPortalManagementSystem.Repository
         /// </summary>
         /// <returns></returns>
         public List<Contact> GetContact()
-         {
-
+        {
+            try {
                 Connection();
                 List<Contact> ContactList = new List<Contact>();
                 SqlCommand command = new SqlCommand("SPS_Contact", connection);
@@ -91,12 +91,17 @@ namespace JobPortalManagementSystem.Repository
                             contactId = Convert.ToInt32(datarow["contactId"]),
                             name = Convert.ToString(datarow["name"]),
                             email = Convert.ToString(datarow["email"]),
-                            subject= Convert.ToString(datarow["subject"]),
+                            subject = Convert.ToString(datarow["subject"]),
 
                             message = Convert.ToString(datarow["message"]),
                         }
                         );
                 return ContactList;
             }
+            finally
+            {
+                connection.Close();
+            }
+        }
         }
 }

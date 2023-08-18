@@ -260,43 +260,49 @@ namespace JobPortalManagementSystem.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        [HttpGet]
+        //[HttpGet]
+        //public ActionResult DeleteJobPost(int Id)
+        //{
+        //    // Get the job post by its ID from the repository
+        //    JobPost jobPost = repository.GetJobPostById(Id);
+
+        //    // If the job post doesn't exist, return a "Not Found" response
+        //    if (jobPost == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(jobPost); // Pass the job post to the view for confirmation
+        //}
+        ///// <summary>
+        ///// DeleteJob Post
+        ///// </summary>
+        ///// <param name="Id"></param>
+        ///// <param name="jobPost"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //public ActionResult DeleteJobPost(int Id,JobPost jobPost)
+        //{
+        //    try
+        //    {
+        //        JobPostRepository jobPostRepository = new JobPostRepository();
+        //        if (jobPostRepository.DeleteJobPost(Id))
+        //        {
+        //            ViewBag.AlertMessage = "Job post deleted successfully";
+        //        }
+        //        return RedirectToAction("GetAllPosts");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+
         public ActionResult DeleteJobPost(int Id)
         {
-            // Get the job post by its ID from the repository
-            JobPost jobPost = repository.GetJobPostById(Id);
-
-            // If the job post doesn't exist, return a "Not Found" response
-            if (jobPost == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(jobPost); // Pass the job post to the view for confirmation
+            repository.DeleteJobPost(Id);
+            return RedirectToAction("GetAllPosts");
         }
-        /// <summary>
-        /// DeleteJob Post
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="jobPost"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult DeleteJobPost(int Id,JobPost jobPost)
-        {
-            try
-            {
-                JobPostRepository jobPostRepository = new JobPostRepository();
-                if (jobPostRepository.DeleteJobPost(Id))
-                {
-                    ViewBag.AlertMessage = "Job post deleted successfully";
-                }
-                return RedirectToAction("GetAllPosts");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+
         /// <summary>
         /// Get SIgnup Details
         /// </summary>

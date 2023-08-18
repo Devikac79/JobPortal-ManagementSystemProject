@@ -17,7 +17,16 @@ namespace JobPortalManagementSystem.Controllers
 {
     public class UserController : Controller
     {
-
+        private readonly JobPostRepository jobPostRepository;
+        private readonly SignupRepository signupRepository;
+        private readonly JobApplicationRepository jobApplicationRepository;
+        //  private readonly JobApplicationRepository jobApplicationRepository;
+        public UserController()
+        {
+            jobPostRepository = new JobPostRepository();
+            signupRepository = new SignupRepository();
+            jobApplicationRepository = new JobApplicationRepository();
+        }
 
         // GET: User
         public ActionResult UserHomepage()
@@ -40,16 +49,7 @@ namespace JobPortalManagementSystem.Controllers
             }
         }
 
-        private readonly JobPostRepository jobPostRepository;
-        private readonly SignupRepository signupRepository;
-        private readonly JobApplicationRepository jobApplicationRepository;
-        //  private readonly JobApplicationRepository jobApplicationRepository;
-        public UserController()
-        {
-            jobPostRepository = new JobPostRepository();
-            signupRepository = new SignupRepository();
-            jobApplicationRepository = new JobApplicationRepository();
-        }
+       
 
         public ActionResult Signin()
         {
@@ -262,7 +262,7 @@ namespace JobPortalManagementSystem.Controllers
                     }
                 }
 
-                return RedirectToAction("AddContact", "Home");
+                return RedirectToAction("AddContact", "User");
             }
             catch
             {
