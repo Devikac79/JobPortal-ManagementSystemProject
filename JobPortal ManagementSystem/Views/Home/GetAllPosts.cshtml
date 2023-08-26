@@ -6,15 +6,16 @@
 }
 
 <style>
-        /* Define your custom CSS styles here */
+    /* Define your custom CSS styles here */
 
 
-        .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-        /* Add custom styles for the heading */
-        /*  .page-heading {
+    }
+
+    /* Add custom styles for the heading */
+    /*  .page-heading {
             background-color: cadetblue;
             color: white;
             padding: 10px;
@@ -22,28 +23,70 @@
             margin-bottom: 20px;
         }
     */
-        .card-body {
-            padding-left: 100px;
-        }
-        /* Add custom styles for the post title */
-        .card-header {
-            background-color: cadetblue !important;
-            text-align: center;
+    .card-body {
+        padding-left: 100px;
+        
+    }
+    /* Add custom styles for the post title */
+    .card-header {
+        background-color: cadetblue !important;
+        text-align: center;
+    }
+
+    .mainn {
+        max-width: 1000px; /* Set the maximum width of the container */
+        margin: 0 auto;
+        padding-top: 200px;
+    }
+
+    .zoom-on-hover {
+        transition: transform 0.3s;
+    }
+
+        .zoom-on-hover:hover {
+            transform: scale(1.05);
         }
 
-        .mainn {
-            max-width: 1000px; /* Set the maximum width of the container */
-            margin: 0 auto;
-            padding-top: 150px;
+    /* Styling search bar */
+    .search {
+        float: left;
+        margin: 7px;
+        padding-top: 130px;
+        padding-left: 270px;
+    }
+
+        .search input[type=text] {
+            width: 250px; /* Adjust width to make it square */
+            height: 40px;
+            border-radius: 0; /* Remove border radius to make it square */
+            border: 1px solid;
+            padding: 5px 10px;
+            background-color: #f2f2f2;
+            outline: none;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        .zoom-on-hover {
-            transition: transform 0.3s;
-        }
-
-            .zoom-on-hover:hover {
-                transform: scale(1.05);
+            .search input[type=text]:focus {
+                background-color: #fff;
+                border-color: #0074D9;
             }
+
+        .search button {
+            background-color: #FF0000; /* Red color for the button */
+            color: #f2f2f2;
+            float: right;
+            width: 100px; /* Adjust width to make it square */
+            height: 40px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .search button:hover {
+                background-color: #D90000; /* Darker red color on hover */
+            }
+
 </style>
 
 <!-- Font Awesome -->
@@ -55,45 +98,57 @@
 <!-- MDB -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css"
       rel="stylesheet" />
+<div>
+    <div class="search">
+        <form method="get" action="@Url.Action("GetAllPosts", "Home")">
+            <input type="text" placeholder="Search title" name="search">
+            <button type="submit">Find jobs
+               @* <i class="fa fa-search" style="font-size: 18px;"></i>*@
+            </button>
+        </form>
+    </div>
 
+    <div class="mainn">
 
+        <div class="container">
 
-<div class="mainn">
-    <div class="container">
+            @*   <h2 class="page-heading">All Posts</h2>*@
 
-        @*   <h2 class="page-heading">All Posts</h2>*@
-
-        @if (Model != null && Model.Any())
-        {
-            <div class="row justify-content-center">
-                @foreach (var post in Model)
-                {
-                    <div class="col-12 col-md-6 mb-4">
-                        <div class="card h-100 zoom-on-hover">
-                            <div class="card-header">
-                                <h5 class="card-title">@post.title</h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text"><strong>Location:</strong> @post.location</p>
-                                <p class="card-text"><strong>Salary:</strong> &#8377;@post.minSalary - &#8377;@post.maxSalary</p>
-                                <p class="card-text"><strong>Posted:</strong> @post.postDate.ToString("yyyy-MM-dd")</p>
-                                <p class="card-text"><strong>End Date:</strong> @post.endDate.ToString("yyyy-MM-dd")</p>
-                                <p class="card-text"><strong>Category:</strong> @post.jobCategory</p>
-                                <p class="card-text"><strong>Nature:</strong> @post.jobNature</p>
-                                <p class="card-text"><strong>Company Name:</strong> @post.companyName</p>
-                            </div>
-                            <div class="card-footer text-center">
-                                <!-- Add a link button to navigate to the detailed page -->
-                                <a href="@Url.Action("Details", "Home", new { Id = post.Id })" class="btn btn-primary">Details</a>
+            @if (Model != null && Model.Any())
+            {
+                <div class="row justify-content-center">
+                    @foreach (var post in Model)
+                    {
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="card h-100 zoom-on-hover">
+                                <div class="card-header">
+                                    <h5 class="card-title">@post.title</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Location:</strong> @post.location</p>
+                                    <p class="card-text"><strong>Salary:</strong> &#8377;@post.minSalary - &#8377;@post.maxSalary</p>
+                                    <p class="card-text"><strong>Posted:</strong> @post.postDate.ToString("yyyy-MM-dd")</p>
+                                    <p class="card-text"><strong>End Date:</strong> @post.endDate.ToString("yyyy-MM-dd")</p>
+                                    <p class="card-text"><strong>Category:</strong> @post.jobCategory</p>
+                                    <p class="card-text"><strong>Nature:</strong> @post.jobNature</p>
+                                    <p class="card-text"><strong>Company Name:</strong> @post.companyName</p>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <!-- Add a link button to navigate to the detailed page -->
+                                    <a href="@Url.Action("Details", "Home", new { Id = post.Id })" class="btn btn-primary">Details</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p>No posts found.</p>
-        }
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No posts found.</p>
+            }
+        </div>
+
+
     </div>
+
 </div>

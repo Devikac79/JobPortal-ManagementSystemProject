@@ -399,11 +399,16 @@ namespace JobPortalManagementSystem.Controllers
         }
 
 
+
+
+     
+
+
         /// <summary>
         /// Add details of user
         /// </summary>
         /// <returns></returns>
-      
+
         public ActionResult AddDetails()
         {
             return View();
@@ -559,10 +564,28 @@ namespace JobPortalManagementSystem.Controllers
         /// GEt all posts
         /// </summary>
         /// <returns></returns>
-        public ActionResult GetAllPosts()
+        //public ActionResult GetAllPosts()
+        //{
+        //    List<JobPost> allPosts = jobPostRepository.GetAllPosts();
+        //    return View("GetAllPosts", allPosts);
+        //}
+
+
+        public ActionResult GetAllPosts(string search)
         {
             List<JobPost> allPosts = jobPostRepository.GetAllPosts();
-            return View("GetAllPosts", allPosts);
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                allPosts = allPosts.Where(post =>
+                    post.title.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    post.location.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    post.jobCategory.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0) 
+                   
+                    .ToList();
+            }
+
+            return View(allPosts);
         }
         [HttpGet]
         public ActionResult Details(int Id)
